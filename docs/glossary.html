@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Glossary – Mixtape Workshops</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./sessions/01-intro-regression.html" rel="next">
+<link href="./facilitating.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-88736fcce7d974bfecfee082ef4a0c3c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Mixtape Workshops</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./setup.html"> 
+<span class="menu-text">Setup</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./facilitating.html"> 
+<span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./glossary.html"> 
+<span class="menu-text">Glossary</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Sessions</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-sessions">    
+        <li>
+    <a class="dropdown-item" href="./sessions/01-intro-regression.html">
+ <span class="dropdown-text">1 · Why causal inference + regression review</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/02-dags.html">
+ <span class="dropdown-text">2 · Directed acyclic graphs</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/03-potential-outcomes.html">
+ <span class="dropdown-text">3 · Potential outcomes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/04-matching.html">
+ <span class="dropdown-text">4 · Matching &amp; subclassification</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/05-rdd.html">
+ <span class="dropdown-text">5 · Regression discontinuity</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/06-iv.html">
+ <span class="dropdown-text">6 · Instrumental variables</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/07-panel-did.html">
+ <span class="dropdown-text">7 · Panel data + the 2×2 DiD</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/08-did-deep-dive.html">
+ <span class="dropdown-text">8 · DiD deep dive</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./sessions/09-synth-wrapup.html">
+ <span class="dropdown-text">9 · Synthetic control + wrap-up</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="./slides.html"> 
+<span class="menu-text">Slides</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://mixtape-1ed.netlify.app/"> 
+<span class="menu-text">The book</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./glossary.html">Glossary</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Mixtape Workshops</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./facilitating.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Facilitating</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Glossary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false">
+ <span class="menu-text">Sessions</span></a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sessions/01-intro-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 1 · Why causal inference, and regression as a tool</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sessions/02-dags.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 2 · Directed acyclic graphs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sessions/03-potential-outcomes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 3 · Potential outcomes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sessions/04-matching.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 4 · Matching and subclassification</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sessions/05-rdd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 5 · Regression discontinuity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sessions/06-iv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 6 · Instrumental variables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sessions/07-panel-did.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 7 · Panel data and the 2×2 difference-in-differences</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sessions/08-did-deep-dive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 8 · Difference-in-differences, deep dive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./sessions/09-synth-wrapup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 9 · Synthetic control, and which design when</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#sessions-13-the-vocabulary-of-causal-questions" id="toc-sessions-13-the-vocabulary-of-causal-questions" class="nav-link active" data-scroll-target="#sessions-13-the-vocabulary-of-causal-questions">Sessions 1–3: the vocabulary of causal questions</a></li>
+  <li><a href="#sessions-46-designs-for-cross-sectional-data" id="toc-sessions-46-designs-for-cross-sectional-data" class="nav-link" data-scroll-target="#sessions-46-designs-for-cross-sectional-data">Sessions 4–6: designs for cross-sectional data</a></li>
+  <li><a href="#sessions-79-designs-for-data-over-time" id="toc-sessions-79-designs-for-data-over-time" class="nav-link" data-scroll-target="#sessions-79-designs-for-data-over-time">Sessions 7–9: designs for data over time</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Glossary</h1>
+<p class="subtitle lead">Every acronym and term the sessions use, in plain words</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Each session page spells an acronym out the first time it appears, but this page is the one to keep open in a second tab. Terms are grouped by the session that introduces them; later sessions assume the earlier ones.</p>
+<section id="sessions-13-the-vocabulary-of-causal-questions" class="level2">
+<h2 class="anchored" data-anchor-id="sessions-13-the-vocabulary-of-causal-questions">Sessions 1–3: the vocabulary of causal questions</h2>
+<p><strong>Treatment (<span class="math inline">\(D\)</span>).</strong> The thing whose effect you want to know: a policy, a program, a drug, a price change. <span class="math inline">\(D = 1\)</span> for units that got it, <span class="math inline">\(D = 0\)</span> for units that did not.</p>
+<p><strong>Outcome (<span class="math inline">\(Y\)</span>).</strong> The thing you measure to see whether the treatment did anything.</p>
+<p><strong>Potential outcomes (<span class="math inline">\(Y^1\)</span>, <span class="math inline">\(Y^0\)</span>).</strong> For one unit, the outcome it <em>would</em> have under treatment (<span class="math inline">\(Y^1\)</span>) and the outcome it <em>would</em> have without treatment (<span class="math inline">\(Y^0\)</span>). You only ever see one of the two. The unseen one is the <em>counterfactual</em>.</p>
+<p><strong>Treatment effect (<span class="math inline">\(\delta_i\)</span>).</strong> For one unit, <span class="math inline">\(Y_i^1 - Y_i^0\)</span>. Never directly observable, which is why everything below is about averages.</p>
+<p><strong>ATE — Average Treatment Effect.</strong> The average of <span class="math inline">\(\delta_i\)</span> over <em>everyone</em> in the population. “If we treated everybody versus nobody, how much would the outcome change on average?”</p>
+<p><strong>ATT — Average Treatment effect on the Treated.</strong> The average of <span class="math inline">\(\delta_i\)</span> over the units that <em>actually got</em> the treatment. “For the people who took the program, how much did it help them?”</p>
+<p><strong>ATU — Average Treatment effect on the Untreated.</strong> The average of <span class="math inline">\(\delta_i\)</span> over the units that <em>did not</em> get the treatment. “If we had given the program to the people who didn’t get it, how much would it have helped them?” ATE is a weighted mix of ATT and ATU.</p>
+<p><strong>SDO — Simple Difference in Outcomes.</strong> The average outcome of the treated group minus the average outcome of the untreated group. It is what a naive comparison gives you. It equals the ATE <em>only</em> if the two groups were comparable to begin with.</p>
+<p><strong>Selection bias.</strong> The part of the SDO that comes from the treated and untreated groups being different people, not from the treatment. Formally: <span class="math inline">\(E[Y^0 \mid D=1] - E[Y^0 \mid D=0]\)</span>, the gap in how the two groups <em>would have done without treatment</em>.</p>
+<p><strong>HTE — Heterogeneous Treatment Effects.</strong> The treatment helps some units more than others. “HTE bias” is the extra error in the SDO that appears when the people who got treated are the ones it helps most (or least).</p>
+<p><strong>Endogenous / exogenous.</strong> A variable is <em>endogenous</em> if it is determined inside the system you are studying — chosen by someone, or caused by something that also affects the outcome. It is <em>exogenous</em> if it came from outside, like a coin flip. Causal inference is the hunt for exogenous variation in the treatment.</p>
+<p><strong>RCT — Randomized Controlled Trial.</strong> An experiment where a coin flip (or equivalent) decides who gets treated. Randomization makes the treatment exogenous.</p>
+<p><strong>RI — Randomization Inference.</strong> A way of testing whether an effect could be luck: pretend the treatment did nothing, reshuffle who was “treated” many times, and see how often the reshuffled data produce an effect as big as the real one.</p>
+<p><strong>Sharp null.</strong> The specific hypothesis RI tests: the treatment effect is exactly zero for <em>every single unit</em>, not just on average.</p>
+<p><strong>CEF — Conditional Expectation Function.</strong> <span class="math inline">\(E[Y \mid X]\)</span>: the average of <span class="math inline">\(Y\)</span> among units with a given value of <span class="math inline">\(X\)</span>. Regression is a way of approximating this function with a line (or a plane).</p>
+<p><strong>OLS — Ordinary Least Squares.</strong> The standard way of fitting a regression line: choose the line that makes the squared gaps between the data and the line as small as possible.</p>
+<p><strong>SE — Standard Error.</strong> How much an estimate would bounce around if you could redo the study with a fresh sample. Small SE means a precise estimate. “Robust” SEs allow the noise to differ across units; “clustered” SEs allow units in the same group (same school, same state) to share noise.</p>
+<p><strong>Regression anatomy / FWL — Frisch–Waugh–Lovell.</strong> The rule that a coefficient in a multiple regression equals the simple regression of <span class="math inline">\(Y\)</span> on the <em>leftover</em> part of that variable after removing what the other variables predict. It is what “controlling for” means mechanically.</p>
+<p><strong>DAG — Directed Acyclic Graph.</strong> A diagram of arrows showing which variables cause which. “Directed” because arrows have a direction; “acyclic” because you can never follow arrows in a loop back to where you started.</p>
+<p><strong>Confounder.</strong> A variable that causes <em>both</em> the treatment and the outcome. It creates a fake association unless you adjust for it.</p>
+<p><strong>Collider.</strong> A variable that is caused by <em>both</em> of two other variables (two arrows collide into it). Adjusting for a collider <em>creates</em> a fake association that was not there before.</p>
+<p><strong>Backdoor path / backdoor criterion.</strong> A backdoor path is any route from treatment to outcome that starts with an arrow pointing <em>into</em> the treatment; it carries non-causal association. The backdoor criterion says which variables to adjust for so that every such path is blocked.</p>
+</section>
+<section id="sessions-46-designs-for-cross-sectional-data" class="level2">
+<h2 class="anchored" data-anchor-id="sessions-46-designs-for-cross-sectional-data">Sessions 4–6: designs for cross-sectional data</h2>
+<p><strong>CIA — Conditional Independence Assumption.</strong> Once you account for the observed variables <span class="math inline">\(X\)</span>, who got treated is as good as random. Also called <em>selection on observables</em> or <em>unconfoundedness</em>. It is an assumption about things you cannot see, so it cannot be tested.</p>
+<p><strong>Common support / overlap.</strong> For every type of unit (every value of <span class="math inline">\(X\)</span>), there are both treated and untreated examples. Without it you are guessing about people who have no comparison.</p>
+<p><strong>Subclassification / stratification.</strong> Split the data into groups with the same <span class="math inline">\(X\)</span>, compare treated and untreated <em>within</em> each group, then average the comparisons.</p>
+<p><strong>Propensity score.</strong> The probability that a unit gets treated, given its characteristics <span class="math inline">\(X\)</span>. Usually estimated with a logistic regression. Two units with the same score are comparable even if their individual characteristics differ.</p>
+<p><strong>IPW — Inverse Probability Weighting.</strong> Reweight the data so that the treated and untreated groups look alike: treated units get weight <span class="math inline">\(1/p\)</span>, untreated units get weight <span class="math inline">\(1/(1-p)\)</span>, where <span class="math inline">\(p\)</span> is the propensity score.</p>
+<p><strong>Matching / NN — Nearest Neighbor.</strong> For each treated unit, find the untreated unit that looks most like it (by <span class="math inline">\(X\)</span> or by propensity score) and compare the two.</p>
+<p><strong>RD / RDD — Regression Discontinuity (Design).</strong> A design that uses a cutoff rule: units just above and just below a threshold get different treatments but are otherwise alike.</p>
+<p><strong>Running variable.</strong> The variable with the cutoff in it (a test score, a vote share, an age). Also called the forcing or assignment variable.</p>
+<p><strong>Sharp vs fuzzy RD.</strong> Sharp: crossing the cutoff <em>always</em> changes treatment. Fuzzy: crossing the cutoff changes the <em>probability</em> of treatment.</p>
+<p><strong>Bandwidth (<span class="math inline">\(h\)</span>).</strong> How far on either side of the cutoff you look. Narrower is more credible but noisier.</p>
+<p><strong>Local linear regression.</strong> Fit a straight line separately on each side of the cutoff, using only data within the bandwidth, and measure the jump between the two lines at the cutoff.</p>
+<p><strong>McCrary density test.</strong> A check for cheating at the cutoff: if units can push themselves just past the threshold, there will be a pile-up on one side.</p>
+<p><strong>IV — Instrumental Variable.</strong> A variable that moves the treatment but has no other way of affecting the outcome. It lets you isolate the part of the treatment that is as good as random.</p>
+<p><strong>Relevance, exclusion, independence.</strong> The three conditions an instrument must satisfy: it actually moves the treatment (relevance, testable); it affects the outcome <em>only</em> through the treatment (exclusion, not testable); it is itself as good as random (independence, not testable).</p>
+<p><strong>First stage.</strong> The regression of treatment on the instrument. Its coefficient tells you how strongly the instrument moves treatment.</p>
+<p><strong>Reduced form.</strong> The regression of the <em>outcome</em> on the instrument. Dividing reduced form by first stage gives the IV estimate (the <em>Wald ratio</em>).</p>
+<p><strong>2SLS — Two-Stage Least Squares.</strong> The standard IV estimator: stage one predicts the treatment from the instrument; stage two regresses the outcome on that prediction.</p>
+<p><strong>Weak instrument.</strong> An instrument that barely moves the treatment. The symptom is a small first-stage F-statistic (under about 10); the consequence is an estimate biased toward the naive one and unreliable confidence intervals.</p>
+<p><strong>LATE — Local Average Treatment Effect.</strong> What IV actually estimates when effects differ across people: the average effect for <em>compliers</em>, the units whose treatment was changed by the instrument.</p>
+<p><strong>Compliers, always-takers, never-takers, defiers.</strong> Compliers take the treatment when the instrument says to and not otherwise. Always-takers and never-takers ignore the instrument. Defiers do the opposite of what the instrument says; <em>monotonicity</em> is the assumption that there are none.</p>
+</section>
+<section id="sessions-79-designs-for-data-over-time" class="level2">
+<h2 class="anchored" data-anchor-id="sessions-79-designs-for-data-over-time">Sessions 7–9: designs for data over time</h2>
+<p><strong>Panel data.</strong> The same units observed repeatedly over time (the same people every year, the same states every quarter).</p>
+<p><strong>FE — Fixed Effects.</strong> A regression that gives every unit its own intercept, so that anything about the unit that never changes is automatically accounted for. Equivalent to comparing each unit only with itself over time.</p>
+<p><strong>Within vs between variation.</strong> <em>Within</em>: how a unit changes over time. <em>Between</em>: how units differ from each other. FE uses only the within part.</p>
+<p><strong>Strict exogeneity.</strong> The assumption FE needs: the unexplained noise in any period is unrelated to the treatment in <em>every</em> period, past and future.</p>
+<p><strong>DiD / DD — Difference-in-Differences.</strong> Compare the change over time in a treated group with the change over time in an untreated group. The second difference removes trends that both groups share.</p>
+<p><strong>Parallel trends.</strong> The assumption DiD needs: without the treatment, the treated group would have moved over time the same way the control group did.</p>
+<p><strong>2×2.</strong> The simplest DiD: two groups (treated, control) and two periods (before, after).</p>
+<p><strong>Event study.</strong> A DiD with a separate effect estimated for each period relative to when treatment started, so you can see effects building up or fading, and check that nothing was happening <em>before</em> treatment.</p>
+<p><strong>Leads and lags.</strong> In an event study, <em>leads</em> are the pre-treatment periods (they should show no effect); <em>lags</em> are the post-treatment periods (they show the dynamic effect).</p>
+<p><strong>Placebo test.</strong> Run the same analysis on a group, period, or outcome where the treatment should have had <em>no</em> effect, and check that you find nothing.</p>
+<p><strong>DDD — Triple Difference.</strong> A DiD of two DiDs: the treated group’s DiD minus a placebo group’s DiD. It removes shocks specific to the treated group’s location or time that a plain DiD would mistake for the treatment.</p>
+<p><strong>TWFE — Two-Way Fixed Effects.</strong> A regression with both unit fixed effects and time fixed effects. The standard way to run DiD with many units and periods.</p>
+<p><strong>Staggered adoption.</strong> Different units start treatment at different times.</p>
+<p><strong>Bacon decomposition (Goodman-Bacon).</strong> A way of breaking a staggered TWFE estimate into all the simple 2×2 comparisons it secretly averages, with their weights. It reveals when TWFE is comparing late-treated units to already-treated ones, which can bias the result.</p>
+<p><strong>Callaway–Sant’Anna, Sun–Abraham.</strong> Newer DiD estimators that avoid using already-treated units as controls.</p>
+<p><strong>Synthetic control.</strong> For one treated unit (a state, a country), build a “synthetic” version from a weighted average of untreated units, choosing weights so the synthetic version matches the real one before treatment. The post-treatment gap is the effect.</p>
+<p><strong>Donor pool.</strong> The untreated units available to build the synthetic control from.</p>
+<p><strong>RMSPE — Root Mean Squared Prediction Error.</strong> How far the synthetic unit is from the real one, on average. <em>Pre-period</em> RMSPE measures fit quality; the <em>post/pre ratio</em> is used for inference.</p>
+<p><strong>Placebo-in-space / placebo-in-time.</strong> Re-run the synthetic control pretending a <em>different unit</em> was treated (in space) or that treatment happened at an <em>earlier date</em> (in time). If the real result is not unusual compared to the placebos, it is probably noise.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/seanlewis08\.github\.io\/causal_mixtape\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./facilitating.html" class="pagination-link" aria-label="Facilitating">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Facilitating</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./sessions/01-intro-regression.html" class="pagination-link" aria-label="Session 1 · Why causal inference, and regression as a tool">
+        <span class="nav-page-text">Session 1 · Why causal inference, and regression as a tool</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Built on <em>Causal Inference: The Mixtape</em> by Scott Cunningham (free online edition).</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Made with Quarto</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

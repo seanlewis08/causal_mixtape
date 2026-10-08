@@ -66,7 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../sessions/02-dags.html" rel="next">
-<link href="../facilitating.html" rel="prev">
+<link href="../glossary.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b6ebfe76373a65f90f03e4eef39a9400.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-88736fcce7d974bfecfee082ef4a0c3c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -165,6 +165,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link" href="../facilitating.html"> 
 <span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../glossary.html"> 
+<span class="menu-text">Glossary</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -258,6 +262,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../facilitating.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Facilitating</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -385,7 +395,7 @@ window.Quarto = {
 </div>
 <section id="learning-goals" class="level2">
 <h2 class="anchored" data-anchor-id="learning-goals">Learning goals</h2>
-<p>By the end of the hour everyone should be able to explain why optimizing agents make correlation uninformative about causation, state what a regression coefficient <em>is</em> (a conditional-expectation approximation, not a causal effect), reproduce a multiple-regression coefficient with the regression-anatomy formula, and say when to use heteroskedasticity-robust versus cluster-robust standard errors.</p>
+<p>By the end of the hour everyone should be able to explain why optimizing agents make correlation uninformative about causation, state what a regression coefficient <em>is</em> (an approximation to a conditional expectation, not a causal effect), reproduce a multiple-regression coefficient with the regression-anatomy formula, and say when to use heteroskedasticity-robust versus cluster-robust standard errors (SEs).</p>
 <div class="agenda">
 <table class="caption-top table">
 <colgroup>
@@ -405,7 +415,7 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td>0:05</td>
-<td>Concepts: price elasticity and endogenous supply; the CEF; regression anatomy; standard errors</td>
+<td>Concepts: price elasticity and endogenous supply; the conditional expectation function (CEF); regression anatomy; standard errors</td>
 </tr>
 <tr class="odd">
 <td>0:20</td>
@@ -425,10 +435,62 @@ window.Quarto = {
 </section>
 <section id="key-ideas" class="level2">
 <h2 class="anchored" data-anchor-id="key-ideas">Key ideas</h2>
-<p><strong>Optimization makes everything endogenous.</strong> The book’s opening example is price elasticity of demand. Observed prices and quantities are equilibrium outcomes: both supply and demand shifted to produce every point you see, so a regression of quantity on price identifies nothing unless something moved only one curve. Wright’s instrumental-variables solution (Session 6) is the first sighting of the whole book’s agenda: find variation in the cause that is unrelated to everything else that matters.</p>
-<p><strong>Regression estimates a conditional expectation function, not a causal effect.</strong> Chapter 2 builds up to three theorems. The <em>linear CEF theorem</em> says if the CEF is linear, regression recovers it. The <em>best linear predictor theorem</em> says regression is always the best linear approximation to the CEF, whether or not it is linear. The <em>regression CEF theorem</em> says regression also gives the best linear approximation to the CEF itself. None of these say anything about causation; they say what the numbers mean descriptively. Causal content enters only through assumptions about the error term (mean independence, <span class="math inline">\(E[u \mid x] = 0\)</span>), and those assumptions are what the rest of the book is about.</p>
-<p><strong>Regression anatomy.</strong> The coefficient on <span class="math inline">\(x_1\)</span> in a multiple regression equals the bivariate regression of <span class="math inline">\(y\)</span> on the <em>residual</em> from regressing <span class="math inline">\(x_1\)</span> on the other covariates: <span class="math display">\[\beta_1 = \frac{\mathrm{Cov}(y, \tilde{x}_1)}{\mathrm{Var}(\tilde{x}_1)}, \qquad \tilde{x}_1 = x_1 - \hat{E}[x_1 \mid x_2, \dots, x_k].\]</span> This is the Frisch–Waugh–Lovell theorem, and it is the single most useful mechanical fact about regression: “controlling for” means “using only the part of <span class="math inline">\(x_1\)</span> that the controls cannot predict.”</p>
-<p><strong>Standard errors.</strong> Conventional OLS standard errors assume homoskedasticity. Heteroskedasticity-robust (HC1, Stata’s <code>robust</code>) standard errors do not. When observations share a shock (students in the same classroom, firms in the same state), errors are correlated within groups and you need cluster-robust standard errors; the robust-versus-conventional gap on a single regression is a diagnostic, not a decision rule.</p>
+<p><strong>Optimization makes everything endogenous.</strong> The book’s opening example is price elasticity of demand. Observed prices and quantities are equilibrium outcomes: both supply and demand shifted to produce every point you see, so a regression of quantity on price identifies nothing unless something moved only one curve. Wright’s instrumental-variables solution (Session 6) is the first sighting of the whole book’s agenda: find variation in the cause that is unrelated to everything else that matters. A variable is <em>endogenous</em> when it is chosen or caused by something inside the system you are studying, and <em>exogenous</em> when it comes from outside, like a coin flip.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>People, companies and governments make choices for reasons. If you compare the people who chose something with the people who didn’t, you are also comparing their reasons — and the reasons usually affect the outcome too. So “people who did X did better” rarely tells you that X helped. The whole book is a search for situations where who got X was decided by something close to a coin flip.</p>
+</div>
+</div>
+<p><strong>Regression estimates a conditional expectation function (CEF), not a causal effect.</strong> The CEF, <span class="math inline">\(E[Y \mid X]\)</span>, is the average of <span class="math inline">\(Y\)</span> among units with a given <span class="math inline">\(X\)</span>. Chapter 2 builds up to three theorems. The <em>linear CEF theorem</em> says if the CEF is linear, regression recovers it. The <em>best linear predictor theorem</em> says regression is always the best linear approximation to the CEF, whether or not it is linear. The <em>regression CEF theorem</em> says regression also gives the best linear approximation to the CEF itself. None of these say anything about causation; they say what the numbers mean descriptively. Causal content enters only through assumptions about the error term (mean independence, <span class="math inline">\(E[u \mid x] = 0\)</span>), and those assumptions are what the rest of the book is about.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A regression line is a summary of averages: “among cars of this length, the average price is about this much.” That is a true and useful description. It becomes a statement about <em>cause</em> only if you add an assumption — that nothing else which matters for price is tangled up with length. Regression software never checks that assumption; you have to argue it.</p>
+</div>
+</div>
+<p><strong>Regression anatomy.</strong> The coefficient on <span class="math inline">\(x_1\)</span> in a multiple regression equals the bivariate regression of <span class="math inline">\(y\)</span> on the <em>residual</em> from regressing <span class="math inline">\(x_1\)</span> on the other covariates: <span class="math display">\[\beta_1 = \frac{\mathrm{Cov}(y, \tilde{x}_1)}{\mathrm{Var}(\tilde{x}_1)}, \qquad \tilde{x}_1 = x_1 - \hat{E}[x_1 \mid x_2, \dots, x_k].\]</span> This is the Frisch–Waugh–Lovell (FWL) theorem, and it is the single most useful mechanical fact about regression: “controlling for” means “using only the part of <span class="math inline">\(x_1\)</span> that the controls cannot predict.”</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>“Controlling for weight” sounds like magic, but it is a two-step recipe: first figure out how much of a car’s length you could have guessed from its weight, throw that part away, and keep only the leftover “surprise” in length. Then see how price moves with that leftover. The coefficient in the big regression is exactly that.</p>
+</div>
+</div>
+<p><strong>Standard errors.</strong> A standard error (SE) says how much an estimate would bounce around in a fresh sample. Conventional ordinary least squares (OLS) standard errors assume homoskedasticity — the same amount of noise for every unit. Heteroskedasticity-robust (HC1, Stata’s <code>robust</code>) standard errors do not. When observations share a shock (students in the same classroom, firms in the same state), errors are correlated within groups and you need cluster-robust standard errors; the robust-versus-conventional gap on a single regression is a diagnostic, not a decision rule.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The estimate is your best guess; the standard error is how shaky that guess is. The default formula assumes every observation is equally noisy and independent of the others. “Robust” relaxes the first part; “clustered” relaxes the second, for cases where units come in groups that share luck — kids in one classroom, counties in one state. Neither one changes the guess itself, only how confident you should be.</p>
+</div>
+</div>
 </section>
 <section id="walkthrough" class="level2">
 <h2 class="anchored" data-anchor-id="walkthrough">Walkthrough</h2>
@@ -438,26 +500,82 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>auto <span class="op">=</span> pd.read_stata(<span class="st">"data/auto.dta"</span>)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>auto.head()</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>m1 <span class="op">=</span> smf.ols(<span class="st">"price ~ length"</span>, data<span class="op">=</span>auto).fit()</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m1.summary().tables[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>auto.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            make  price  mpg  rep78  ...  turn  displacement  gear_ratio   foreign
+0    AMC Concord   4099   22    3.0  ...    40           121        3.58  Domestic
+1      AMC Pacer   4749   17    3.0  ...    40           258        2.53  Domestic
+2     AMC Spirit   3799   22    NaN  ...    35           121        3.08  Domestic
+3  Buick Century   4816   20    3.0  ...    40           196        2.93  Domestic
+4  Buick Electra   7827   15    4.0  ...    43           350        2.41  Domestic
+
+[5 rows x 12 columns]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="op">=</span> smf.ols(<span class="st">"price ~ length"</span>, data<span class="op">=</span>auto).fit()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m1.summary().tables[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept  -4584.8990   2664.437     -1.721      0.090   -9896.357     726.559
+length        57.2022     14.080      4.063      0.000      29.133      85.271
+==============================================================================</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(estimatr)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>auto <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/auto.dta"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(auto)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(price <span class="sc">~</span> length, <span class="at">data =</span> auto)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(estimatr)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>auto <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/auto.dta"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(auto)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 74
+Columns: 12
+$ make         &lt;chr&gt; "AMC Concord", "AMC Pacer", "AMC Spirit", "Buick Century"~
+$ price        &lt;dbl&gt; 4099, 4749, 3799, 4816, 7827, 5788, 4453, 5189, 10372, 40~
+$ mpg          &lt;dbl&gt; 22, 17, 22, 20, 15, 18, 26, 20, 16, 19, 14, 14, 21, 29, 1~
+$ rep78        &lt;dbl&gt; 3, 3, NA, 3, 4, 3, NA, 3, 3, 3, 3, 2, 3, 3, 4, 3, 2, 2, 3~
+$ headroom     &lt;dbl&gt; 2.5, 3.0, 3.0, 4.5, 4.0, 4.0, 3.0, 2.0, 3.5, 3.5, 4.0, 3.~
+$ trunk        &lt;dbl&gt; 11, 11, 12, 16, 20, 21, 10, 16, 17, 13, 20, 16, 13, 9, 20~
+$ weight       &lt;dbl&gt; 2930, 3350, 2640, 3250, 4080, 3670, 2230, 3280, 3880, 340~
+$ length       &lt;dbl&gt; 186, 173, 168, 196, 222, 218, 170, 200, 207, 200, 221, 20~
+$ turn         &lt;dbl&gt; 40, 40, 35, 40, 43, 43, 34, 42, 43, 42, 44, 43, 45, 34, 4~
+$ displacement &lt;dbl&gt; 121, 258, 121, 196, 350, 231, 304, 196, 231, 231, 425, 35~
+$ gear_ratio   &lt;dbl&gt; 3.58, 2.53, 3.08, 2.93, 2.41, 2.73, 2.87, 2.93, 2.93, 3.0~
+$ foreign      &lt;dbl+lbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,~</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(price <span class="sc">~</span> length, <span class="at">data =</span> auto)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = price ~ length, data = auto)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3278.5 -1809.8  -720.8   775.8  8821.6 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -4584.90    2664.44  -1.721 0.089587 .  
+length         57.20      14.08   4.063 0.000122 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 2679 on 72 degrees of freedom
+Multiple R-squared:  0.1865,    Adjusted R-squared:  0.1752 
+F-statistic:  16.5 on 1 and 72 DF,  p-value: 0.0001222</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -471,12 +589,28 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>m2 <span class="op">=</span> smf.ols(<span class="st">"price ~ length + weight + headroom + mpg"</span>, data<span class="op">=</span>auto).fit()</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m2.params.<span class="bu">round</span>(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>m2 <span class="op">=</span> smf.ols(<span class="st">"price ~ length + weight + headroom + mpg"</span>, data<span class="op">=</span>auto).fit()</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m2.params.<span class="bu">round</span>(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Intercept    14177.58
+length         -94.50
+weight           4.34
+headroom      -490.97
+mpg            -87.96
+dtype: float64</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(price <span class="sc">~</span> length <span class="sc">+</span> weight <span class="sc">+</span> headroom <span class="sc">+</span> mpg, <span class="at">data =</span> auto)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(price <span class="sc">~</span> length <span class="sc">+</span> weight <span class="sc">+</span> headroom <span class="sc">+</span> mpg, <span class="at">data =</span> auto)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)       length       weight     headroom          mpg 
+14177.582331   -94.496510     4.335045  -490.966654   -87.958383 </code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -491,25 +625,42 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>aux <span class="op">=</span> smf.ols(<span class="st">"length ~ weight + headroom + mpg"</span>, data<span class="op">=</span>auto).fit()</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>auto[<span class="st">"length_resid"</span>] <span class="op">=</span> aux.resid</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>m3 <span class="op">=</span> smf.ols(<span class="st">"price ~ length_resid"</span>, data<span class="op">=</span>auto).fit()</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m3.params.<span class="bu">round</span>(<span class="dv">2</span>))</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># the formula directly</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>cov <span class="op">=</span> np.cov(auto[<span class="st">"price"</span>], auto[<span class="st">"length_resid"</span>], ddof<span class="op">=</span><span class="dv">1</span>)[<span class="dv">0</span>, <span class="dv">1</span>]</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>var <span class="op">=</span> auto[<span class="st">"length_resid"</span>].var(ddof<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cov <span class="op">/</span> var)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>aux <span class="op">=</span> smf.ols(<span class="st">"length ~ weight + headroom + mpg"</span>, data<span class="op">=</span>auto).fit()</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>auto[<span class="st">"length_resid"</span>] <span class="op">=</span> aux.resid</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>m3 <span class="op">=</span> smf.ols(<span class="st">"price ~ length_resid"</span>, data<span class="op">=</span>auto).fit()</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m3.params.<span class="bu">round</span>(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Intercept       6165.26
+length_resid     -94.50
+dtype: float64</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the formula directly</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>cov <span class="op">=</span> np.cov(auto[<span class="st">"price"</span>], auto[<span class="st">"length_resid"</span>], ddof<span class="op">=</span><span class="dv">1</span>)[<span class="dv">0</span>, <span class="dv">1</span>]</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>var <span class="op">=</span> auto[<span class="st">"length_resid"</span>].var(ddof<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cov <span class="op">/</span> var)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>-94.49650952525606</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>auto <span class="ot">&lt;-</span> auto <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">length_resid =</span> <span class="fu">resid</span>(<span class="fu">lm</span>(length <span class="sc">~</span> weight <span class="sc">+</span> headroom <span class="sc">+</span> mpg, <span class="at">data =</span> auto)))</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(price <span class="sc">~</span> length_resid, <span class="at">data =</span> auto)</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(m3)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(auto<span class="sc">$</span>price, auto<span class="sc">$</span>length_resid) <span class="sc">/</span> <span class="fu">var</span>(auto<span class="sc">$</span>length_resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>auto <span class="ot">&lt;-</span> auto <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">length_resid =</span> <span class="fu">resid</span>(<span class="fu">lm</span>(length <span class="sc">~</span> weight <span class="sc">+</span> headroom <span class="sc">+</span> mpg, <span class="at">data =</span> auto)))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(price <span class="sc">~</span> length_resid, <span class="at">data =</span> auto)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept) length_resid 
+  6165.25676    -94.49651 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cov</span>(auto<span class="sc">$</span>price, auto<span class="sc">$</span>length_resid) <span class="sc">/</span> <span class="fu">var</span>(auto<span class="sc">$</span>length_resid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -94.49651</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -524,30 +675,48 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">1</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">10_000</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> rng.normal(size<span class="op">=</span>n)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> rng.normal(size<span class="op">=</span>n) <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> np.<span class="bu">abs</span>(x))      <span class="co"># heteroskedastic</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="fl">5.5</span> <span class="op">*</span> x <span class="op">+</span> <span class="dv">12</span> <span class="op">*</span> u</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>sim <span class="op">=</span> pd.DataFrame({<span class="st">"x"</span>: x, <span class="st">"y"</span>: y})</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>conv <span class="op">=</span> smf.ols(<span class="st">"y ~ x"</span>, data<span class="op">=</span>sim).fit()</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>rob  <span class="op">=</span> smf.ols(<span class="st">"y ~ x"</span>, data<span class="op">=</span>sim).fit(cov_type<span class="op">=</span><span class="st">"HC1"</span>)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"conventional SE:"</span>, <span class="bu">round</span>(conv.bse[<span class="st">"x"</span>], <span class="dv">3</span>))</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"HC1 robust SE:  "</span>, <span class="bu">round</span>(rob.bse[<span class="st">"x"</span>], <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">1</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">10_000</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> rng.normal(size<span class="op">=</span>n)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> rng.normal(size<span class="op">=</span>n) <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> np.<span class="bu">abs</span>(x))      <span class="co"># heteroskedastic</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="fl">5.5</span> <span class="op">*</span> x <span class="op">+</span> <span class="dv">12</span> <span class="op">*</span> u</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>sim <span class="op">=</span> pd.DataFrame({<span class="st">"x"</span>: x, <span class="st">"y"</span>: y})</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>conv <span class="op">=</span> smf.ols(<span class="st">"y ~ x"</span>, data<span class="op">=</span>sim).fit()</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>rob  <span class="op">=</span> smf.ols(<span class="st">"y ~ x"</span>, data<span class="op">=</span>sim).fit(cov_type<span class="op">=</span><span class="st">"HC1"</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"conventional SE:"</span>, <span class="bu">round</span>(conv.bse[<span class="st">"x"</span>], <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>conventional SE: 0.224</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"HC1 robust SE:  "</span>, <span class="bu">round</span>(rob.bse[<span class="st">"x"</span>], <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>HC1 robust SE:   0.31</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">abs</span>(x))</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fl">5.5</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="dv">12</span> <span class="sc">*</span> u</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">tibble</span>(x, y)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>conv <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> sim)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>rob  <span class="ot">&lt;-</span> <span class="fu">lm_robust</span>(y <span class="sc">~</span> x, <span class="at">data =</span> sim, <span class="at">se_type =</span> <span class="st">"HC1"</span>)</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">vcov</span>(conv)))[<span class="st">"x"</span>]</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>rob<span class="sc">$</span>std.error[<span class="st">"x"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>u <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">abs</span>(x))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fl">5.5</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="dv">12</span> <span class="sc">*</span> u</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">tibble</span>(x, y)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>conv <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> sim)</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>rob  <span class="ot">&lt;-</span> <span class="fu">lm_robust</span>(y <span class="sc">~</span> x, <span class="at">data =</span> sim, <span class="at">se_type =</span> <span class="st">"HC1"</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">diag</span>(<span class="fu">vcov</span>(conv)))[<span class="st">"x"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        x 
+0.2219798 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>rob<span class="sc">$</span>std.error[<span class="st">"x"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        x 
+0.3078054 </code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -562,25 +731,40 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> rng.integers(<span class="dv">0</span>, <span class="dv">50</span>, size<span class="op">=</span>n)                   <span class="co"># 50 clusters</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>group_shock <span class="op">=</span> rng.normal(size<span class="op">=</span><span class="dv">50</span>)[g]</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> rng.normal(size<span class="op">=</span>n) <span class="op">+</span> group_shock</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> x <span class="op">+</span> <span class="dv">5</span> <span class="op">*</span> group_shock <span class="op">+</span> rng.normal(size<span class="op">=</span>n)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>cl <span class="op">=</span> pd.DataFrame({<span class="st">"x"</span>: x, <span class="st">"y"</span>: y, <span class="st">"g"</span>: g})</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>plain   <span class="op">=</span> smf.ols(<span class="st">"y ~ x"</span>, data<span class="op">=</span>cl).fit(cov_type<span class="op">=</span><span class="st">"HC1"</span>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>cluster <span class="op">=</span> smf.ols(<span class="st">"y ~ x"</span>, data<span class="op">=</span>cl).fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: cl[<span class="st">"g"</span>]})</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(plain.bse[<span class="st">"x"</span>].<span class="bu">round</span>(<span class="dv">3</span>), cluster.bse[<span class="st">"x"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> rng.integers(<span class="dv">0</span>, <span class="dv">50</span>, size<span class="op">=</span>n)                   <span class="co"># 50 clusters</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>group_shock <span class="op">=</span> rng.normal(size<span class="op">=</span><span class="dv">50</span>)[g]</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> rng.normal(size<span class="op">=</span>n) <span class="op">+</span> group_shock</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> x <span class="op">+</span> <span class="dv">5</span> <span class="op">*</span> group_shock <span class="op">+</span> rng.normal(size<span class="op">=</span>n)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>cl <span class="op">=</span> pd.DataFrame({<span class="st">"x"</span>: x, <span class="st">"y"</span>: y, <span class="st">"g"</span>: g})</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>plain   <span class="op">=</span> smf.ols(<span class="st">"y ~ x"</span>, data<span class="op">=</span>cl).fit(cov_type<span class="op">=</span><span class="st">"HC1"</span>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>cluster <span class="op">=</span> smf.ols(<span class="st">"y ~ x"</span>, data<span class="op">=</span>cl).fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: cl[<span class="st">"g"</span>]})</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(plain.bse[<span class="st">"x"</span>].<span class="bu">round</span>(<span class="dv">3</span>), cluster.bse[<span class="st">"x"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.029 0.319</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
-<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">49</span>, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>group_shock <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">50</span>)[g <span class="sc">+</span> <span class="dv">1</span>]</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n) <span class="sc">+</span> group_shock</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> group_shock <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">tibble</span>(x, y, g)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lm_robust</span>(y <span class="sc">~</span> x, <span class="at">data =</span> cl, <span class="at">se_type =</span> <span class="st">"HC1"</span>)<span class="sc">$</span>std.error[<span class="st">"x"</span>]</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lm_robust</span>(y <span class="sc">~</span> x, <span class="at">data =</span> cl, <span class="at">clusters =</span> g)<span class="sc">$</span>std.error[<span class="st">"x"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">49</span>, n, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>group_shock <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">50</span>)[g <span class="sc">+</span> <span class="dv">1</span>]</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n) <span class="sc">+</span> group_shock</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">*</span> x <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> group_shock <span class="sc">+</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>cl <span class="ot">&lt;-</span> <span class="fu">tibble</span>(x, y, g)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lm_robust</span>(y <span class="sc">~</span> x, <span class="at">data =</span> cl, <span class="at">se_type =</span> <span class="st">"HC1"</span>)<span class="sc">$</span>std.error[<span class="st">"x"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         x 
+0.02853175 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm_robust</span>(y <span class="sc">~</span> x, <span class="at">data =</span> cl, <span class="at">clusters =</span> g)<span class="sc">$</span>std.error[<span class="st">"x"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        x 
+0.3091246 </code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -600,7 +784,7 @@ window.Quarto = {
 <section id="solutions" class="level2">
 <h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -609,16 +793,16 @@ Solutions (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>1.</strong> For <code>mpg</code>: residualize <code>mpg</code> on <code>length + weight + headroom</code>, regress <code>price</code> on the residual; slope is −87.96. For <code>weight</code>: residualize on <code>length + headroom + mpg</code>; slope is 4.34. Compare each residual’s variance to the variable’s raw variance: <code>mpg</code> keeps about 34% of its variation after partialling out the others, while <code>length</code> and <code>weight</code> each keep only about 10% (they are nearly collinear with one another). Precision is <span class="math inline">\(\sigma^2 / (n \cdot \mathrm{Var}(\tilde{x}_k))\)</span> scaled by the variable’s units, so the coefficient whose regressor retains the <em>most</em> of its own variation — <code>mpg</code> — is the one estimated most precisely relative to its scale; <code>length</code> and <code>weight</code> are fighting over the same variation.</p>
 <p><strong>2.</strong> Stay wins ≈ 1/3, switch wins ≈ 2/3. With a random host (void if the car is revealed), both strategies win 1/2 of the non-void games. The informed host’s choice is a function of where the car is, so conditioning on it moves probability; the random host’s choice is independent of the car’s location, so it carries no information.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)<span class="op">;</span> N <span class="op">=</span> <span class="dv">100_000</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>car <span class="op">=</span> rng.integers(<span class="dv">0</span>, <span class="dv">3</span>, N)<span class="op">;</span> pick <span class="op">=</span> rng.integers(<span class="dv">0</span>, <span class="dv">3</span>, N)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># informed host opens a goat door that is not the pick</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>host <span class="op">=</span> np.array([<span class="bu">next</span>(d <span class="cf">for</span> d <span class="kw">in</span> rng.permutation(<span class="dv">3</span>) <span class="cf">if</span> d <span class="op">!=</span> c <span class="kw">and</span> d <span class="op">!=</span> p) <span class="cf">for</span> c, p <span class="kw">in</span> <span class="bu">zip</span>(car, pick)])</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>switch <span class="op">=</span> <span class="dv">3</span> <span class="op">-</span> pick <span class="op">-</span> host</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>((pick <span class="op">==</span> car).mean(), (switch <span class="op">==</span> car).mean())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)<span class="op">;</span> N <span class="op">=</span> <span class="dv">100_000</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>car <span class="op">=</span> rng.integers(<span class="dv">0</span>, <span class="dv">3</span>, N)<span class="op">;</span> pick <span class="op">=</span> rng.integers(<span class="dv">0</span>, <span class="dv">3</span>, N)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co"># informed host opens a goat door that is not the pick</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>host <span class="op">=</span> np.array([<span class="bu">next</span>(d <span class="cf">for</span> d <span class="kw">in</span> rng.permutation(<span class="dv">3</span>) <span class="cf">if</span> d <span class="op">!=</span> c <span class="kw">and</span> d <span class="op">!=</span> p) <span class="cf">for</span> c, p <span class="kw">in</span> <span class="bu">zip</span>(car, pick)])</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>switch <span class="op">=</span> <span class="dv">3</span> <span class="op">-</span> pick <span class="op">-</span> host</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>((pick <span class="op">==</span> car).mean(), (switch <span class="op">==</span> car).mean())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>3.</strong> Homoskedastic case: the two SEs agree to two decimals. At <code>n = 50</code> the robust SE has a noticeably larger spread across replications (it estimates more parameters from the same data). Researchers accept the variability because the robust estimator is consistent under a wider set of DGPs, but with tiny samples HC2/HC3 corrections are advisable.</p>
 </div>
 </div>
@@ -627,7 +811,7 @@ Solutions (click to expand)
 <section id="facilitator-notes" class="level2">
 <h2 class="anchored" data-anchor-id="facilitator-notes">Facilitator notes</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Facilitator notes (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -636,7 +820,7 @@ Facilitator notes (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>What usually goes wrong.</strong> Participants read the sign flip in Step 2 as “the first regression was wrong.” Steer them to: both are correct descriptions of different conditional expectations, and neither is causal without an argument about the error term. This is the thesis of the whole book.</p>
 <p><strong>Misconception: “robust SEs fix everything.”</strong> Clustered and robust SEs change inference, not the estimand. Use Step 5’s biased point estimate to make the point concretely.</p>
@@ -1057,8 +1241,8 @@ Facilitator notes (click to expand)
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../facilitating.html" class="pagination-link" aria-label="Facilitating">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Facilitating</span>
+      <a href="../glossary.html" class="pagination-link" aria-label="Glossary">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Glossary</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

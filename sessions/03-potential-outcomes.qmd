@@ -11,13 +11,13 @@ subtitle: "Book chapter 4"
 
 ## Learning goals
 
-Participants should be able to write the simple difference in outcomes as ATE + selection bias + heterogeneous-treatment-effect bias, explain why physical randomization zeroes out the last two terms, and run a Fisher randomization-inference test by hand: state the sharp null, enumerate (or sample) the assignments, and compute an exact $p$-value.
+Participants should be able to write the simple difference in outcomes (SDO) as the average treatment effect (ATE) plus selection bias plus heterogeneous-treatment-effect bias, explain why physical randomization zeroes out the last two terms, and run a Fisher randomization-inference test by hand: state the sharp null, enumerate (or sample) the assignments, and compute an exact $p$-value.
 
 ::: {.agenda}
 | Time | Block |
 |------|-------|
 | 0:00 | Recap: backdoor criterion; collider bias |
-| 0:05 | Concepts: potential outcomes, the switching equation, SDO decomposition, randomization inference |
+| 0:05 | Concepts: potential outcomes, the switching equation, the SDO decomposition, randomization inference (RI) |
 | 0:20 | Walkthrough: Yule's pauperism regression (what not to do); Thornton's HIV experiment; RI on the 8-unit toy data and on Thornton |
 | 0:45 | Exercise 1 kickoff |
 | 0:55 | Assign exercises; preview matching |
@@ -27,13 +27,29 @@ Participants should be able to write the simple difference in outcomes as ATE + 
 
 **Potential outcomes.** Each unit $i$ has $Y_i^1$ (outcome if treated) and $Y_i^0$ (if not). The individual treatment effect is $\delta_i = Y_i^1 - Y_i^0$. We observe only $Y_i = D_i Y_i^1 + (1 - D_i) Y_i^0$ — the *switching equation*. The missing potential outcome is the *fundamental problem of causal inference*; every design in this book is a strategy for filling it in credibly.
 
-**Estimands.** $ATE = E[\delta]$; $ATT = E[\delta \mid D = 1]$; $ATU = E[\delta \mid D = 0]$. They differ whenever effects are heterogeneous and treatment is selected on them.
+::: {.callout-tip .plain-english title="In plain English"}
+For any one person there are two possible futures — with the treatment and without — and you only get to watch one. The effect on that person is the gap between the two futures, which you can never see directly. Every method in this book is a trick for estimating the future you didn't get to watch, using other people who did.
+:::
 
-**The decomposition.** The simple difference in outcomes (SDO) is
-$$E[Y \mid D=1] - E[Y \mid D=0] = ATE + \underbrace{E[Y^0 \mid D=1] - E[Y^0 \mid D=0]}_{\text{selection bias}} + \underbrace{(1-\pi)(ATT - ATU)}_{\text{HTE bias}}.$$
+**Estimands.** The average treatment effect, $ATE = E[\delta]$, averages over everyone. The average treatment effect on the treated, $ATT = E[\delta \mid D = 1]$, averages over the units that actually got treated. The average treatment effect on the untreated, $ATU = E[\delta \mid D = 0]$, averages over those that did not. They differ whenever effects are heterogeneous and treatment is selected on them.
+
+::: {.callout-tip .plain-english title="In plain English"}
+ATE: "How much would it help on average if we gave it to everyone?" ATT: "How much did it help the people who actually got it?" ATU: "How much would it have helped the people who didn't?" These can be very different numbers — a job-training program might help the people who sign up (ATT) a lot more than it would help a random person (ATE).
+:::
+
+**The decomposition.** The simple difference in outcomes (SDO) — the treated group's average minus the untreated group's — is
+$$E[Y \mid D=1] - E[Y \mid D=0] = ATE + \underbrace{E[Y^0 \mid D=1] - E[Y^0 \mid D=0]}_{\text{selection bias}} + \underbrace{(1-\pi)(ATT - ATU)}_{\text{heterogeneous-effect (HTE) bias}}.$$
 Selection bias: treated units would have done differently even untreated. HTE bias: treated units gain differently from treatment. Randomization makes $D$ independent of $(Y^0, Y^1)$, so both bias terms are zero and the SDO is the ATE.
 
-**Randomization inference.** Fisher's sharp null, $H_0: \delta_i = 0$ for every $i$, fills in *every* missing potential outcome (they equal the observed ones). Under it, you can recompute the test statistic for every possible assignment and get an exact $p$-value with no distributional assumptions and no appeal to large samples. It is the right tool for small experiments and a useful stress test for any design.
+::: {.callout-tip .plain-english title="In plain English"}
+Comparing treated and untreated averages gives you the true effect plus two kinds of junk. Junk #1 (selection bias): the treated group would have done differently *anyway* — healthier people take the gym membership. Junk #2 (heterogeneous-effect bias): the treatment helps the treated group by a different amount than it would help everyone else. A coin flip deciding who gets treated makes both junk terms average out to zero.
+:::
+
+**Randomization inference (RI).** Fisher's sharp null, $H_0: \delta_i = 0$ for every $i$, fills in *every* missing potential outcome (they equal the observed ones). Under it, you can recompute the test statistic for every possible assignment and get an exact $p$-value with no distributional assumptions and no appeal to large samples. It is the right tool for small experiments and a useful stress test for any design.
+
+::: {.callout-tip .plain-english title="In plain English"}
+Ask: "If the treatment did absolutely nothing to anyone, how often would a random reshuffle of who got treated produce a gap as big as the one I found?" You answer by actually doing the reshuffles — hundreds or thousands of them — and counting. If big gaps show up in 40% of reshuffles, your result is unremarkable; if they show up in 0.1%, it is not.
+:::
 
 ## Walkthrough
 
@@ -45,7 +61,7 @@ Yule regressed changes in pauperism on changes in out-relief (welfare outside th
 
 #### Python
 
-```python
+```{python}
 import pandas as pd
 import numpy as np
 import statsmodels.formula.api as smf
@@ -56,7 +72,7 @@ print(smf.ols("paup ~ outrelief + old + pop", data=yule).fit().summary().tables[
 
 #### R
 
-```r
+```{r}
 library(tidyverse); library(haven); library(estimatr)
 
 yule <- read_dta("data/yule.dta")
@@ -66,7 +82,7 @@ lm(paup ~ outrelief + old + pop, data = yule) %>% summary()
 :::
 
 ::: {.expect}
-`outrelief` ≈ **0.75**: a 10% rise in out-relief is associated with a 7.5% rise in pauperism. Ask: what is the obvious reverse-causation story, and what would a DAG for this look like? (Hint: local poverty shocks drive both.)
+`outrelief` ≈ **0.75**: a 10% rise in out-relief is associated with a 7.5% rise in pauperism. Ask: what is the obvious reverse-causation story, and what would a directed acyclic graph (DAG) for this look like? (Hint: local poverty shocks drive both.)
 :::
 
 ### Step 2 — Thornton (2008): a real experiment
@@ -77,7 +93,7 @@ Thornton randomized cash incentives for learning one's HIV status in rural Malaw
 
 #### Python
 
-```python
+```{python}
 hiv = pd.read_stata("data/thornton_hiv.dta").dropna(subset=["got", "any"])
 print(hiv.groupby("any")["got"].mean().round(3))
 
@@ -88,7 +104,7 @@ print(m.summary().tables[1])
 
 #### R
 
-```r
+```{r}
 hiv <- read_dta("data/thornton_hiv.dta") %>% drop_na(got, any)
 hiv %>% group_by(any) %>% summarise(got = mean(got), n = n())
 
@@ -98,7 +114,7 @@ lm_robust(got ~ any, data = hiv, clusters = villnum)
 :::
 
 ::: {.expect}
-34% of the no-incentive group learned their status; **79%** of the incentive group did. The difference, **0.45** (SE ≈ 0.02 clustered by village), is the ATE because `any` was randomized. Note how little work the regression is doing; the design did it.
+34% of the no-incentive group learned their status; **79%** of the incentive group did. The difference, **0.45** (standard error, SE, ≈ 0.02 clustered by village), is the ATE because `any` was randomized. Note how little work the regression is doing; the design did it.
 :::
 
 ### Step 3 — Fisher's exact $p$-value on the 8-unit toy data
@@ -109,7 +125,7 @@ lm_robust(got ~ any, data = hiv, clusters = villnum)
 
 #### Python
 
-```python
+```{python}
 import itertools
 
 ri = pd.read_stata("data/ri.dta")
@@ -129,7 +145,7 @@ print(f"observed diff = {obs:.2f}, exact two-sided p = {p:.3f} over {len(stats)}
 
 #### R
 
-```r
+```{r}
 ri <- read_dta("data/ri.dta")
 y <- ri$y; d <- ri$d
 obs <- mean(y[d == 1]) - mean(y[d == 0])
@@ -154,7 +170,7 @@ With 4,820 people there are too many assignments to enumerate; sample 1,000 rand
 
 #### Python
 
-```python
+```{python}
 rng = np.random.default_rng(1)
 got = hiv["got"].to_numpy(); anyv = hiv["any"].to_numpy()
 obs = got[anyv == 1].mean() - got[anyv == 0].mean()
@@ -171,7 +187,7 @@ print("p-value:", (np.abs(perm) >= abs(obs)).mean())
 
 #### R
 
-```r
+```{r}
 set.seed(1)
 obs <- with(hiv, mean(got[any == 1]) - mean(got[any == 0]))
 perm <- replicate(1000, {

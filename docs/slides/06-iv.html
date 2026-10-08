@@ -141,13 +141,86 @@
 <li>That is an IV. Today: any variable can play the cutoff’s role</li>
 </ul>
 </section>
-<section id="the-problem" class="slide level2">
-<h2>The problem</h2>
-<ul>
-<li><span class="math inline">\(Y = \alpha + \delta D + u\)</span> with <span class="math inline">\(\mathrm{Cov}(D, u) \neq 0\)</span></li>
-<li>If <span class="math inline">\(Z\)</span> moves <span class="math inline">\(D\)</span> and is otherwise unrelated to <span class="math inline">\(Y\)</span>:</li>
-</ul>
-<p><span class="math display">\[\delta_{IV} = \frac{\mathrm{Cov}(Z, Y)}{\mathrm{Cov}(Z, D)} = \frac{\text{reduced form}}{\text{first stage}}\]</span></p>
+<section id="the-problem-and-the-trick" class="slide level2">
+<h2>The problem, and the trick</h2>
+<div class="cell" data-fig-width="10" data-fig-height="3" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<svg width="960" height="288" viewbox="0.00 0.00 746.72 154.80" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none; display: block; margin: auto auto auto auto">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 150.8)">
+<!-- Z -->
+<g id="node1" class="node">
+<title>Z</title>
+<path fill="#e3f4e9" stroke="#1f5f3a" d="M115.26,-105.6C115.26,-105.6 11.91,-105.6 11.91,-105.6 5.91,-105.6 -0.09,-99.6 -0.09,-93.6 -0.09,-93.6 -0.09,-70.8 -0.09,-70.8 -0.09,-64.8 5.91,-58.8 11.91,-58.8 11.91,-58.8 115.26,-58.8 115.26,-58.8 121.26,-58.8 127.26,-64.8 127.26,-70.8 127.26,-70.8 127.26,-93.6 127.26,-93.6 127.26,-99.6 121.26,-105.6 115.26,-105.6"></path>
+<text text-anchor="middle" x="63.59" y="-87" font-family="Helvetica,sans-Serif" font-size="16.00">instrument Z</text>
+<text text-anchor="middle" x="63.59" y="-67.8" font-family="Helvetica,sans-Serif" font-size="16.00">(near a college)</text>
+</g>
+<!-- D -->
+<g id="node2" class="node">
+<title>D</title>
+<path fill="#eef4f9" stroke="#1f5f8b" d="M493.45,-99.6C493.45,-99.6 418.28,-99.6 418.28,-99.6 412.28,-99.6 406.28,-93.6 406.28,-87.6 406.28,-87.6 406.28,-64.8 406.28,-64.8 406.28,-58.8 412.28,-52.8 418.28,-52.8 418.28,-52.8 493.45,-52.8 493.45,-52.8 499.45,-52.8 505.45,-58.8 505.45,-64.8 505.45,-64.8 505.45,-87.6 505.45,-87.6 505.45,-93.6 499.45,-99.6 493.45,-99.6"></path>
+<text text-anchor="middle" x="455.87" y="-81" font-family="Helvetica,sans-Serif" font-size="16.00">treatment D</text>
+<text text-anchor="middle" x="455.87" y="-61.8" font-family="Helvetica,sans-Serif" font-size="16.00">(schooling)</text>
+</g>
+<!-- Z&#45;&gt;D -->
+<g id="edge1" class="edge">
+<title>Z-&gt;D</title>
+<path fill="none" stroke="#1f5f3a" stroke-width="2.5" d="M127.29,-81.24C201.33,-80.1 323.52,-78.22 395.9,-77.11"></path>
+<polygon fill="#1f5f3a" stroke="#1f5f3a" stroke-width="2.5" points="396.26,-80.6 406.2,-76.95 396.15,-73.6 396.26,-80.6"></polygon>
+<text text-anchor="middle" x="220.65" y="-84.4" font-family="Times,serif" font-size="14.00" fill="#1f5f3a"> first stage</text>
+</g>
+<!-- Y -->
+<g id="node3" class="node">
+<title>Y</title>
+<path fill="#eef4f9" stroke="#1f5f8b" d="M726.96,-99.6C726.96,-99.6 657.99,-99.6 657.99,-99.6 651.99,-99.6 645.99,-93.6 645.99,-87.6 645.99,-87.6 645.99,-64.8 645.99,-64.8 645.99,-58.8 651.99,-52.8 657.99,-52.8 657.99,-52.8 726.96,-52.8 726.96,-52.8 732.96,-52.8 738.96,-58.8 738.96,-64.8 738.96,-64.8 738.96,-87.6 738.96,-87.6 738.96,-93.6 732.96,-99.6 726.96,-99.6"></path>
+<text text-anchor="middle" x="692.48" y="-81" font-family="Helvetica,sans-Serif" font-size="16.00">outcome Y</text>
+<text text-anchor="middle" x="692.48" y="-61.8" font-family="Helvetica,sans-Serif" font-size="16.00">(wages)</text>
+</g>
+<!-- Z&#45;&gt;Y -->
+<g id="edge6" class="edge">
+<title>Z-&gt;Y</title>
+<path fill="none" stroke="#e34948" stroke-width="1.6" stroke-dasharray="5,2" d="M127.31,-95.74C139.48,-97.92 152.19,-99.89 164.17,-101.2 315.08,-117.67 354.01,-114.99 505.66,-108.2 560.3,-105.75 574.68,-108.34 628.24,-97.2 630.91,-96.64 633.62,-96.01 636.35,-95.33"></path>
+<polygon fill="#e34948" stroke="#e34948" stroke-width="1.6" points="637.51,-98.64 646.22,-92.62 635.66,-91.89 637.51,-98.64"></polygon>
+<text text-anchor="middle" x="341.6" y="-134.2" font-family="Times,serif" font-size="14.00" fill="#e34948"> must NOT exist</text>
+<text text-anchor="middle" x="341.6" y="-117.4" font-family="Times,serif" font-size="14.00" fill="#e34948"> (exclusion)</text>
+</g>
+<!-- u -->
+<g id="node4" class="node">
+<title>u</title>
+<path fill="#fff8e6" stroke="#8a6d1d" d="M265.11,-46.6C265.11,-46.6 176.19,-46.6 176.19,-46.6 170.19,-46.6 164.19,-40.6 164.19,-34.6 164.19,-34.6 164.19,-11.8 164.19,-11.8 164.19,-5.8 170.19,0.2 176.19,0.2 176.19,0.2 265.11,0.2 265.11,0.2 271.11,0.2 277.11,-5.8 277.11,-11.8 277.11,-11.8 277.11,-34.6 277.11,-34.6 277.11,-40.6 271.11,-46.6 265.11,-46.6"></path>
+<text text-anchor="middle" x="220.65" y="-28" font-family="Helvetica,sans-Serif" font-size="16.00">unobserved u</text>
+<text text-anchor="middle" x="220.65" y="-8.8" font-family="Helvetica,sans-Serif" font-size="16.00">(ability)</text>
+</g>
+<!-- Z&#45;&gt;u -->
+<!-- D&#45;&gt;Y -->
+<g id="edge2" class="edge">
+<title>D-&gt;Y</title>
+<path fill="none" stroke="#2a78d6" stroke-width="2.5" d="M505.48,-76.2C543.51,-76.2 596.41,-76.2 636.07,-76.2"></path>
+<polygon fill="#2a78d6" stroke="#2a78d6" stroke-width="2.5" points="636.11,-79.7 646.11,-76.2 636.11,-72.7 636.11,-79.7"></polygon>
+<text text-anchor="middle" x="575.95" y="-80.4" font-family="Times,serif" font-size="14.00" fill="#2a78d6"> δ &nbsp;(what we want)</text>
+</g>
+<!-- u&#45;&gt;D -->
+<g id="edge3" class="edge">
+<title>u-&gt;D</title>
+<path fill="none" stroke="#52514e" stroke-width="1.6" d="M277.22,-35.83C313.05,-43.97 359.6,-54.55 396.06,-62.84"></path>
+<polygon fill="#52514e" stroke="#52514e" stroke-width="1.6" points="395.53,-66.3 406.06,-65.11 397.08,-59.48 395.53,-66.3"></polygon>
+</g>
+<!-- u&#45;&gt;Y -->
+<g id="edge4" class="edge">
+<title>u-&gt;Y</title>
+<path fill="none" stroke="#52514e" stroke-width="1.6" d="M277.32,-25.72C334.69,-28.69 426.65,-34.5 505.66,-44.2 549.76,-49.62 599.34,-58.28 636.18,-65.23"></path>
+<polygon fill="#52514e" stroke="#52514e" stroke-width="1.6" points="635.74,-68.71 646.22,-67.14 637.05,-61.84 635.74,-68.71"></polygon>
+</g>
+</g>
+</svg>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p><span class="math display">\[\delta_{IV} = \frac{\text{effect of } Z \text{ on } Y}{\text{effect of } Z \text{ on } D} = \frac{\text{reduced form}}{\text{first stage}}\]</span></p>
 </section>
 <section id="three-conditions-plus-one" class="slide level2">
 <h2>Three conditions (plus one)</h2>
@@ -193,11 +266,10 @@
 </section>
 <section id="weak-instruments" class="slide level2">
 <h2>Weak instruments</h2>
-<ul>
-<li>Weak first stage → 2SLS biased toward OLS, badly behaved</li>
-<li>Rule of thumb: F &gt; 10; be nervous below 20</li>
-<li>Prefer just-identified models; always report the F</li>
-</ul>
+
+<img data-src="img/s6_weak.svg" style="width:100.0%" class="r-stretch"><div class="small">
+<p>Truth is 1 (orange); naive OLS gives 1.8 (grey). With a weak first stage, 2SLS is spread everywhere <em>and</em> pulled toward the OLS answer. Rule of thumb: first-stage F above 10; nervous below 20.</p>
+</div>
 </section>
 <section id="late" class="slide level2">
 <h2>LATE</h2>

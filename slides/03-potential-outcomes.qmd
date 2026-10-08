@@ -10,9 +10,16 @@ subtitle: "Session 3 · Mixtape chapter 4"
 
 ## Potential outcomes
 
-- Each unit has $Y_i^1$ and $Y_i^0$; the treatment effect is $\delta_i = Y_i^1 - Y_i^0$
-- We see one: $Y_i = D_i Y_i^1 + (1 - D_i) Y_i^0$ (the switching equation)
-- The other is missing. That is the *fundamental problem of causal inference*.
+| unit | $D$ | $Y^1$ | $Y^0$ | observed $Y$ | effect $\delta$ |
+|---|---|---|---|---|---|
+| Andy | 1 | 10 | **?** | 10 | ? |
+| Ben | 1 | 5 | **?** | 5 | ? |
+| Edith | 0 | **?** | 5 | 5 | ? |
+| Frank | 0 | **?** | 7 | 7 | ? |
+
+- Each person has two possible futures; we see one
+- The **?** cells are the fundamental problem of causal inference
+- Every design is a way of filling in the **?** credibly
 
 ## Estimands
 
@@ -29,6 +36,14 @@ $$\underbrace{E[Y \mid D=1] - E[Y \mid D=0]}_{\text{SDO}} = ATE + \underbrace{E[
 - HTE bias: the treated gain differently from treatment
 - Every design in this book is a story about killing these two terms
 
+## The decomposition, as a picture
+
+![](img/s3_decomp.svg){width=95%}
+
+::: {.small}
+Randomization sets the orange and aqua pieces to zero on average. Every other design is an argument for why they are zero anyway.
+:::
+
 ## Randomization
 
 - $D \perp (Y^0, Y^1)$
@@ -42,6 +57,14 @@ $$\underbrace{E[Y \mid D=1] - E[Y \mid D=0]}_{\text{SDO}} = ATE + \underbrace{E[
 - Under it, every missing potential outcome is known
 - Recompute the statistic for every possible assignment
 - Exact $p$-value, no distributional assumptions, no large-sample appeal
+
+## What randomization inference looks like
+
+![](img/s3_ri.svg){width=90%}
+
+::: {.small}
+Reshuffle who was "treated" 1,000 times; the blue histogram is what a zero effect produces. The real estimate (orange) is nowhere near it.
+:::
 
 ## Walkthrough
 

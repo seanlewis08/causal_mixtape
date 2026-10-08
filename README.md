@@ -6,9 +6,11 @@ Quarto website with every walkthrough in both Python and R.
 
 - `index.qmd`, `setup.qmd`, `facilitating.qmd` — site front matter
 - `sessions/` — one page per 60-minute session (walkthrough, exercises, solutions, facilitator notes)
-- `slides/` — one reveal.js deck per session
+- `glossary.qmd` — every acronym and term, in plain words
+- `slides/` — one reveal.js deck per session, with diagrams in `slides/img/`
 - `code/` — the Python and R code from each session as plain files
 - `data/` — the datasets (from the book's repo and the `causaldata` package)
+- `_freeze/` — cached chunk output
 - `docs/` — rendered site (GitHub Pages serves this folder)
 
 ## Build
@@ -18,8 +20,9 @@ quarto render          # writes docs/
 quarto preview         # live-reloading local server
 ```
 
-Code is displayed, not executed, at build time (`execute: enabled: false` in `_quarto.yml`),
-so rendering needs only Quarto. To run the analyses, see `setup.qmd`.
+Walkthrough chunks are executed at render time (knitr engine; Python via `reticulate`) and the
+results are cached in `_freeze/`, which is committed. Rendering from the cache needs only Quarto;
+re-running a page needs R, Python and the packages listed in `setup.qmd`.
 
 ## Publish on GitHub Pages
 

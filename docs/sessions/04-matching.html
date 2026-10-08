@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b6ebfe76373a65f90f03e4eef39a9400.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-88736fcce7d974bfecfee082ef4a0c3c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -165,6 +165,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link" href="../facilitating.html"> 
 <span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../glossary.html"> 
+<span class="menu-text">Glossary</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -258,6 +262,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../facilitating.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Facilitating</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -385,7 +395,7 @@ window.Quarto = {
 </div>
 <section id="learning-goals" class="level2">
 <h2 class="anchored" data-anchor-id="learning-goals">Learning goals</h2>
-<p>Participants should be able to state the conditional independence assumption and the common-support condition, compute a subclassification estimate by hand, explain why the propensity score is a sufficient statistic for the covariates, implement inverse-probability weighting and nearest-neighbor matching on the propensity score, and recognize the Dehejia–Wahba result: a good selection-on-observables design can recover an experimental benchmark — and a careless one can be off by $10,000.</p>
+<p>Participants should be able to state the conditional independence assumption (CIA) and the common-support condition, compute a subclassification estimate by hand, explain why the propensity score is a sufficient statistic for the covariates, implement inverse-probability weighting (IPW) and nearest-neighbor matching on the propensity score, and recognize the Dehejia–Wahba result on the National Supported Work (NSW) experiment and Current Population Survey (CPS) comparison group: a good selection-on-observables design can recover an experimental benchmark — and a careless one can be off by $10,000.</p>
 <div class="agenda">
 <table class="caption-top table">
 <colgroup>
@@ -401,7 +411,7 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td>0:00</td>
-<td>Recap: SDO = ATE + selection bias + HTE bias</td>
+<td>Recap: simple difference in outcomes = average treatment effect (ATE) + selection bias + heterogeneous-effect bias</td>
 </tr>
 <tr class="even">
 <td>0:05</td>
@@ -409,7 +419,7 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td>0:20</td>
-<td>Walkthrough: Titanic subclassification; NSW vs CPS; estimate the propensity score; IPW and nearest-neighbor ATT</td>
+<td>Walkthrough: Titanic subclassification; NSW experiment vs CPS survey controls; estimate the propensity score; IPW and nearest-neighbor ATT</td>
 </tr>
 <tr class="even">
 <td>0:45</td>
@@ -417,7 +427,7 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td>0:55</td>
-<td>Assign exercises; preview RDD</td>
+<td>Assign exercises; preview regression discontinuity</td>
 </tr>
 </tbody>
 </table>
@@ -425,11 +435,76 @@ window.Quarto = {
 </section>
 <section id="key-ideas" class="level2">
 <h2 class="anchored" data-anchor-id="key-ideas">Key ideas</h2>
-<p><strong>Conditional independence (CIA).</strong> <span class="math inline">\((Y^0, Y^1) \perp D \mid X\)</span>. Within strata of <span class="math inline">\(X\)</span>, treatment is as good as random. This is the backdoor criterion in potential-outcomes clothing. It is an assumption about <em>unobservables</em>, so no test on the data can confirm it; only the DAG argument can.</p>
+<p><strong>Conditional independence assumption (CIA).</strong> <span class="math inline">\((Y^0, Y^1) \perp D \mid X\)</span>. Within strata of <span class="math inline">\(X\)</span>, treatment is as good as random. This is the backdoor criterion in potential-outcomes clothing; it is also called <em>selection on observables</em>. It is an assumption about <em>unobservables</em>, so no test on the data can confirm it; only the DAG argument can.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The bet behind matching: “once I line up people with the same age, education, and past earnings, the ones who got the program and the ones who didn’t are interchangeable.” If something you <em>can’t</em> see — motivation, say — also drove who signed up, the bet is lost, and no amount of data will tell you so.</p>
+</div>
+</div>
 <p><strong>Common support.</strong> <span class="math inline">\(0 &lt; P(D=1 \mid X) &lt; 1\)</span>. For each covariate profile there must be both treated and untreated units; otherwise you are extrapolating.</p>
-<p><strong>Subclassification.</strong> Stratify on <span class="math inline">\(X\)</span>, compute the treated-minus-control difference within each stratum, and average using the treated group’s stratum shares (for the ATT). It works beautifully with a few discrete covariates and dies of the curse of dimensionality quickly.</p>
-<p><strong>Propensity score.</strong> Rosenbaum and Rubin: if CIA holds given <span class="math inline">\(X\)</span>, it also holds given <span class="math inline">\(p(X) = P(D=1 \mid X)\)</span>. One scalar replaces the whole covariate vector. Estimate it with a logit, then stratify on it, weight by it (IPW), or match on it.</p>
-<p><strong>Dehejia–Wahba.</strong> LaLonde showed that regressions using a non-experimental control group (CPS) badly missed the NSW experimental estimate. Dehejia and Wahba showed that propensity-score methods with a well-specified score and attention to common support get close. The lesson is double-edged: matching can work, and it can fail silently.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can only compare like with like if both kinds exist. If every 50-year-old in the data got the program, you have nobody to compare them to, and any “effect” for 50-year-olds is a guess. Check the overlap before you do anything else.</p>
+</div>
+</div>
+<p><strong>Subclassification.</strong> Stratify on <span class="math inline">\(X\)</span>, compute the treated-minus-control difference within each stratum, and average using the treated group’s stratum shares (for the average treatment effect on the treated, ATT). It works beautifully with a few discrete covariates and dies of the curse of dimensionality quickly.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Sort people into bins — men/women, adult/child — compare treated to untreated inside each bin, then average the bin-by-bin gaps, counting each bin as heavily as it appears in the treated group. Simple and transparent, but with ten characteristics you have thousands of bins and most are empty.</p>
+</div>
+</div>
+<p><strong>Propensity score.</strong> Rosenbaum and Rubin: if CIA holds given <span class="math inline">\(X\)</span>, it also holds given <span class="math inline">\(p(X) = P(D=1 \mid X)\)</span>. One scalar replaces the whole covariate vector. Estimate it with a logit, then stratify on it, weight by it (inverse probability weighting, IPW), or match on it (nearest neighbor, NN).</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Instead of matching on ten characteristics at once, boil them down to one number: how likely was this person to get the treatment, given everything we know about them? Two people with the same likelihood are a fair comparison even if they got there by different routes. IPW uses that number as a weight; matching uses it to find each treated person’s closest untreated twin.</p>
+</div>
+</div>
+<p><strong>Dehejia–Wahba.</strong> LaLonde showed that regressions using a non-experimental control group (the Current Population Survey, CPS) badly missed the National Supported Work (NSW) experimental estimate. Dehejia and Wahba showed that propensity-score methods with a well-specified score and attention to common support get close. The lesson is double-edged: matching can work, and it can fail silently.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A famous test case: a real experiment said job training raised earnings by about $1,800. Replacing the experiment’s control group with ordinary survey respondents gave <em>minus</em> $8,500. Careful propensity-score work got back to roughly $2,000. The method can rescue a bad comparison group — but only when you have the right variables, and nothing warns you when you don’t.</p>
+</div>
+</div>
 </section>
 <section id="walkthrough" class="level2">
 <h2 class="anchored" data-anchor-id="walkthrough">Walkthrough</h2>
@@ -440,7 +515,8 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -451,32 +527,60 @@ window.Quarto = {
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>t[<span class="st">"adult"</span>]<span class="op">=</span> (t[<span class="st">"age"</span>] <span class="op">==</span> <span class="st">"adults"</span>).astype(<span class="bu">int</span>)</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>sdo <span class="op">=</span> t.loc[t.d <span class="op">==</span> <span class="dv">1</span>, <span class="st">"surv"</span>].mean() <span class="op">-</span> t.loc[t.d <span class="op">==</span> <span class="dv">0</span>, <span class="st">"surv"</span>].mean()</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"SDO:"</span>, <span class="bu">round</span>(sdo, <span class="dv">3</span>))</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>cell <span class="op">=</span> t.groupby([<span class="st">"man"</span>, <span class="st">"adult"</span>, <span class="st">"d"</span>])[<span class="st">"surv"</span>].mean().unstack(<span class="st">"d"</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>diff <span class="op">=</span> cell[<span class="dv">1</span>] <span class="op">-</span> cell[<span class="dv">0</span>]</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> t[t.d <span class="op">==</span> <span class="dv">1</span>].groupby([<span class="st">"man"</span>, <span class="st">"adult"</span>]).size() <span class="op">/</span> (t.d <span class="op">==</span> <span class="dv">1</span>).<span class="bu">sum</span>()</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.DataFrame({<span class="st">"diff"</span>: diff.<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">"treated_share"</span>: w.<span class="bu">round</span>(<span class="dv">3</span>)}))</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Subclassified ATT:"</span>, <span class="bu">round</span>((diff <span class="op">*</span> w).<span class="bu">sum</span>(), <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"SDO:"</span>, <span class="bu">round</span>(sdo, <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>SDO: 0.354</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cell <span class="op">=</span> t.groupby([<span class="st">"man"</span>, <span class="st">"adult"</span>, <span class="st">"d"</span>])[<span class="st">"surv"</span>].mean().unstack(<span class="st">"d"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>diff <span class="op">=</span> cell[<span class="dv">1</span>] <span class="op">-</span> cell[<span class="dv">0</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> t[t.d <span class="op">==</span> <span class="dv">1</span>].groupby([<span class="st">"man"</span>, <span class="st">"adult"</span>]).size() <span class="op">/</span> (t.d <span class="op">==</span> <span class="dv">1</span>).<span class="bu">sum</span>()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.DataFrame({<span class="st">"diff"</span>: diff.<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">"treated_share"</span>: w.<span class="bu">round</span>(<span class="dv">3</span>)}))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            diff  treated_share
+man adult                      
+0   0      0.386          0.003
+    1      0.346          0.443
+1   0      0.593          0.015
+    1      0.137          0.538</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Subclassified ATT:"</span>, <span class="bu">round</span>((diff <span class="op">*</span> w).<span class="bu">sum</span>(), <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Subclassified ATT: 0.238</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/titanic.dta"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">d =</span> <span class="fu">as.integer</span>(class <span class="sc">==</span> <span class="dv">1</span>),</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">man =</span> <span class="fu">as.integer</span>(sex <span class="sc">==</span> <span class="dv">1</span>), <span class="at">adult =</span> <span class="fu">as.integer</span>(age <span class="sc">==</span> <span class="dv">1</span>))</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># haven keeps Stata's numeric codes; attributes(t$sex)$labels shows</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 1 = man, and age 1 = adults, class 1 = 1st class, survived 1 = yes</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>sdo <span class="ot">&lt;-</span> <span class="fu">with</span>(t, <span class="fu">mean</span>(survived[d <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(survived[d <span class="sc">==</span> <span class="dv">0</span>]))</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>att <span class="ot">&lt;-</span> t <span class="sc">%&gt;%</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(man, adult) <span class="sc">%&gt;%</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">diff =</span> <span class="fu">mean</span>(survived[d <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(survived[d <span class="sc">==</span> <span class="dv">0</span>]),</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">n_treated =</span> <span class="fu">sum</span>(d <span class="sc">==</span> <span class="dv">1</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">w =</span> n_treated <span class="sc">/</span> <span class="fu">sum</span>(n_treated))</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>att</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(att<span class="sc">$</span>diff <span class="sc">*</span> att<span class="sc">$</span>w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/titanic.dta"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">d =</span> <span class="fu">as.integer</span>(class <span class="sc">==</span> <span class="dv">1</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">man =</span> <span class="fu">as.integer</span>(sex <span class="sc">==</span> <span class="dv">1</span>), <span class="at">adult =</span> <span class="fu">as.integer</span>(age <span class="sc">==</span> <span class="dv">1</span>))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># haven keeps Stata's numeric codes; attributes(t$sex)$labels shows</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 1 = man, and age 1 = adults, class 1 = 1st class, survived 1 = yes</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>sdo <span class="ot">&lt;-</span> <span class="fu">with</span>(t, <span class="fu">mean</span>(survived[d <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(survived[d <span class="sc">==</span> <span class="dv">0</span>]))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>att <span class="ot">&lt;-</span> t <span class="sc">%&gt;%</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(man, adult) <span class="sc">%&gt;%</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">diff =</span> <span class="fu">mean</span>(survived[d <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(survived[d <span class="sc">==</span> <span class="dv">0</span>]),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">n_treated =</span> <span class="fu">sum</span>(d <span class="sc">==</span> <span class="dv">1</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">w =</span> n_treated <span class="sc">/</span> <span class="fu">sum</span>(n_treated))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>att</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 x 5
+    man adult  diff n_treated       w
+  &lt;int&gt; &lt;int&gt; &lt;dbl&gt;     &lt;int&gt;   &lt;dbl&gt;
+1     0     0 0.386         1 0.00308
+2     0     1 0.346       144 0.443  
+3     1     0 0.593         5 0.0154 
+4     1     1 0.137       175 0.538  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(att<span class="sc">$</span>diff <span class="sc">*</span> att<span class="sc">$</span>w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.2375421</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -491,24 +595,38 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>nsw <span class="op">=</span> pd.read_stata(<span class="st">"data/nsw_mixtape.dta"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cps <span class="op">=</span> pd.read_stata(<span class="st">"data/cps_mixtape.dta"</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>exp <span class="op">=</span> nsw.loc[nsw.treat <span class="op">==</span> <span class="dv">1</span>, <span class="st">"re78"</span>].mean() <span class="op">-</span> nsw.loc[nsw.treat <span class="op">==</span> <span class="dv">0</span>, <span class="st">"re78"</span>].mean()</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"experimental effect on 1978 earnings:"</span>, <span class="bu">round</span>(exp, <span class="dv">0</span>))</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> pd.concat([nsw[nsw.treat <span class="op">==</span> <span class="dv">1</span>], cps[cps.treat <span class="op">==</span> <span class="dv">0</span>]], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>naive <span class="op">=</span> d.loc[d.treat <span class="op">==</span> <span class="dv">1</span>, <span class="st">"re78"</span>].mean() <span class="op">-</span> d.loc[d.treat <span class="op">==</span> <span class="dv">0</span>, <span class="st">"re78"</span>].mean()</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"NSW treated vs CPS controls:"</span>, <span class="bu">round</span>(naive, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>nsw <span class="op">=</span> pd.read_stata(<span class="st">"data/nsw_mixtape.dta"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cps <span class="op">=</span> pd.read_stata(<span class="st">"data/cps_mixtape.dta"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>exp <span class="op">=</span> nsw.loc[nsw.treat <span class="op">==</span> <span class="dv">1</span>, <span class="st">"re78"</span>].mean() <span class="op">-</span> nsw.loc[nsw.treat <span class="op">==</span> <span class="dv">0</span>, <span class="st">"re78"</span>].mean()</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"experimental effect on 1978 earnings:"</span>, <span class="bu">round</span>(exp, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>experimental effect on 1978 earnings: 1794.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> pd.concat([nsw[nsw.treat <span class="op">==</span> <span class="dv">1</span>], cps[cps.treat <span class="op">==</span> <span class="dv">0</span>]], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>naive <span class="op">=</span> d.loc[d.treat <span class="op">==</span> <span class="dv">1</span>, <span class="st">"re78"</span>].mean() <span class="op">-</span> d.loc[d.treat <span class="op">==</span> <span class="dv">0</span>, <span class="st">"re78"</span>].mean()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"NSW treated vs CPS controls:"</span>, <span class="bu">round</span>(naive, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NSW treated vs CPS controls: -8498.0</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>nsw <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/nsw_mixtape.dta"</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cps <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/cps_mixtape.dta"</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(nsw, <span class="fu">mean</span>(re78[treat <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(re78[treat <span class="sc">==</span> <span class="dv">0</span>]))</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">filter</span>(nsw, treat <span class="sc">==</span> <span class="dv">1</span>), <span class="fu">filter</span>(cps, treat <span class="sc">==</span> <span class="dv">0</span>))</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(d, <span class="fu">mean</span>(re78[treat <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(re78[treat <span class="sc">==</span> <span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>nsw <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/nsw_mixtape.dta"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>cps <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/cps_mixtape.dta"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(nsw, <span class="fu">mean</span>(re78[treat <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(re78[treat <span class="sc">==</span> <span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1794.342</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">filter</span>(nsw, treat <span class="sc">==</span> <span class="dv">1</span>), <span class="fu">filter</span>(cps, treat <span class="sc">==</span> <span class="dv">0</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(d, <span class="fu">mean</span>(re78[treat <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(re78[treat <span class="sc">==</span> <span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -8497.516</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -523,27 +641,50 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"age2"</span>] <span class="op">=</span> d.age<span class="op">**</span><span class="dv">2</span><span class="op">;</span>  d[<span class="st">"age3"</span>] <span class="op">=</span> d.age<span class="op">**</span><span class="dv">3</span><span class="op">;</span>  d[<span class="st">"educ2"</span>] <span class="op">=</span> d.educ<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"u74"</span>]  <span class="op">=</span> (d.re74 <span class="op">==</span> <span class="dv">0</span>).astype(<span class="bu">int</span>)<span class="op">;</span>  d[<span class="st">"u75"</span>] <span class="op">=</span> (d.re75 <span class="op">==</span> <span class="dv">0</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"interaction1"</span>] <span class="op">=</span> d.educ <span class="op">*</span> d.re74</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>logit <span class="op">=</span> smf.logit(<span class="st">"treat ~ age + age2 + age3 + educ + educ2 + marr + nodegree + black "</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"+ hisp + re74 + re75 + u74 + u75 + interaction1"</span>, data<span class="op">=</span>d).fit(disp<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"pscore"</span>] <span class="op">=</span> logit.predict(d)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(d.groupby(<span class="st">"treat"</span>)[<span class="st">"pscore"</span>].describe()[[<span class="st">"mean"</span>, <span class="st">"min"</span>, <span class="st">"max"</span>]].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"age2"</span>] <span class="op">=</span> d.age<span class="op">**</span><span class="dv">2</span><span class="op">;</span>  d[<span class="st">"age3"</span>] <span class="op">=</span> d.age<span class="op">**</span><span class="dv">3</span><span class="op">;</span>  d[<span class="st">"educ2"</span>] <span class="op">=</span> d.educ<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"u74"</span>]  <span class="op">=</span> (d.re74 <span class="op">==</span> <span class="dv">0</span>).astype(<span class="bu">int</span>)<span class="op">;</span>  d[<span class="st">"u75"</span>] <span class="op">=</span> (d.re75 <span class="op">==</span> <span class="dv">0</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"interaction1"</span>] <span class="op">=</span> d.educ <span class="op">*</span> d.re74</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>logit <span class="op">=</span> smf.logit(<span class="st">"treat ~ age + age2 + age3 + educ + educ2 + marr + nodegree + black "</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"+ hisp + re74 + re75 + u74 + u75 + interaction1"</span>, data<span class="op">=</span>d).fit(disp<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"pscore"</span>] <span class="op">=</span> logit.predict(d)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(d.groupby(<span class="st">"treat"</span>)[<span class="st">"pscore"</span>].describe()[[<span class="st">"mean"</span>, <span class="st">"min"</span>, <span class="st">"max"</span>]].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mean    min    max
+treat                     
+0      0.008  0.000  0.657
+1      0.328  0.001  0.651</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">age2 =</span> age<span class="sc">^</span><span class="dv">2</span>, <span class="at">age3 =</span> age<span class="sc">^</span><span class="dv">3</span>, <span class="at">educ2 =</span> educ<span class="sc">^</span><span class="dv">2</span>,</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">u74 =</span> <span class="fu">as.integer</span>(re74 <span class="sc">==</span> <span class="dv">0</span>), <span class="at">u75 =</span> <span class="fu">as.integer</span>(re75 <span class="sc">==</span> <span class="dv">0</span>),</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">interaction1 =</span> educ <span class="sc">*</span> re74)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>logit <span class="ot">&lt;-</span> <span class="fu">glm</span>(treat <span class="sc">~</span> age <span class="sc">+</span> age2 <span class="sc">+</span> age3 <span class="sc">+</span> educ <span class="sc">+</span> educ2 <span class="sc">+</span> marr <span class="sc">+</span> nodegree <span class="sc">+</span> black <span class="sc">+</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               hisp <span class="sc">+</span> re74 <span class="sc">+</span> re75 <span class="sc">+</span> u74 <span class="sc">+</span> u75 <span class="sc">+</span> interaction1,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">family =</span> <span class="fu">binomial</span>(), <span class="at">data =</span> d)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>pscore <span class="ot">&lt;-</span> <span class="fu">predict</span>(logit, <span class="at">type =</span> <span class="st">"response"</span>)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(treat) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(pscore), <span class="at">min =</span> <span class="fu">min</span>(pscore), <span class="at">max =</span> <span class="fu">max</span>(pscore))</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(d, <span class="fu">aes</span>(pscore, <span class="at">fill =</span> <span class="fu">factor</span>(treat))) <span class="sc">+</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>, <span class="at">position =</span> <span class="st">"identity"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">age2 =</span> age<span class="sc">^</span><span class="dv">2</span>, <span class="at">age3 =</span> age<span class="sc">^</span><span class="dv">3</span>, <span class="at">educ2 =</span> educ<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">u74 =</span> <span class="fu">as.integer</span>(re74 <span class="sc">==</span> <span class="dv">0</span>), <span class="at">u75 =</span> <span class="fu">as.integer</span>(re75 <span class="sc">==</span> <span class="dv">0</span>),</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">interaction1 =</span> educ <span class="sc">*</span> re74)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>logit <span class="ot">&lt;-</span> <span class="fu">glm</span>(treat <span class="sc">~</span> age <span class="sc">+</span> age2 <span class="sc">+</span> age3 <span class="sc">+</span> educ <span class="sc">+</span> educ2 <span class="sc">+</span> marr <span class="sc">+</span> nodegree <span class="sc">+</span> black <span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>               hisp <span class="sc">+</span> re74 <span class="sc">+</span> re75 <span class="sc">+</span> u74 <span class="sc">+</span> u75 <span class="sc">+</span> interaction1,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">family =</span> <span class="fu">binomial</span>(), <span class="at">data =</span> d)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>pscore <span class="ot">&lt;-</span> <span class="fu">predict</span>(logit, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(treat) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(pscore), <span class="at">min =</span> <span class="fu">min</span>(pscore), <span class="at">max =</span> <span class="fu">max</span>(pscore))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 x 4
+  treat    mean           min   max
+  &lt;dbl&gt;   &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;
+1     0 0.00665 0.00000000118 0.924
+2     1 0.425   0.00106       0.938</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(d, <span class="fu">aes</span>(pscore, <span class="at">fill =</span> <span class="fu">factor</span>(treat))) <span class="sc">+</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>, <span class="at">position =</span> <span class="st">"identity"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="04-matching_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -557,28 +698,44 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ov <span class="op">=</span> d[(d.pscore <span class="op">&gt;</span> <span class="fl">0.1</span>) <span class="op">&amp;</span> (d.pscore <span class="op">&lt;</span> <span class="fl">0.9</span>)].copy()</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"units in overlap:"</span>, <span class="bu">len</span>(ov), <span class="st">" treated:"</span>, <span class="bu">int</span>(ov.treat.<span class="bu">sum</span>()))</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># normalized IPW (ATE)</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>w1 <span class="op">=</span> ov.treat <span class="op">/</span> ov.pscore</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> (<span class="dv">1</span> <span class="op">-</span> ov.treat) <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> ov.pscore)</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>y1 <span class="op">=</span> (w1 <span class="op">*</span> ov.re78).<span class="bu">sum</span>() <span class="op">/</span> w1.<span class="bu">sum</span>()</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> (w0 <span class="op">*</span> ov.re78).<span class="bu">sum</span>() <span class="op">/</span> w0.<span class="bu">sum</span>()</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"normalized IPW estimate:"</span>, <span class="bu">round</span>(y1 <span class="op">-</span> y0, <span class="dv">0</span>))</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># non-normalized version for comparison</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"non-normalized IPW:"</span>, <span class="bu">round</span>((w1 <span class="op">*</span> ov.re78).mean() <span class="op">-</span> (w0 <span class="op">*</span> ov.re78).mean(), <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ov <span class="op">=</span> d[(d.pscore <span class="op">&gt;</span> <span class="fl">0.1</span>) <span class="op">&amp;</span> (d.pscore <span class="op">&lt;</span> <span class="fl">0.9</span>)].copy()</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"units in overlap:"</span>, <span class="bu">len</span>(ov), <span class="st">" treated:"</span>, <span class="bu">int</span>(ov.treat.<span class="bu">sum</span>()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>units in overlap: 445  treated: 147</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># normalized IPW (ATE)</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>w1 <span class="op">=</span> ov.treat <span class="op">/</span> ov.pscore</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> (<span class="dv">1</span> <span class="op">-</span> ov.treat) <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> ov.pscore)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>y1 <span class="op">=</span> (w1 <span class="op">*</span> ov.re78).<span class="bu">sum</span>() <span class="op">/</span> w1.<span class="bu">sum</span>()</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> (w0 <span class="op">*</span> ov.re78).<span class="bu">sum</span>() <span class="op">/</span> w0.<span class="bu">sum</span>()</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"normalized IPW estimate:"</span>, <span class="bu">round</span>(y1 <span class="op">-</span> y0, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>normalized IPW estimate: 2034.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># non-normalized version for comparison</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"non-normalized IPW:"</span>, <span class="bu">round</span>((w1 <span class="op">*</span> ov.re78).mean() <span class="op">-</span> (w0 <span class="op">*</span> ov.re78).mean(), <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>non-normalized IPW: 2862.0</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ov <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> <span class="fu">filter</span>(pscore <span class="sc">&gt;</span> <span class="fl">0.1</span>, pscore <span class="sc">&lt;</span> <span class="fl">0.9</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">w1 =</span> treat <span class="sc">/</span> pscore, <span class="at">w0 =</span> (<span class="dv">1</span> <span class="sc">-</span> treat) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> pscore))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>y1 <span class="ot">&lt;-</span> <span class="fu">with</span>(ov, <span class="fu">sum</span>(w1 <span class="sc">*</span> re78) <span class="sc">/</span> <span class="fu">sum</span>(w1))</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>y0 <span class="ot">&lt;-</span> <span class="fu">with</span>(ov, <span class="fu">sum</span>(w0 <span class="sc">*</span> re78) <span class="sc">/</span> <span class="fu">sum</span>(w0))</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>y1 <span class="sc">-</span> y0</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(ov, <span class="fu">mean</span>(w1 <span class="sc">*</span> re78) <span class="sc">-</span> <span class="fu">mean</span>(w0 <span class="sc">*</span> re78))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ov <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> <span class="fu">filter</span>(pscore <span class="sc">&gt;</span> <span class="fl">0.1</span>, pscore <span class="sc">&lt;</span> <span class="fl">0.9</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">w1 =</span> treat <span class="sc">/</span> pscore, <span class="at">w0 =</span> (<span class="dv">1</span> <span class="sc">-</span> treat) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> pscore))</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>y1 <span class="ot">&lt;-</span> <span class="fu">with</span>(ov, <span class="fu">sum</span>(w1 <span class="sc">*</span> re78) <span class="sc">/</span> <span class="fu">sum</span>(w1))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>y0 <span class="ot">&lt;-</span> <span class="fu">with</span>(ov, <span class="fu">sum</span>(w0 <span class="sc">*</span> re78) <span class="sc">/</span> <span class="fu">sum</span>(w0))</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>y1 <span class="sc">-</span> y0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1806.73</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(ov, <span class="fu">mean</span>(w1 <span class="sc">*</span> re78) <span class="sc">-</span> <span class="fu">mean</span>(w0 <span class="sc">*</span> re78))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2006.365</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -592,22 +749,56 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> NearestNeighbors</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>tr <span class="op">=</span> d[d.treat <span class="op">==</span> <span class="dv">1</span>]<span class="op">;</span> co <span class="op">=</span> d[d.treat <span class="op">==</span> <span class="dv">0</span>]</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>nn <span class="op">=</span> NearestNeighbors(n_neighbors<span class="op">=</span><span class="dv">1</span>).fit(co[[<span class="st">"pscore"</span>]].to_numpy())</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>_, idx <span class="op">=</span> nn.kneighbors(tr[[<span class="st">"pscore"</span>]].to_numpy())</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>att <span class="op">=</span> (tr.re78.to_numpy() <span class="op">-</span> co.re78.to_numpy()[idx[:, <span class="dv">0</span>]]).mean()</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"1-NN ATT on pscore:"</span>, <span class="bu">round</span>(att, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> NearestNeighbors</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>tr <span class="op">=</span> d[d.treat <span class="op">==</span> <span class="dv">1</span>]<span class="op">;</span> co <span class="op">=</span> d[d.treat <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>nn <span class="op">=</span> NearestNeighbors(n_neighbors<span class="op">=</span><span class="dv">1</span>).fit(co[[<span class="st">"pscore"</span>]].to_numpy())</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>_, idx <span class="op">=</span> nn.kneighbors(tr[[<span class="st">"pscore"</span>]].to_numpy())</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>att <span class="op">=</span> (tr.re78.to_numpy() <span class="op">-</span> co.re78.to_numpy()[idx[:, <span class="dv">0</span>]]).mean()</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"1-NN ATT on pscore:"</span>, <span class="bu">round</span>(att, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1-NN ATT on pscore: 1760.0</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
-<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MatchIt)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">matchit</span>(treat <span class="sc">~</span> age <span class="sc">+</span> age2 <span class="sc">+</span> age3 <span class="sc">+</span> educ <span class="sc">+</span> educ2 <span class="sc">+</span> marr <span class="sc">+</span> nodegree <span class="sc">+</span> black <span class="sc">+</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>               hisp <span class="sc">+</span> re74 <span class="sc">+</span> re75 <span class="sc">+</span> u74 <span class="sc">+</span> u75 <span class="sc">+</span> interaction1,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> d, <span class="at">method =</span> <span class="st">"nearest"</span>, <span class="at">distance =</span> <span class="st">"glm"</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>md <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(re78 <span class="sc">~</span> treat, <span class="at">data =</span> md, <span class="at">weights =</span> weights)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m)<span class="sc">$</span>sum.matched[, <span class="fu">c</span>(<span class="st">"Means Treated"</span>, <span class="st">"Means Control"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MatchIt)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">matchit</span>(treat <span class="sc">~</span> age <span class="sc">+</span> age2 <span class="sc">+</span> age3 <span class="sc">+</span> educ <span class="sc">+</span> educ2 <span class="sc">+</span> marr <span class="sc">+</span> nodegree <span class="sc">+</span> black <span class="sc">+</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>               hisp <span class="sc">+</span> re74 <span class="sc">+</span> re75 <span class="sc">+</span> u74 <span class="sc">+</span> u75 <span class="sc">+</span> interaction1,</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> d, <span class="at">method =</span> <span class="st">"nearest"</span>, <span class="at">distance =</span> <span class="st">"glm"</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>md <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(re78 <span class="sc">~</span> treat, <span class="at">data =</span> md, <span class="at">weights =</span> weights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = re78 ~ treat, data = md, weights = weights)
+
+Coefficients:
+(Intercept)        treat  
+     5580.4        768.7  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m)<span class="sc">$</span>sum.matched[, <span class="fu">c</span>(<span class="st">"Means Treated"</span>, <span class="st">"Means Control"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Means Treated Means Control
+distance      4.253567e-01  4.255886e-01
+age           2.581622e+01  2.565946e+01
+age2          7.173946e+02  7.018649e+02
+age3          2.155466e+04  2.043646e+04
+educ          1.034595e+01  1.080000e+01
+educ2         1.110595e+02  1.203351e+02
+marr          1.891892e-01  1.837838e-01
+nodegree      7.081081e-01  5.945946e-01
+black         8.432432e-01  8.756757e-01
+hisp          5.945946e-02  2.702703e-02
+re74          2.095574e+03  1.838650e+03
+re75          1.532055e+03  1.474858e+03
+u74           7.081081e-01  7.675676e-01
+u75           6.000000e-01  6.000000e-01
+interaction1  2.289873e+04  1.991657e+04</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -627,7 +818,7 @@ window.Quarto = {
 <section id="solutions" class="level2">
 <h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -636,19 +827,19 @@ Solutions (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>1.</strong> Raw SDO = <strong>3.25</strong>. Matching each treated unit to the control with the closest <code>X</code> (11→10, 7→8, 5→4, 3→4) gives an ATT of <strong>2.25</strong>. The bias-corrected version adjusts each matched pair by <span class="math inline">\(\hat{\mu}_0(X_{treated}) - \hat{\mu}_0(X_{match})\)</span>, where <span class="math inline">\(\hat{\mu}_0\)</span> is the control-group regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span>. In this tiny example the <span class="math inline">\(X\)</span> mismatches are +1, −1, +1, −1, so with a linear <span class="math inline">\(\hat{\mu}_0\)</span> the corrections cancel and the bias-corrected ATT is also 2.25 — which is itself a useful lesson: the correction matters when mismatches are <em>systematic</em>, not when they are balanced.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tb <span class="op">=</span> pd.read_stata(<span class="st">"data/training_bias_reduction.dta"</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>tr, co <span class="op">=</span> tb[tb.D <span class="op">==</span> <span class="dv">1</span>], tb[tb.D <span class="op">==</span> <span class="dv">0</span>]</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>mu0 <span class="op">=</span> smf.ols(<span class="st">"Y ~ X"</span>, co).fit()</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, r <span class="kw">in</span> tr.iterrows():</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    j <span class="op">=</span> (co.X <span class="op">-</span> r.X).<span class="bu">abs</span>().idxmin()</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    rows.append((r.Y <span class="op">-</span> co.loc[j, <span class="st">"Y"</span>],</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                 r.Y <span class="op">-</span> co.loc[j, <span class="st">"Y"</span>] <span class="op">-</span> (mu0.predict(pd.DataFrame({<span class="st">"X"</span>:[r.X]}))[<span class="dv">0</span>]</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                                        <span class="op">-</span> mu0.predict(pd.DataFrame({<span class="st">"X"</span>:[co.loc[j,<span class="st">"X"</span>]]}))[<span class="dv">0</span>])))</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.mean(rows, axis<span class="op">=</span><span class="dv">0</span>))   <span class="co"># [naive NN ATT, bias-corrected ATT]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>tb <span class="op">=</span> pd.read_stata(<span class="st">"data/training_bias_reduction.dta"</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>tr, co <span class="op">=</span> tb[tb.D <span class="op">==</span> <span class="dv">1</span>], tb[tb.D <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>mu0 <span class="op">=</span> smf.ols(<span class="st">"Y ~ X"</span>, co).fit()</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, r <span class="kw">in</span> tr.iterrows():</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    j <span class="op">=</span> (co.X <span class="op">-</span> r.X).<span class="bu">abs</span>().idxmin()</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    rows.append((r.Y <span class="op">-</span> co.loc[j, <span class="st">"Y"</span>],</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>                 r.Y <span class="op">-</span> co.loc[j, <span class="st">"Y"</span>] <span class="op">-</span> (mu0.predict(pd.DataFrame({<span class="st">"X"</span>:[r.X]}))[<span class="dv">0</span>]</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>                                        <span class="op">-</span> mu0.predict(pd.DataFrame({<span class="st">"X"</span>:[co.loc[j,<span class="st">"X"</span>]]}))[<span class="dv">0</span>])))</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.mean(rows, axis<span class="op">=</span><span class="dv">0</span>))   <span class="co"># [naive NN ATT, bias-corrected ATT]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>2.</strong> (0.05, 0.95): ≈ +$1,320 on 601 units; (0.1, 0.9): ≈ +$2,030 on 445; (0.2, 0.8): ≈ +$3,210 on 256. Wider windows keep more controls (lower variance) but include units with poor overlap (more bias); narrower windows do the reverse. The estimate swings by almost $2,000 across reasonable choices — report the sensitivity, not one number.</p>
 <p><strong>3.</strong> Without lagged earnings the treated group’s mean score drops from 0.33 to about 0.20, and the (0.1, 0.9) IPW estimate flips to ≈ <strong>−$2,080</strong>. The score no longer captures the dimension that matters most (NSW enrollees had near-zero 1974–75 earnings). Pre-treatment outcomes are the single most important covariate in this design.</p>
 </div>
@@ -658,7 +849,7 @@ Solutions (click to expand)
 <section id="facilitator-notes" class="level2">
 <h2 class="anchored" data-anchor-id="facilitator-notes">Facilitator notes</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Facilitator notes (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -667,7 +858,7 @@ Facilitator notes (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>The Titanic step is the whole chapter in miniature.</strong> Make sure everyone can reproduce the 0.24 by hand (four cells, four weights) before touching propensity scores. The weights are the <em>treated</em> group’s shares, which is what makes it the ATT.</p>
 <p><strong>Misconception: the propensity score is a prediction model.</strong> You are not trying to predict treatment well; you are trying to achieve covariate balance. A score with AUC 0.99 means no overlap. Say this out loud; it surprises people who come from ML.</p>

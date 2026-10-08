@@ -9,7 +9,8 @@ tx <- read_dta("data/texas.dta")
 
 out <- tx %>%
   synthetic_control(outcome = bmprison, unit = state, time = year,
-                    i_unit = "Texas", i_time = 1993, generate_placebos = TRUE) %>%
+                    i_unit = "Texas", i_time = 1993,
+                    generate_placebos = FALSE) %>%   # TRUE also fits 50 placebo states (slow)
   generate_predictor(time_window = 1985:1993, poverty = mean(poverty), income = mean(income)) %>%
   generate_predictor(time_window = 1988, bmprison_1988 = mean(bmprison)) %>%
   generate_predictor(time_window = 1990, bmprison_1990 = mean(bmprison), alcohol = mean(alcohol),
@@ -27,6 +28,13 @@ out %>% plot_trends()
 out %>% plot_differences()
 
 # ---- step 3 ----
+#| eval: false
+# needs generate_placebos = TRUE in Step 1, which also fits the 50 placebo states (slow)
 out %>% plot_placebos()
 out %>% plot_mspe_ratio()
 out %>% grab_signficance()      # (sic) returns the rank-based p-value
+
+# ---- step 4 ----
+placebo <- read.csv("data/texas_placebo_ratios.csv")
+head(placebo, 10)
+which(placebo$state == "Texas") / nrow(placebo)

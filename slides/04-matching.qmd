@@ -32,6 +32,14 @@ $$0 < P(D = 1 \mid X) < 1$$
 - Works with 2–3 discrete covariates
 - Dies of the curse of dimensionality immediately after
 
+## Subclassification: Titanic in four cells
+
+![](img/s4_subclass.svg){width=90%}
+
+::: {.small}
+Raw gap 0.35. Within cells the gaps are 0.14–0.59; weighting them by where first-class passengers actually were (mostly adults) gives 0.24.
+:::
+
 ## The propensity score
 
 - $p(X) = P(D = 1 \mid X)$
@@ -44,6 +52,10 @@ $$0 < P(D = 1 \mid X) < 1$$
 - You are **not** trying to predict treatment well
 - A score with perfect separation means **no overlap**
 - The goal is covariate balance, and the diagnostic is the balance table
+
+## Common support, in one histogram
+
+![](img/s4_overlap.svg){width=95%}
 
 ## Dehejia–Wahba
 

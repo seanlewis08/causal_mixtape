@@ -89,9 +89,13 @@ lm_robust(price ~ length, data = auto)
 
 ## Running the code
 
-The session pages display code without executing it, so the site builds without needing every package installed. To actually run a session, copy the chunks into a Jupyter notebook or an R script (each session page links its Python and R code files under `code/` in the header), or open the `.qmd` file itself in RStudio / VS Code and run chunks interactively.
+Every walkthrough chunk on the session pages is executed when the site is rendered, and the output you see under each chunk is real. The results are cached in `_freeze/`, so `quarto render` only re-runs a page whose code changed; a fresh clone renders from the cache without needing R or Python at all.
 
-If you would rather render the site with live output, set `execute: enabled: true` in `_quarto.yml` and add `freeze: auto` so results are cached; you will then need both a Jupyter kernel and an R installation with the packages above.
+To re-run a page yourself you need both toolchains: R with the packages above, Python with `requirements.txt`, and the `reticulate` R package, which is how Quarto runs the Python chunks inside the R session. The repo's `.Rprofile` points `reticulate` at `.venv/` when that folder exists (otherwise at the first `python3` on your path), so create the virtual environment in the repo root as shown above and everything lines up.
+
+To work interactively instead, open the `.qmd` file in RStudio or VS Code and run chunks one at a time, or use the plain code files under `code/` (each session page links its Python and R versions in the header) in a notebook or script. Run from the repository root so that `data/` paths resolve.
+
+Session 9's placebo loop fits 51 synthetic controls and takes 20–30 minutes in each language; it is cached like everything else, so you only pay that cost if you edit that page.
 
 ## Reading the book
 

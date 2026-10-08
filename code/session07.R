@@ -10,6 +10,7 @@ timevar <- c("unsafe","llength","reg","asq_cl","appearance_cl","provider_second"
              "asian_cl","black_cl","hispanic_cl","othrace_cl","hot","massage_cl","age_cl")
 fixed   <- c("age","asq","bmi","hispanic","black","other","asian","schooling",
              "cohab","married","divorced","separated")
+sasp <- sasp %>% drop_na(all_of(c("lnw", "id", timevar, fixed)))   # same sample as Python
 
 f_pooled <- as.formula(paste("lnw ~", paste(c(timevar, fixed), collapse = " + ")))
 pooled <- feols(f_pooled, data = sasp, cluster = ~id)

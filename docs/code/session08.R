@@ -22,8 +22,9 @@ placebo <- feols(lnr ~ i(year, repeal, ref = 1985) + acc + ir + pi + alcohol + c
 iplot(placebo, main = "Placebo: black women 25–29")
 
 both <- ab %>% filter(sex == 2, race == 2, age %in% c(15, 25)) %>%
-  mutate(younger = as.integer(age == 15), fip_young = paste(fip, younger))
-ddd <- feols(lnr ~ i(year, repeal, ref = 1985) + i(year, repeal * younger, ref = 1985) +
+  mutate(younger = as.integer(age == 15), repeal_young = repeal * younger,
+         fip_young = paste(fip, younger))
+ddd <- feols(lnr ~ i(year, repeal, ref = 1985) + i(year, repeal_young, ref = 1985) +
                i(year, younger, ref = 1985) + acc + ir + pi + alcohol + crack +
                poverty + income + ur | fip_young + year,
              data = both, weights = ~totpop, cluster = ~fip)
@@ -43,7 +44,8 @@ library(bacondecomp)
 castle <- mutate(castle, D = as.integer(post > 0))
 bd <- bacon(l_homicide ~ D, data = castle, id_var = "sid", time_var = "year")
 # prints the weight and average estimate by comparison type
-bd %>% group_by(type) %>% summarise(weight = sum(weight), avg_est = weighted.mean(estimate, weight))
+bd %>% group_by(type) %>%
+  summarise(avg_est = sum(estimate * weight) / sum(weight), weight = sum(weight))
 ggplot(bd, aes(weight, estimate, shape = type, colour = type)) + geom_point(size = 3) +
   geom_hline(yintercept = sum(bd$estimate * bd$weight)) + theme_minimal()
 

@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b6ebfe76373a65f90f03e4eef39a9400.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-88736fcce7d974bfecfee082ef4a0c3c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -165,6 +165,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link" href="../facilitating.html"> 
 <span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../glossary.html"> 
+<span class="menu-text">Glossary</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -258,6 +262,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../facilitating.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Facilitating</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -384,7 +394,7 @@ window.Quarto = {
 </div>
 <section id="learning-goals" class="level2">
 <h2 class="anchored" data-anchor-id="learning-goals">Learning goals</h2>
-<p>Participants should be able to state the three IV conditions (relevance, exclusion, independence) and the fourth that makes the estimand interpretable (monotonicity), compute a Wald/2SLS estimate and explain it as reduced form divided by first stage, diagnose weak instruments with the first-stage F, and explain why the IV estimand under heterogeneous effects is a LATE for compliers — and who the compliers are in the judge-leniency design.</p>
+<p>Participants should be able to state the three instrumental-variable (IV) conditions (relevance, exclusion, independence) and the fourth that makes the estimand interpretable (monotonicity), compute a Wald / two-stage least squares (2SLS) estimate and explain it as reduced form divided by first stage, diagnose weak instruments with the first-stage F, and explain why the IV estimand under heterogeneous effects is a local average treatment effect (LATE) for compliers — and who the compliers are in the judge-leniency design.</p>
 <div class="agenda">
 <table class="caption-top table">
 <colgroup>
@@ -400,7 +410,7 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td>0:00</td>
-<td>Recap: fuzzy RD as an IV</td>
+<td>Recap: fuzzy regression discontinuity as an instrumental variable</td>
 </tr>
 <tr class="even">
 <td>0:05</td>
@@ -424,11 +434,63 @@ window.Quarto = {
 </section>
 <section id="key-ideas" class="level2">
 <h2 class="anchored" data-anchor-id="key-ideas">Key ideas</h2>
-<p><strong>The problem IV solves.</strong> <span class="math inline">\(Y = \alpha + \delta D + u\)</span> with <span class="math inline">\(\mathrm{Cov}(D, u) \neq 0\)</span>. Regression cannot recover <span class="math inline">\(\delta\)</span>. But if some instrument <span class="math inline">\(Z\)</span> moves <span class="math inline">\(D\)</span> and is otherwise unrelated to <span class="math inline">\(Y\)</span>, then the <em>only</em> reason <span class="math inline">\(Y\)</span> moves with <span class="math inline">\(Z\)</span> is through <span class="math inline">\(D\)</span>, so <span class="math display">\[\delta_{IV} = \frac{\mathrm{Cov}(Z, Y)}{\mathrm{Cov}(Z, D)} = \frac{\text{reduced form}}{\text{first stage}}.\]</span></p>
+<p><strong>The problem IV solves.</strong> <span class="math inline">\(Y = \alpha + \delta D + u\)</span> with <span class="math inline">\(\mathrm{Cov}(D, u) \neq 0\)</span>. Regression cannot recover <span class="math inline">\(\delta\)</span>. But if some instrumental variable (IV) <span class="math inline">\(Z\)</span> moves <span class="math inline">\(D\)</span> and is otherwise unrelated to <span class="math inline">\(Y\)</span>, then the <em>only</em> reason <span class="math inline">\(Y\)</span> moves with <span class="math inline">\(Z\)</span> is through <span class="math inline">\(D\)</span>, so <span class="math display">\[\delta_{IV} = \frac{\mathrm{Cov}(Z, Y)}{\mathrm{Cov}(Z, D)} = \frac{\text{reduced form}}{\text{first stage}}.\]</span></p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can’t trust the raw relationship between schooling and wages because ambitious people get more of both. But suppose some people happened to grow up near a college. That nudges them toward more schooling, and — if it has no <em>other</em> effect on wages — any wage difference between near-college and far-from-college people must have come through schooling. Divide the wage gap by the schooling gap and you have the effect of schooling.</p>
+</div>
+</div>
 <p><strong>The conditions.</strong> <em>Relevance</em>: <span class="math inline">\(Z\)</span> predicts <span class="math inline">\(D\)</span> (testable; look at the first-stage F). <em>Exclusion</em>: <span class="math inline">\(Z\)</span> affects <span class="math inline">\(Y\)</span> only through <span class="math inline">\(D\)</span> (untestable; argued from the DAG). <em>Independence</em>: <span class="math inline">\(Z\)</span> is as good as random with respect to <span class="math inline">\(u\)</span> (untestable). Philip Wright’s 1928 appendix is the origin story: identify a demand curve with a supply shifter (weather) that does not enter demand.</p>
-<p><strong>2SLS.</strong> Regress <span class="math inline">\(D\)</span> on <span class="math inline">\(Z\)</span> and covariates, take the fitted values <span class="math inline">\(\hat{D}\)</span>, regress <span class="math inline">\(Y\)</span> on <span class="math inline">\(\hat{D}\)</span> and the same covariates. The second-stage SEs must account for the first stage; use a proper IV routine, not two <code>lm</code> calls.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An instrument has one job and one restriction. The job: it has to actually move the treatment (you can check this). The restriction: it must not touch the outcome any other way, and it must not itself be chosen by people for reasons related to the outcome (you cannot check either; you have to argue them). Most IV debates are about the restriction.</p>
+</div>
+</div>
+<p><strong>Two-stage least squares (2SLS).</strong> Regress <span class="math inline">\(D\)</span> on <span class="math inline">\(Z\)</span> and covariates, take the fitted values <span class="math inline">\(\hat{D}\)</span>, regress <span class="math inline">\(Y\)</span> on <span class="math inline">\(\hat{D}\)</span> and the same covariates. The second-stage standard errors must account for the first stage; use a proper IV routine, not two <code>lm</code> calls.</p>
 <p><strong>Weak instruments.</strong> When the first stage is weak, 2SLS is biased toward OLS and its sampling distribution is badly behaved. The rule of thumb is first-stage F above 10 for one endogenous regressor; the modern advice is to report it, prefer just-identified models, and be nervous below 20.</p>
-<p><strong>LATE.</strong> With heterogeneous effects, IV identifies the average effect for <em>compliers</em> — units whose treatment is moved by the instrument — under monotonicity (no defiers). Different instruments identify different LATEs for the same treatment. The judge-leniency design makes this vivid: the compliers are defendants who would be detained by a strict judge and released by a lenient one.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If the instrument barely nudges the treatment, you are dividing a small number by another small number, and the answer swings wildly — and, worse, tends to drift back toward the naive estimate you were trying to avoid. The first-stage F-statistic measures how hard the nudge is; under 10 is a warning light.</p>
+</div>
+</div>
+<p><strong>Local average treatment effect (LATE).</strong> With heterogeneous effects, IV identifies the average effect for <em>compliers</em> — units whose treatment is moved by the instrument — under monotonicity (no defiers). Different instruments identify different LATEs for the same treatment. The judge-leniency design makes this vivid: the compliers are defendants who would be detained by a strict judge and released by a lenient one.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>IV only tells you about the people the instrument actually moved. Growing up near a college changes the plans of some teenagers and not others; the IV estimate is the return to schooling <em>for those teenagers</em>, not for everyone. A different instrument moves different people and can honestly give a different answer. “Local” means “for the movers.”</p>
+</div>
+</div>
 </section>
 <section id="walkthrough" class="level2">
 <h2 class="anchored" data-anchor-id="walkthrough">Walkthrough</h2>
@@ -438,7 +500,8 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> linearmodels.iv <span class="im">import</span> IV2SLS</span>
@@ -448,13 +511,23 @@ window.Quarto = {
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>ols <span class="op">=</span> smf.ols(<span class="ss">f"lwage ~ educ + </span><span class="sc">{</span>ctrl<span class="sc">}</span><span class="ss">"</span>, data<span class="op">=</span>card).fit()</span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"OLS return to a year of schooling:"</span>, ols.params[<span class="st">"educ"</span>].<span class="bu">round</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>OLS return to a year of schooling: 0.0712</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(estimatr); <span class="fu">library</span>(ivreg)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>card <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/card.dta"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(lwage <span class="sc">~</span> educ <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa, <span class="at">data =</span> card)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(ols)[<span class="st">"educ"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(estimatr); <span class="fu">library</span>(ivreg)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>card <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/card.dta"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(lwage <span class="sc">~</span> educ <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa, <span class="at">data =</span> card)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(ols)[<span class="st">"educ"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      educ 
+0.07117285 </code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -468,18 +541,42 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> smf.ols(<span class="ss">f"educ ~ nearc4 + </span><span class="sc">{</span>ctrl<span class="sc">}</span><span class="ss">"</span>, data<span class="op">=</span>card).fit()</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"first stage:"</span>, fs.params[<span class="st">"nearc4"</span>].<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">" t ="</span>, (fs.params[<span class="st">"nearc4"</span>] <span class="op">/</span> fs.bse[<span class="st">"nearc4"</span>]).<span class="bu">round</span>(<span class="dv">2</span>))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> smf.ols(<span class="ss">f"lwage ~ nearc4 + </span><span class="sc">{</span>ctrl<span class="sc">}</span><span class="ss">"</span>, data<span class="op">=</span>card).fit()</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"reduced form:"</span>, rf.params[<span class="st">"nearc4"</span>].<span class="bu">round</span>(<span class="dv">4</span>))</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wald ratio:"</span>, (rf.params[<span class="st">"nearc4"</span>] <span class="op">/</span> fs.params[<span class="st">"nearc4"</span>]).<span class="bu">round</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> smf.ols(<span class="ss">f"educ ~ nearc4 + </span><span class="sc">{</span>ctrl<span class="sc">}</span><span class="ss">"</span>, data<span class="op">=</span>card).fit()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"first stage:"</span>, fs.params[<span class="st">"nearc4"</span>].<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">" t ="</span>, (fs.params[<span class="st">"nearc4"</span>] <span class="op">/</span> fs.bse[<span class="st">"nearc4"</span>]).<span class="bu">round</span>(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>first stage: 0.327  t = 3.97</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> smf.ols(<span class="ss">f"lwage ~ nearc4 + </span><span class="sc">{</span>ctrl<span class="sc">}</span><span class="ss">"</span>, data<span class="op">=</span>card).fit()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"reduced form:"</span>, rf.params[<span class="st">"nearc4"</span>].<span class="bu">round</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>reduced form: 0.0406</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wald ratio:"</span>, (rf.params[<span class="st">"nearc4"</span>] <span class="op">/</span> fs.params[<span class="st">"nearc4"</span>]).<span class="bu">round</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Wald ratio: 0.1242</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> nearc4 <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa, <span class="at">data =</span> card)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">lm</span>(lwage <span class="sc">~</span> nearc4 <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa, <span class="at">data =</span> card)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fs)[<span class="st">"nearc4"</span>]; <span class="fu">coef</span>(rf)[<span class="st">"nearc4"</span>]</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(rf)[<span class="st">"nearc4"</span>] <span class="sc">/</span> <span class="fu">coef</span>(fs)[<span class="st">"nearc4"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> nearc4 <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa, <span class="at">data =</span> card)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">lm</span>(lwage <span class="sc">~</span> nearc4 <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa, <span class="at">data =</span> card)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fs)[<span class="st">"nearc4"</span>]; <span class="fu">coef</span>(rf)[<span class="st">"nearc4"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   nearc4 
+0.3272826 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    nearc4 
+0.04063679 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(rf)[<span class="st">"nearc4"</span>] <span class="sc">/</span> <span class="fu">coef</span>(fs)[<span class="st">"nearc4"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   nearc4 
+0.1241642 </code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -493,20 +590,74 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cc <span class="op">=</span> card.dropna(subset<span class="op">=</span>[<span class="st">"lwage"</span>, <span class="st">"educ"</span>, <span class="st">"exper"</span>, <span class="st">"black"</span>, <span class="st">"south"</span>, <span class="st">"married"</span>, <span class="st">"smsa"</span>, <span class="st">"nearc4"</span>])</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>iv <span class="op">=</span> IV2SLS.from_formula(<span class="ss">f"lwage ~ 1 + </span><span class="sc">{</span>ctrl<span class="sc">}</span><span class="ss"> + [educ ~ nearc4]"</span>, data<span class="op">=</span>cc).fit(cov_type<span class="op">=</span><span class="st">"robust"</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iv.summary.tables[<span class="dv">1</span>])</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iv.first_stage.diagnostics[[<span class="st">"f.stat"</span>, <span class="st">"partial.rsquared"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>cc <span class="op">=</span> card.dropna(subset<span class="op">=</span>[<span class="st">"lwage"</span>, <span class="st">"educ"</span>, <span class="st">"exper"</span>, <span class="st">"black"</span>, <span class="st">"south"</span>, <span class="st">"married"</span>, <span class="st">"smsa"</span>, <span class="st">"nearc4"</span>])</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>iv <span class="op">=</span> IV2SLS.from_formula(<span class="ss">f"lwage ~ 1 + </span><span class="sc">{</span>ctrl<span class="sc">}</span><span class="ss"> + [educ ~ nearc4]"</span>, data<span class="op">=</span>cc).fit(cov_type<span class="op">=</span><span class="st">"robust"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iv.summary.tables[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                             Parameter Estimates                              
+==============================================================================
+            Parameter  Std. Err.     T-stat    P-value    Lower CI    Upper CI
+------------------------------------------------------------------------------
+Intercept      4.1625     0.8349     4.9857     0.0000      2.5262      5.7988
+exper          0.0556     0.0199     2.7980     0.0051      0.0166      0.0945
+black         -0.1157     0.0496    -2.3343     0.0196     -0.2128     -0.0186
+south         -0.1132     0.0229    -4.9314     0.0000     -0.1581     -0.0682
+married       -0.0320     0.0051    -6.3037     0.0000     -0.0419     -0.0220
+smsa           0.1477     0.0303     4.8721     0.0000      0.0883      0.2071
+educ           0.1242     0.0492     2.5258     0.0115      0.0278      0.2205
+==============================================================================</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iv.first_stage.diagnostics[[<span class="st">"f.stat"</span>, <span class="st">"partial.rsquared"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         f.stat  partial.rsquared
+educ  16.553873          0.005235</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>iv <span class="ot">&lt;-</span> <span class="fu">ivreg</span>(lwage <span class="sc">~</span> educ <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa <span class="sc">|</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>              nearc4 <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa, <span class="at">data =</span> card)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iv, <span class="at">diagnostics =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>iv <span class="ot">&lt;-</span> <span class="fu">ivreg</span>(lwage <span class="sc">~</span> educ <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa <span class="sc">|</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>              nearc4 <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa, <span class="at">data =</span> card)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iv, <span class="at">diagnostics =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+ivreg(formula = lwage ~ educ + exper + black + south + married + 
+    smsa | nearc4 + exper + black + south + married + smsa, data = card)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.81301 -0.23805  0.01766  0.24727  1.32278 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  4.162476   0.849590   4.899 1.01e-06 ***
+educ         0.124164   0.049956   2.485  0.01299 *  
+exper        0.055588   0.020286   2.740  0.00618 ** 
+black       -0.115686   0.050741  -2.280  0.02268 *  
+south       -0.113165   0.023244  -4.869 1.18e-06 ***
+married     -0.031975   0.005087  -6.286 3.73e-10 ***
+smsa         0.147707   0.030895   4.781 1.83e-06 ***
+
+Diagnostic tests:
+                  df1  df2 statistic  p-value    
+Weak instruments    1 2996    15.767 7.33e-05 ***
+Wu-Hausman          1 2995     1.219     0.27    
+Sargan              0   NA        NA       NA    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.3843 on 2996 degrees of freedom
+Multiple R-Squared: 0.2513, Adjusted R-squared: 0.2498 
+Wald test: 139.8 on 6 and 2996 DF,  p-value: &lt; 2.2e-16 </code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="expect">
-<p>2SLS <code>educ</code> ≈ <strong>0.124</strong> (SE ≈ 0.05), versus OLS 0.071. The IV estimate is <em>larger</em>, which the book reads as evidence that measurement error and the LATE population (people on the margin of attending because a college was nearby) matter more than ability bias. The 95% CI runs roughly 0.03 to 0.22: honest, and wide.</p>
+<p>2SLS <code>educ</code> ≈ <strong>0.124</strong> (standard error, SE, ≈ 0.05), versus ordinary least squares (OLS) 0.071. The IV estimate is <em>larger</em>, which the book reads as evidence that measurement error and the LATE population (people on the margin of attending because a college was nearby) matter more than ability bias. The 95% CI runs roughly 0.03 to 0.22: honest, and wide.</p>
 </div>
 </section>
 <section id="step-4-judge-leniency-as-an-instrument-stevenson-2018" class="level3">
@@ -516,36 +667,61 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Large file: download once from the book's repo</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta"</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>judge <span class="op">=</span> pd.read_stata(url)        <span class="co"># or pd.read_stata("data/judge_fe.dta") if you saved it</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>controls <span class="op">=</span> (<span class="st">"white + age + male + black + possess + robbery + DUI1st + aggAss + drugSell "</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"+ fel + mis + threePriors + F1 + F2 + F3 + M1 + M2 + M3 "</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"+ day + day2 + day3 + t1 + t2 + t3 + t4 + t5"</span>)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># `sum` and `t6` are dropped: they are linear combinations of the other controls,</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># and one judge dummy is dropped because the eight sum to one.</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>judges <span class="op">=</span> <span class="st">" + "</span>.join(<span class="ss">f"judge_pre_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">8</span>))</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>ols <span class="op">=</span> smf.ols(<span class="ss">f"guilt ~ jail3 + </span><span class="sc">{</span>controls<span class="sc">}</span><span class="ss">"</span>, data<span class="op">=</span>judge).fit()</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>iv  <span class="op">=</span> IV2SLS.from_formula(<span class="ss">f"guilt ~ 1 + </span><span class="sc">{</span>controls<span class="sc">}</span><span class="ss"> + [jail3 ~ </span><span class="sc">{</span>judges<span class="sc">}</span><span class="ss">]"</span>, data<span class="op">=</span>judge).fit(cov_type<span class="op">=</span><span class="st">"robust"</span>)</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"OLS  jail3:"</span>, ols.params[<span class="st">"jail3"</span>].<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">" SE"</span>, ols.bse[<span class="st">"jail3"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"2SLS jail3:"</span>, iv.params[<span class="st">"jail3"</span>].<span class="bu">round</span>(<span class="dv">3</span>),  <span class="st">" SE"</span>, iv.std_errors[<span class="st">"jail3"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iv.first_stage.diagnostics[[<span class="st">"f.stat"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Large file (58 MB): read the local copy if you saved one, otherwise download from the book's repo</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta"</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>judge <span class="op">=</span> pd.read_stata(<span class="st">"data/judge_fe.dta"</span> <span class="cf">if</span> os.path.exists(<span class="st">"data/judge_fe.dta"</span>) <span class="cf">else</span> url)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>controls <span class="op">=</span> (<span class="st">"white + age + male + black + possess + robbery + DUI1st + aggAss + drugSell "</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"+ fel + mis + threePriors + F1 + F2 + F3 + M1 + M2 + M3 "</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">"+ day + day2 + day3 + t1 + t2 + t3 + t4 + t5"</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># `sum` and `t6` are dropped: they are linear combinations of the other controls,</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># and one judge dummy is dropped because the eight sum to one.</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>judges <span class="op">=</span> <span class="st">" + "</span>.join(<span class="ss">f"judge_pre_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">8</span>))</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>ols <span class="op">=</span> smf.ols(<span class="ss">f"guilt ~ jail3 + </span><span class="sc">{</span>controls<span class="sc">}</span><span class="ss">"</span>, data<span class="op">=</span>judge).fit()</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>iv  <span class="op">=</span> IV2SLS.from_formula(<span class="ss">f"guilt ~ 1 + </span><span class="sc">{</span>controls<span class="sc">}</span><span class="ss"> + [jail3 ~ </span><span class="sc">{</span>judges<span class="sc">}</span><span class="ss">]"</span>, data<span class="op">=</span>judge).fit(cov_type<span class="op">=</span><span class="st">"robust"</span>)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"OLS  jail3:"</span>, ols.params[<span class="st">"jail3"</span>].<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">" SE"</span>, ols.bse[<span class="st">"jail3"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>OLS  jail3: 0.035  SE 0.002</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"2SLS jail3:"</span>, iv.params[<span class="st">"jail3"</span>].<span class="bu">round</span>(<span class="dv">3</span>),  <span class="st">" SE"</span>, iv.std_errors[<span class="st">"jail3"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2SLS jail3: 0.157  SE 0.066</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iv.first_stage.diagnostics[[<span class="st">"f.stat"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           f.stat
+jail3  284.393918</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>judge <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta"</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>ctrl <span class="ot">&lt;-</span> <span class="er">~</span> white <span class="sc">+</span> age <span class="sc">+</span> male <span class="sc">+</span> black <span class="sc">+</span> possess <span class="sc">+</span> robbery <span class="sc">+</span> DUI1st <span class="sc">+</span> aggAss <span class="sc">+</span> drugSell <span class="sc">+</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  fel <span class="sc">+</span> mis <span class="sc">+</span> sum <span class="sc">+</span> threePriors <span class="sc">+</span> F1 <span class="sc">+</span> F2 <span class="sc">+</span> F3 <span class="sc">+</span> M1 <span class="sc">+</span> M2 <span class="sc">+</span> M3 <span class="sc">+</span> day <span class="sc">+</span> day2 <span class="sc">+</span> day3 <span class="sc">+</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  t1 <span class="sc">+</span> t2 <span class="sc">+</span> t3 <span class="sc">+</span> t4 <span class="sc">+</span> t5 <span class="sc">+</span> t6</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>judges <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"judge_pre_"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">collapse =</span> <span class="st">" + "</span>)</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">update</span>(ctrl, guilt <span class="sc">~</span> jail3 <span class="sc">+</span> .), <span class="at">data =</span> judge)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>iv  <span class="ot">&lt;-</span> <span class="fu">ivreg</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"guilt ~ jail3 +"</span>, <span class="fu">as.character</span>(ctrl)[<span class="dv">2</span>],</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"|"</span>, judges, <span class="st">"+"</span>, <span class="fu">as.character</span>(ctrl)[<span class="dv">2</span>])), <span class="at">data =</span> judge)</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(ols)[<span class="st">"jail3"</span>]; <span class="fu">coef</span>(iv)[<span class="st">"jail3"</span>]</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># R drops collinear terms automatically; Python's linearmodels does not, hence the trimmed list above.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>judge_path <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">file.exists</span>(<span class="st">"data/judge_fe.dta"</span>)) <span class="st">"data/judge_fe.dta"</span> <span class="cf">else</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta"</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>judge <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(judge_path)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>ctrl <span class="ot">&lt;-</span> <span class="er">~</span> white <span class="sc">+</span> age <span class="sc">+</span> male <span class="sc">+</span> black <span class="sc">+</span> possess <span class="sc">+</span> robbery <span class="sc">+</span> DUI1st <span class="sc">+</span> aggAss <span class="sc">+</span> drugSell <span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  fel <span class="sc">+</span> mis <span class="sc">+</span> sum <span class="sc">+</span> threePriors <span class="sc">+</span> F1 <span class="sc">+</span> F2 <span class="sc">+</span> F3 <span class="sc">+</span> M1 <span class="sc">+</span> M2 <span class="sc">+</span> M3 <span class="sc">+</span> day <span class="sc">+</span> day2 <span class="sc">+</span> day3 <span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  t1 <span class="sc">+</span> t2 <span class="sc">+</span> t3 <span class="sc">+</span> t4 <span class="sc">+</span> t5 <span class="sc">+</span> t6</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>judges <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"judge_pre_"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">collapse =</span> <span class="st">" + "</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">update</span>(ctrl, guilt <span class="sc">~</span> jail3 <span class="sc">+</span> .), <span class="at">data =</span> judge)</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>iv  <span class="ot">&lt;-</span> <span class="fu">ivreg</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"guilt ~ jail3 +"</span>, <span class="fu">as.character</span>(ctrl)[<span class="dv">2</span>],</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"|"</span>, judges, <span class="st">"+"</span>, <span class="fu">as.character</span>(ctrl)[<span class="dv">2</span>])), <span class="at">data =</span> judge)</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(ols)[<span class="st">"jail3"</span>]; <span class="fu">coef</span>(iv)[<span class="st">"jail3"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     jail3 
+0.03484723 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    jail3 
+0.1587186 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># R drops collinear terms automatically; Python's linearmodels does not, hence the trimmed list above.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -565,7 +741,7 @@ window.Quarto = {
 <section id="solutions" class="level2">
 <h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -574,18 +750,18 @@ Solutions (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>1.</strong> With both instruments the estimate rises to ≈ 0.16 (SE ≈ 0.05) and the first-stage F is ≈ 19; the Sargan statistic is 3.6 on 1 df, <span class="math inline">\(p ≈ 0.06\)</span> — borderline. A rejection would say the two instruments imply <em>different</em> LATEs, which could be heterogeneity rather than invalidity; the test can never validate the exclusion restriction of either instrument on its own.</p>
 <p><strong>2.</strong> OLS is ≈ 1.8 regardless of <span class="math inline">\(\pi\)</span> (the endogeneity bias). At <span class="math inline">\(\pi = 0.05\)</span> the median first-stage F is ≈ 1 and the 2SLS median is ≈ 1.3 with an interquartile range of about 0.8–1.7, pulled toward OLS; at <span class="math inline">\(\pi = 0.1\)</span> (F ≈ 5) the median is right but the IQR is still 0.6–1.3; by <span class="math inline">\(\pi = 0.2\)</span> (F ≈ 20) it is tight around 1 (IQR 0.8–1.1). The F ≈ 10 threshold is where the worst behavior fades, not where it ends.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sim(pi, n<span class="op">=</span><span class="dv">500</span>):</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> rng.normal(size<span class="op">=</span>n)<span class="op">;</span> uv <span class="op">=</span> rng.multivariate_normal([<span class="dv">0</span>,<span class="dv">0</span>], [[<span class="dv">1</span>,<span class="fl">.8</span>],[<span class="fl">.8</span>,<span class="dv">1</span>]], n)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> pi<span class="op">*</span>z <span class="op">+</span> uv[:,<span class="dv">1</span>]<span class="op">;</span> y <span class="op">=</span> d <span class="op">+</span> uv[:,<span class="dv">0</span>]</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(<span class="bu">dict</span>(y<span class="op">=</span>y, d<span class="op">=</span>d, z<span class="op">=</span>z))</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    fs <span class="op">=</span> smf.ols(<span class="st">"d ~ z"</span>, df).fit()</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> smf.ols(<span class="st">"y ~ d"</span>, df).fit().params[<span class="st">"d"</span>], <span class="op">\</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>           IV2SLS.from_formula(<span class="st">"y ~ 1 + [d ~ z]"</span>, df).fit().params[<span class="st">"d"</span>], fs.fvalue</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sim(pi, n<span class="op">=</span><span class="dv">500</span>):</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> rng.normal(size<span class="op">=</span>n)<span class="op">;</span> uv <span class="op">=</span> rng.multivariate_normal([<span class="dv">0</span>,<span class="dv">0</span>], [[<span class="dv">1</span>,<span class="fl">.8</span>],[<span class="fl">.8</span>,<span class="dv">1</span>]], n)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> pi<span class="op">*</span>z <span class="op">+</span> uv[:,<span class="dv">1</span>]<span class="op">;</span> y <span class="op">=</span> d <span class="op">+</span> uv[:,<span class="dv">0</span>]</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(<span class="bu">dict</span>(y<span class="op">=</span>y, d<span class="op">=</span>d, z<span class="op">=</span>z))</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    fs <span class="op">=</span> smf.ols(<span class="st">"d ~ z"</span>, df).fit()</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> smf.ols(<span class="st">"y ~ d"</span>, df).fit().params[<span class="st">"d"</span>], <span class="op">\</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>           IV2SLS.from_formula(<span class="st">"y ~ 1 + [d ~ z]"</span>, df).fit().params[<span class="st">"d"</span>], fs.fvalue</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>3.</strong> With <code>D = educ &gt;= 13</code>, the first stage on <code>nearc4</code> is about 0.06, i.e.&nbsp;roughly 6% of the sample are compliers. Using the ratio-of-first-stages method (<span class="math inline">\(P(x=1 \mid \text{complier}) / P(x=1) = \text{FS}_{x=1} / \text{FS}\)</span>), compliers are far <em>less</em> likely to be Black (ratio ≈ 0.2) and less likely to be Southern (ratio ≈ 0.6) than the full sample. The LATE is for a population that looks quite different from the average respondent — one more reason not to call it “the” return to schooling.</p>
 </div>
 </div>
@@ -594,7 +770,7 @@ Solutions (click to expand)
 <section id="facilitator-notes" class="level2">
 <h2 class="anchored" data-anchor-id="facilitator-notes">Facilitator notes</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Facilitator notes (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -603,7 +779,7 @@ Facilitator notes (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Do Step 2 by hand before Step 3.</strong> The Wald ratio is the whole idea; 2SLS is bookkeeping. If people see 0.04 / 0.33 ≈ 0.12 with their own eyes, the software output stops being magic.</p>
 <p><strong>Misconception: a significant first stage proves the instrument is valid.</strong> It proves relevance only. Exclusion and independence come from the argument, never from the data.</p>

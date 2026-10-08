@@ -29,9 +29,10 @@ print(iv.summary.tables[1])
 print(iv.first_stage.diagnostics[["f.stat", "partial.rsquared"]])
 
 # ---- step 4 ----
-# Large file: download once from the book's repo
+# Large file (58 MB): read the local copy if you saved one, otherwise download from the book's repo
+import os
 url = "https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta"
-judge = pd.read_stata(url)        # or pd.read_stata("data/judge_fe.dta") if you saved it
+judge = pd.read_stata("data/judge_fe.dta" if os.path.exists("data/judge_fe.dta") else url)
 
 controls = ("white + age + male + black + possess + robbery + DUI1st + aggAss + drugSell "
             "+ fel + mis + threePriors + F1 + F2 + F3 + M1 + M2 + M3 "

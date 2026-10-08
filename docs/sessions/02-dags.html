@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b6ebfe76373a65f90f03e4eef39a9400.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-88736fcce7d974bfecfee082ef4a0c3c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -165,6 +165,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link" href="../facilitating.html"> 
 <span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../glossary.html"> 
+<span class="menu-text">Glossary</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -258,6 +262,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../facilitating.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Facilitating</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -385,7 +395,7 @@ window.Quarto = {
 </div>
 <section id="learning-goals" class="level2">
 <h2 class="anchored" data-anchor-id="learning-goals">Learning goals</h2>
-<p>Everyone should leave able to read a DAG (nodes, arrows, missing arrows), list the backdoor paths between a treatment and an outcome, apply the backdoor criterion to decide what to condition on, and explain — with a simulation they ran — why conditioning on a collider <em>creates</em> bias where none existed.</p>
+<p>Everyone should leave able to read a directed acyclic graph (DAG: nodes, arrows, missing arrows), list the backdoor paths between a treatment and an outcome, apply the backdoor criterion to decide what to condition on, and explain — with a simulation they ran — why conditioning on a collider <em>creates</em> bias where none existed.</p>
 <div class="agenda">
 <table class="caption-top table">
 <colgroup>
@@ -425,10 +435,62 @@ window.Quarto = {
 </section>
 <section id="key-ideas" class="level2">
 <h2 class="anchored" data-anchor-id="key-ideas">Key ideas</h2>
-<p><strong>A DAG is a set of causal claims, including the arrows you leave out.</strong> Nodes are variables; a directed edge <span class="math inline">\(A \to B\)</span> says <span class="math inline">\(A\)</span> causes <span class="math inline">\(B\)</span>; the absence of an edge is the strong claim that there is no direct effect. The DAG encodes your prior knowledge of the data-generating process — theory, institutional detail, previous studies — and that is what makes it useful: it forces you to write down what you believe before you touch data.</p>
+<p><strong>A directed acyclic graph (DAG) is a set of causal claims, including the arrows you leave out.</strong> Nodes are variables; a directed edge <span class="math inline">\(A \to B\)</span> says <span class="math inline">\(A\)</span> causes <span class="math inline">\(B\)</span>; the absence of an edge is the strong claim that there is no direct effect. “Acyclic” means you can never follow arrows in a loop back to where you started. The DAG encodes your prior knowledge of the data-generating process — theory, institutional detail, previous studies — and that is what makes it useful: it forces you to write down what you believe before you touch data.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A DAG is a sketch of your story about how the world works: boxes for the things you measure, arrows for “this one causes that one.” Drawing it before you run anything makes your assumptions visible, which is the point — you can argue about a picture, but you can’t argue about an assumption nobody wrote down.</p>
+</div>
+</div>
 <p><strong>Paths and what blocks them.</strong> A <em>backdoor path</em> from <span class="math inline">\(D\)</span> to <span class="math inline">\(Y\)</span> is any path starting with an arrow <em>into</em> <span class="math inline">\(D\)</span>. Backdoor paths carry non-causal association. A path is blocked if it contains a <em>non-collider</em> you condition on, or a <em>collider</em> you do <strong>not</strong> condition on. A collider is a node where two arrows meet (<span class="math inline">\(A \to C \leftarrow B\)</span>). Conditioning on a collider (or its descendant) <em>opens</em> the path.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Think of paths as pipes that can carry a fake correlation from the treatment to the outcome. A <em>confounder</em> (a common cause of both) is a pipe that is open by default; you close it by controlling for the confounder. A <em>collider</em> (something caused by both) is a pipe that is closed by default; controlling for it <em>opens</em> the pipe. Same action, opposite effect, depending only on which way the arrows point.</p>
+</div>
+</div>
 <p><strong>The backdoor criterion.</strong> A set of variables <span class="math inline">\(X\)</span> satisfies the backdoor criterion for <span class="math inline">\((D, Y)\)</span> if <span class="math inline">\(X\)</span> blocks every backdoor path and contains no descendant of <span class="math inline">\(D\)</span>. Then conditioning on <span class="math inline">\(X\)</span> identifies the causal effect of <span class="math inline">\(D\)</span> on <span class="math inline">\(Y\)</span>. This is the formal version of “conditional independence” and “selection on observables” that Sessions 4 and 7 rely on.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The backdoor criterion is a checklist for what to put in your regression: enough variables to close every fake pipe, and nothing that sits downstream of the treatment. It can say “control for nothing” (if the treatment was randomized) or “you cannot fix this with controls at all” (if a confounder is unmeasured). Both are legitimate answers.</p>
+</div>
+</div>
 <p><strong>Collider bias is the chapter’s main warning.</strong> The book’s discrimination example: female <span class="math inline">\(\to\)</span> discrimination <span class="math inline">\(\to\)</span> occupation <span class="math inline">\(\to\)</span> wage, with discrimination <span class="math inline">\(\to\)</span> wage directly and unobserved ability <span class="math inline">\(\to\)</span> occupation and ability <span class="math inline">\(\to\)</span> wage. Occupation is a collider on the path discrimination <span class="math inline">\(\to\)</span> occupation <span class="math inline">\(\leftarrow\)</span> ability <span class="math inline">\(\to\)</span> wage. “Controlling for occupation,” which sounds like good practice, opens that path and makes discrimination look like it <em>raises</em> wages. The second example — a negative talent–beauty correlation among movie stars when both are independent in the population — is the same mechanism via sample selection.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose discrimination pushes women out of high-paying jobs, and high-ability people get into them. Among women in a <em>given</em> job, the ones who made it there against the headwind tend to be unusually able — and are paid for it. Comparing men and women within the same job therefore makes discrimination look harmless or even helpful. The job variable is the collider; comparing “within” it is the mistake.</p>
+</div>
+</div>
 </section>
 <section id="walkthrough" class="level2">
 <h2 class="anchored" data-anchor-id="walkthrough">Walkthrough</h2>
@@ -439,7 +501,8 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -454,8 +517,10 @@ window.Quarto = {
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>tb <span class="op">=</span> pd.DataFrame(<span class="bu">dict</span>(female<span class="op">=</span>female, ability<span class="op">=</span>ability, discrimination<span class="op">=</span>discrimination,</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                       occupation<span class="op">=</span>occupation, wage<span class="op">=</span>wage))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(estimatr)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">42</span>)</span>
@@ -470,6 +535,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
+</div>
 </section>
 <section id="step-2-three-regressions-three-answers" class="level3">
 <h3 class="anchored" data-anchor-id="step-2-three-regressions-three-answers">Step 2 — Three regressions, three answers</h3>
@@ -477,19 +543,145 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> [<span class="st">"wage ~ female"</span>,</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> f <span class="kw">in</span> [<span class="st">"wage ~ female"</span>,</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>          <span class="st">"wage ~ female + occupation"</span>,</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>          <span class="st">"wage ~ female + occupation + ability"</span>]:</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f, <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>, smf.ols(f, data<span class="op">=</span>tb).fit().params.<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>wage ~ female 
+ Intercept    2.072
+female      -3.005
+dtype: float64 
+
+wage ~ female + occupation 
+ Intercept     0.197
+female        0.567
+occupation    1.803
+dtype: float64 
+
+wage ~ female + occupation + ability 
+ Intercept     1.003
+female       -1.021
+occupation    0.997
+ability       2.005
+dtype: float64 </code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lm_1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> female, <span class="at">data =</span> tb)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>lm_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> female <span class="sc">+</span> occupation, <span class="at">data =</span> tb)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>lm_3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> female <span class="sc">+</span> occupation <span class="sc">+</span> ability, <span class="at">data =</span> tb)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>modelsummary<span class="sc">::</span><span class="fu">modelsummary</span>(<span class="fu">list</span>(<span class="st">"Biased unconditional"</span> <span class="ot">=</span> lm_1,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Biased (collider)"</span>    <span class="ot">=</span> lm_2,</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Unbiased conditional"</span> <span class="ot">=</span> lm_3),</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                           <span class="at">gof_omit =</span> <span class="st">".*"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lm_1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> female, <span class="at">data =</span> tb)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>lm_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> female <span class="sc">+</span> occupation, <span class="at">data =</span> tb)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>lm_3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(wage <span class="sc">~</span> female <span class="sc">+</span> occupation <span class="sc">+</span> ability, <span class="at">data =</span> tb)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>modelsummary<span class="sc">::</span><span class="fu">modelsummary</span>(<span class="fu">list</span>(<span class="st">"Biased unconditional"</span> <span class="ot">=</span> lm_1,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Biased (collider)"</span>    <span class="ot">=</span> lm_2,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"Unbiased conditional"</span> <span class="ot">=</span> lm_3),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                           <span class="at">gof_omit =</span> <span class="st">".*"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<script src="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.js"></script>
+
+    <script>
+      // Create table-specific functions using external factory
+      const tableFns_0ne5r64u5sdxr0vne2ok = TinyTable.createTableFunctions("tinytable_0ne5r64u5sdxr0vne2ok");
+      // tinytable span after
+      window.addEventListener('load', function () {
+          var cellsToStyle = [
+            // tinytable style arrays after
+          { positions: [ { i: '8', j: 2 }, { i: '8', j: 3 }, { i: '8', j: 4 } ], css_id: 'tinytable_css_00vd8xi2renigze59hsb',}, 
+          { positions: [ { i: '1', j: 2 }, { i: '2', j: 2 }, { i: '3', j: 2 }, { i: '4', j: 2 }, { i: '5', j: 2 }, { i: '6', j: 2 }, { i: '7', j: 2 }, { i: '1', j: 3 }, { i: '2', j: 3 }, { i: '3', j: 3 }, { i: '4', j: 3 }, { i: '5', j: 3 }, { i: '6', j: 3 }, { i: '7', j: 3 }, { i: '1', j: 4 }, { i: '2', j: 4 }, { i: '3', j: 4 }, { i: '4', j: 4 }, { i: '5', j: 4 }, { i: '6', j: 4 }, { i: '7', j: 4 } ], css_id: 'tinytable_css_1f1axxgk3sn3aug7jz0y',}, 
+          { positions: [ { i: '0', j: 2 }, { i: '0', j: 3 }, { i: '0', j: 4 } ], css_id: 'tinytable_css_yksjscizw4zinpi3c72a',}, 
+          { positions: [ { i: '8', j: 1 } ], css_id: 'tinytable_css_y7x9p6r378ur6oprrv24',}, 
+          { positions: [ { i: '1', j: 1 }, { i: '2', j: 1 }, { i: '3', j: 1 }, { i: '4', j: 1 }, { i: '5', j: 1 }, { i: '6', j: 1 }, { i: '7', j: 1 } ], css_id: 'tinytable_css_7w0nir9b7wu81ll4tfh6',}, 
+          { positions: [ { i: '0', j: 1 } ], css_id: 'tinytable_css_6ruyedjsjzy29r3dykvc',}, 
+          ];
+
+          // Loop over the arrays to style the cells
+          cellsToStyle.forEach(function (group) {
+              group.positions.forEach(function (cell) {
+                  tableFns_0ne5r64u5sdxr0vne2ok.styleCell(cell.i, cell.j, group.css_id);
+              });
+          });
+      });
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vincentarelbundock/tinytable@main/inst/tinytable.css">
+    <style>
+    /* tinytable css entries after */
+    #tinytable_0ne5r64u5sdxr0vne2ok td.tinytable_css_00vd8xi2renigze59hsb, #tinytable_0ne5r64u5sdxr0vne2ok th.tinytable_css_00vd8xi2renigze59hsb {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_0ne5r64u5sdxr0vne2ok td.tinytable_css_1f1axxgk3sn3aug7jz0y, #tinytable_0ne5r64u5sdxr0vne2ok th.tinytable_css_1f1axxgk3sn3aug7jz0y { text-align: center }
+    #tinytable_0ne5r64u5sdxr0vne2ok td.tinytable_css_yksjscizw4zinpi3c72a, #tinytable_0ne5r64u5sdxr0vne2ok th.tinytable_css_yksjscizw4zinpi3c72a {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: center }
+    #tinytable_0ne5r64u5sdxr0vne2ok td.tinytable_css_y7x9p6r378ur6oprrv24, #tinytable_0ne5r64u5sdxr0vne2ok th.tinytable_css_y7x9p6r378ur6oprrv24 {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 0; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.08em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.1em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    #tinytable_0ne5r64u5sdxr0vne2ok td.tinytable_css_7w0nir9b7wu81ll4tfh6, #tinytable_0ne5r64u5sdxr0vne2ok th.tinytable_css_7w0nir9b7wu81ll4tfh6 { text-align: left }
+    #tinytable_0ne5r64u5sdxr0vne2ok td.tinytable_css_6ruyedjsjzy29r3dykvc, #tinytable_0ne5r64u5sdxr0vne2ok th.tinytable_css_6ruyedjsjzy29r3dykvc {  position: relative; --border-bottom: 1; --border-left: 0; --border-right: 0; --border-top: 1; --line-color-bottom: var(--tt-line-color); --line-color-left: var(--tt-line-color); --line-color-right: var(--tt-line-color); --line-color-top: var(--tt-line-color); --line-width-bottom: 0.05em; --line-width-left: 0.1em; --line-width-right: 0.1em; --line-width-top: 0.08em; --line-type-bottom: solid; --line-type-left: solid; --line-type-right: solid; --line-type-top: solid; --trim-bottom-left: 0%; --trim-bottom-right: 0%; --trim-left-bottom: 0%; --trim-left-top: 0%; --trim-right-bottom: 0%; --trim-right-top: 0%; --trim-top-left: 0%; --trim-top-right: 0%; ; text-align: left }
+    </style>
+    <div class="container">
+      <table class="tinytable" id="tinytable_0ne5r64u5sdxr0vne2ok" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing="true">
+        
+        <thead>
+              <tr>
+                <th scope="col" data-row="0" data-col="1"> </th>
+                <th scope="col" data-row="0" data-col="2">Biased unconditional</th>
+                <th scope="col" data-row="0" data-col="3">Biased (collider)</th>
+                <th scope="col" data-row="0" data-col="4">Unbiased conditional</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td data-row="1" data-col="1">(Intercept)</td>
+                  <td data-row="1" data-col="2">2.000</td>
+                  <td data-row="1" data-col="3">0.179</td>
+                  <td data-row="1" data-col="4">0.986</td>
+                </tr>
+                <tr>
+                  <td data-row="2" data-col="1"></td>
+                  <td data-row="2" data-col="2">(0.060)</td>
+                  <td data-row="2" data-col="3">(0.020)</td>
+                  <td data-row="2" data-col="4">(0.018)</td>
+                </tr>
+                <tr>
+                  <td data-row="3" data-col="1">female</td>
+                  <td data-row="3" data-col="2">-3.046</td>
+                  <td data-row="3" data-col="3">0.614</td>
+                  <td data-row="3" data-col="4">-0.974</td>
+                </tr>
+                <tr>
+                  <td data-row="4" data-col="1"></td>
+                  <td data-row="4" data-col="2">(0.085)</td>
+                  <td data-row="4" data-col="3">(0.030)</td>
+                  <td data-row="4" data-col="4">(0.028)</td>
+                </tr>
+                <tr>
+                  <td data-row="5" data-col="1">occupation</td>
+                  <td data-row="5" data-col="2"></td>
+                  <td data-row="5" data-col="3">1.796</td>
+                  <td data-row="5" data-col="4">1.004</td>
+                </tr>
+                <tr>
+                  <td data-row="6" data-col="1"></td>
+                  <td data-row="6" data-col="2"></td>
+                  <td data-row="6" data-col="3">(0.006)</td>
+                  <td data-row="6" data-col="4">(0.010)</td>
+                </tr>
+                <tr>
+                  <td data-row="7" data-col="1">ability</td>
+                  <td data-row="7" data-col="2"></td>
+                  <td data-row="7" data-col="3"></td>
+                  <td data-row="7" data-col="4">1.989</td>
+                </tr>
+                <tr>
+                  <td data-row="8" data-col="1"></td>
+                  <td data-row="8" data-col="2"></td>
+                  <td data-row="8" data-col="3"></td>
+                  <td data-row="8" data-col="4">(0.022)</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- hack to avoid NA insertion in last line -->
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -539,27 +731,49 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">3</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pop <span class="op">=</span> pd.DataFrame({<span class="st">"beauty"</span>: rng.normal(size<span class="op">=</span><span class="dv">10_000</span>),</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"talent"</span>: rng.normal(size<span class="op">=</span><span class="dv">10_000</span>)})</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>pop[<span class="st">"score"</span>] <span class="op">=</span> pop.beauty <span class="op">+</span> pop.talent</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>cutoff <span class="op">=</span> pop.score.quantile(<span class="fl">0.85</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>pop[<span class="st">"star"</span>] <span class="op">=</span> pop.score <span class="op">&gt;=</span> cutoff</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"population corr:"</span>, pop[[<span class="st">"beauty"</span>, <span class="st">"talent"</span>]].corr().iloc[<span class="dv">0</span>, <span class="dv">1</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"stars corr:     "</span>, pop.loc[pop.star, [<span class="st">"beauty"</span>, <span class="st">"talent"</span>]].corr().iloc[<span class="dv">0</span>, <span class="dv">1</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">3</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pop <span class="op">=</span> pd.DataFrame({<span class="st">"beauty"</span>: rng.normal(size<span class="op">=</span><span class="dv">10_000</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"talent"</span>: rng.normal(size<span class="op">=</span><span class="dv">10_000</span>)})</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>pop[<span class="st">"score"</span>] <span class="op">=</span> pop.beauty <span class="op">+</span> pop.talent</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>cutoff <span class="op">=</span> pop.score.quantile(<span class="fl">0.85</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>pop[<span class="st">"star"</span>] <span class="op">=</span> pop.score <span class="op">&gt;=</span> cutoff</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"population corr:"</span>, pop[[<span class="st">"beauty"</span>, <span class="st">"talent"</span>]].corr().iloc[<span class="dv">0</span>, <span class="dv">1</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>population corr: -0.006</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"stars corr:     "</span>, pop.loc[pop.star, [<span class="st">"beauty"</span>, <span class="st">"talent"</span>]].corr().iloc[<span class="dv">0</span>, <span class="dv">1</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>stars corr:      -0.661</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">beauty =</span> <span class="fu">rnorm</span>(<span class="dv">10000</span>), <span class="at">talent =</span> <span class="fu">rnorm</span>(<span class="dv">10000</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">score =</span> beauty <span class="sc">+</span> talent,</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">star  =</span> score <span class="sc">&gt;=</span> <span class="fu">quantile</span>(score, <span class="fl">0.85</span>))</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(pop<span class="sc">$</span>beauty, pop<span class="sc">$</span>talent)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(<span class="fu">filter</span>(pop, star), <span class="fu">cor</span>(beauty, talent))</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pop, <span class="fu">aes</span>(beauty, talent, <span class="at">colour =</span> star)) <span class="sc">+</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">beauty =</span> <span class="fu">rnorm</span>(<span class="dv">10000</span>), <span class="at">talent =</span> <span class="fu">rnorm</span>(<span class="dv">10000</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">score =</span> beauty <span class="sc">+</span> talent,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">star  =</span> score <span class="sc">&gt;=</span> <span class="fu">quantile</span>(score, <span class="fl">0.85</span>))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cor</span>(pop<span class="sc">$</span>beauty, pop<span class="sc">$</span>talent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.008185414</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(<span class="fu">filter</span>(pop, star), <span class="fu">cor</span>(beauty, talent))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.7178036</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pop, <span class="fu">aes</span>(beauty, talent, <span class="at">colour =</span> star)) <span class="sc">+</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-dags_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -569,19 +783,34 @@ window.Quarto = {
 </section>
 <section id="step-5-optional-r-only-let-dagitty-find-the-adjustment-set" class="level3">
 <h3 class="anchored" data-anchor-id="step-5-optional-r-only-let-dagitty-find-the-adjustment-set">Step 5 — (Optional, R only) Let <code>dagitty</code> find the adjustment set</h3>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dagitty); <span class="fu">library</span>(ggdag)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">"dag {</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="st">  female -&gt; discrimination</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="st">  discrimination -&gt; occupation</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="st">  discrimination -&gt; wage</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="st">  ability -&gt; occupation</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="st">  ability -&gt; wage</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="st">  occupation -&gt; wage</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="st">}"</span>)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">adjustmentSets</span>(g, <span class="at">exposure =</span> <span class="st">"discrimination"</span>, <span class="at">outcome =</span> <span class="st">"wage"</span>, <span class="at">effect =</span> <span class="st">"total"</span>)</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">adjustmentSets</span>(g, <span class="at">exposure =</span> <span class="st">"discrimination"</span>, <span class="at">outcome =</span> <span class="st">"wage"</span>, <span class="at">effect =</span> <span class="st">"direct"</span>)</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggdag</span>(g) <span class="sc">+</span> <span class="fu">theme_dag</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dagitty); <span class="fu">library</span>(ggdag)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">"dag {</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="st">  female -&gt; discrimination</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="st">  discrimination -&gt; occupation</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="st">  discrimination -&gt; wage</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="st">  ability -&gt; occupation</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="st">  ability -&gt; wage</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="st">  occupation -&gt; wage</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="st">}"</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="fu">adjustmentSets</span>(g, <span class="at">exposure =</span> <span class="st">"discrimination"</span>, <span class="at">outcome =</span> <span class="st">"wage"</span>, <span class="at">effect =</span> <span class="st">"total"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> {}</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">adjustmentSets</span>(g, <span class="at">exposure =</span> <span class="st">"discrimination"</span>, <span class="at">outcome =</span> <span class="st">"wage"</span>, <span class="at">effect =</span> <span class="st">"direct"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{ ability, occupation }</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggdag</span>(g) <span class="sc">+</span> <span class="fu">theme_dag</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="02-dags_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <p>For the <em>total</em> effect the empty set suffices (no backdoor paths into <code>discrimination</code>). For the <em>direct</em> effect you must condition on <code>occupation</code> <strong>and</strong> <code>ability</code>. In Python, <code>networkx</code> can draw the graph but has no backdoor solver; this is one place where the R tooling is simply better.</p>
 </section>
 </section>
@@ -596,7 +825,7 @@ window.Quarto = {
 <section id="solutions" class="level2">
 <h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -605,16 +834,16 @@ Solutions (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>1.</strong> One DAG: smoking → hospitalization ← severity (both smoking-related illness and severe COVID get you admitted), with smoking having no arrow to severity. Restricting the sample to the hospitalized conditions on the collider.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">7</span>)<span class="op">;</span> n <span class="op">=</span> <span class="dv">100_000</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>smoke <span class="op">=</span> rng.binomial(<span class="dv">1</span>, <span class="fl">0.3</span>, n)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>severity <span class="op">=</span> rng.normal(size<span class="op">=</span>n)                      <span class="co"># independent of smoking</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>hosp <span class="op">=</span> (<span class="fl">0.8</span><span class="op">*</span>smoke <span class="op">+</span> severity <span class="op">+</span> rng.normal(size<span class="op">=</span>n)) <span class="op">&gt;</span> <span class="fl">1.0</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> pd.DataFrame(<span class="bu">dict</span>(smoke<span class="op">=</span>smoke, severity<span class="op">=</span>severity, hosp<span class="op">=</span>hosp))</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(smf.ols(<span class="st">"severity ~ smoke"</span>, d).fit().params[<span class="st">"smoke"</span>])            <span class="co"># ≈ 0</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(smf.ols(<span class="st">"severity ~ smoke"</span>, d[d.hosp]).fit().params[<span class="st">"smoke"</span>])    <span class="co"># &lt; 0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">7</span>)<span class="op">;</span> n <span class="op">=</span> <span class="dv">100_000</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>smoke <span class="op">=</span> rng.binomial(<span class="dv">1</span>, <span class="fl">0.3</span>, n)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>severity <span class="op">=</span> rng.normal(size<span class="op">=</span>n)                      <span class="co"># independent of smoking</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>hosp <span class="op">=</span> (<span class="fl">0.8</span><span class="op">*</span>smoke <span class="op">+</span> severity <span class="op">+</span> rng.normal(size<span class="op">=</span>n)) <span class="op">&gt;</span> <span class="fl">1.0</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> pd.DataFrame(<span class="bu">dict</span>(smoke<span class="op">=</span>smoke, severity<span class="op">=</span>severity, hosp<span class="op">=</span>hosp))</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(smf.ols(<span class="st">"severity ~ smoke"</span>, d).fit().params[<span class="st">"smoke"</span>])            <span class="co"># ≈ 0</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(smf.ols(<span class="st">"severity ~ smoke"</span>, d[d.hosp]).fit().params[<span class="st">"smoke"</span>])    <span class="co"># &lt; 0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>2.</strong> The unconditional <code>female</code> coefficient becomes more negative, ≈ −4 (−1 direct via discrimination, −2 via discrimination→occupation, and now −1 more via female→occupation); the collider regression is now ≈ +1.4, even more misleading; the full regression still returns ≈ −1. The collider regression is still wrong, and the full regression now returns the direct effect of <code>female</code> holding occupation fixed, which is −1 (through discrimination). The total effect is still identified with no controls because there are still no arrows <em>into</em> <code>female</code>: randomness of the treatment is what makes the empty adjustment set valid.</p>
 <p><strong>3.</strong> Open-ended. Common finds: wage regressions that control for occupation or industry; health studies that control for BMI when the treatment affects weight; education studies controlling for test scores measured after the intervention.</p>
 </div>
@@ -624,7 +853,7 @@ Solutions (click to expand)
 <section id="facilitator-notes" class="level2">
 <h2 class="anchored" data-anchor-id="facilitator-notes">Facilitator notes</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Facilitator notes (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -633,14 +862,14 @@ Facilitator notes (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Make them draw.</strong> The biggest failure mode of this session is treating the DAG as decoration for a regression someone already planned. Have each participant sketch the discrimination DAG on paper before Step 2 and predict the sign of the collider regression. Most will predict it stays negative.</p>
 <p><strong>Misconception: “more controls are always safer.”</strong> Steps 2–3 are the counterexample. Reinforce that the backdoor criterion is a <em>set</em> of variables, and that it can be empty.</p>
 <p><strong>Misconception: colliders only matter if you put them in the regression.</strong> Step 4 shows selection into the sample does the same thing. Ask: how was <em>this</em> dataset assembled?</p>
 <p><strong>If running short.</strong> Drop Step 5; it is a nice-to-have for the R users.</p>
 <p><strong>Discussion prompts.</strong> (a) Where did the arrows in the discrimination DAG come from — data or theory? (b) Can a DAG be tested? (Partially: it implies conditional independencies you can check, but it cannot be derived from data alone.)</p>
-<p><strong>Bridge to next session.</strong> DAGs tell you what must be true for conditioning to work. Potential outcomes give you the language for <em>what</em> you are estimating — ATE, ATT — and what randomization buys you.</p>
+<p><strong>Bridge to next session.</strong> DAGs tell you what must be true for conditioning to work. Potential outcomes give you the language for <em>what</em> you are estimating — the average treatment effect (ATE) and the effect on the treated (ATT) — and what randomization buys you.</p>
 </div>
 </div>
 </div>

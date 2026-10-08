@@ -21,7 +21,9 @@ iv <- ivreg(lwage ~ educ + exper + black + south + married + smsa |
 summary(iv, diagnostics = TRUE)
 
 # ---- step 4 ----
-judge <- read_dta("https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta")
+judge_path <- if (file.exists("data/judge_fe.dta")) "data/judge_fe.dta" else
+  "https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta"
+judge <- read_dta(judge_path)
 
 ctrl <- ~ white + age + male + black + possess + robbery + DUI1st + aggAss + drugSell +
   fel + mis + sum + threePriors + F1 + F2 + F3 + M1 + M2 + M3 + day + day2 + day3 +

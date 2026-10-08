@@ -1,0 +1,135 @@
+---
+title: "Glossary"
+subtitle: "Every acronym and term the sessions use, in plain words"
+toc: true
+---
+
+Each session page spells an acronym out the first time it appears, but this page is the one to keep open in a second tab. Terms are grouped by the session that introduces them; later sessions assume the earlier ones.
+
+## Sessions 1–3: the vocabulary of causal questions
+
+**Treatment ($D$).** The thing whose effect you want to know: a policy, a program, a drug, a price change. $D = 1$ for units that got it, $D = 0$ for units that did not.
+
+**Outcome ($Y$).** The thing you measure to see whether the treatment did anything.
+
+**Potential outcomes ($Y^1$, $Y^0$).** For one unit, the outcome it *would* have under treatment ($Y^1$) and the outcome it *would* have without treatment ($Y^0$). You only ever see one of the two. The unseen one is the *counterfactual*.
+
+**Treatment effect ($\delta_i$).** For one unit, $Y_i^1 - Y_i^0$. Never directly observable, which is why everything below is about averages.
+
+**ATE — Average Treatment Effect.** The average of $\delta_i$ over *everyone* in the population. "If we treated everybody versus nobody, how much would the outcome change on average?"
+
+**ATT — Average Treatment effect on the Treated.** The average of $\delta_i$ over the units that *actually got* the treatment. "For the people who took the program, how much did it help them?"
+
+**ATU — Average Treatment effect on the Untreated.** The average of $\delta_i$ over the units that *did not* get the treatment. "If we had given the program to the people who didn't get it, how much would it have helped them?" ATE is a weighted mix of ATT and ATU.
+
+**SDO — Simple Difference in Outcomes.** The average outcome of the treated group minus the average outcome of the untreated group. It is what a naive comparison gives you. It equals the ATE *only* if the two groups were comparable to begin with.
+
+**Selection bias.** The part of the SDO that comes from the treated and untreated groups being different people, not from the treatment. Formally: $E[Y^0 \mid D=1] - E[Y^0 \mid D=0]$, the gap in how the two groups *would have done without treatment*.
+
+**HTE — Heterogeneous Treatment Effects.** The treatment helps some units more than others. "HTE bias" is the extra error in the SDO that appears when the people who got treated are the ones it helps most (or least).
+
+**Endogenous / exogenous.** A variable is *endogenous* if it is determined inside the system you are studying — chosen by someone, or caused by something that also affects the outcome. It is *exogenous* if it came from outside, like a coin flip. Causal inference is the hunt for exogenous variation in the treatment.
+
+**RCT — Randomized Controlled Trial.** An experiment where a coin flip (or equivalent) decides who gets treated. Randomization makes the treatment exogenous.
+
+**RI — Randomization Inference.** A way of testing whether an effect could be luck: pretend the treatment did nothing, reshuffle who was "treated" many times, and see how often the reshuffled data produce an effect as big as the real one.
+
+**Sharp null.** The specific hypothesis RI tests: the treatment effect is exactly zero for *every single unit*, not just on average.
+
+**CEF — Conditional Expectation Function.** $E[Y \mid X]$: the average of $Y$ among units with a given value of $X$. Regression is a way of approximating this function with a line (or a plane).
+
+**OLS — Ordinary Least Squares.** The standard way of fitting a regression line: choose the line that makes the squared gaps between the data and the line as small as possible.
+
+**SE — Standard Error.** How much an estimate would bounce around if you could redo the study with a fresh sample. Small SE means a precise estimate. "Robust" SEs allow the noise to differ across units; "clustered" SEs allow units in the same group (same school, same state) to share noise.
+
+**Regression anatomy / FWL — Frisch–Waugh–Lovell.** The rule that a coefficient in a multiple regression equals the simple regression of $Y$ on the *leftover* part of that variable after removing what the other variables predict. It is what "controlling for" means mechanically.
+
+**DAG — Directed Acyclic Graph.** A diagram of arrows showing which variables cause which. "Directed" because arrows have a direction; "acyclic" because you can never follow arrows in a loop back to where you started.
+
+**Confounder.** A variable that causes *both* the treatment and the outcome. It creates a fake association unless you adjust for it.
+
+**Collider.** A variable that is caused by *both* of two other variables (two arrows collide into it). Adjusting for a collider *creates* a fake association that was not there before.
+
+**Backdoor path / backdoor criterion.** A backdoor path is any route from treatment to outcome that starts with an arrow pointing *into* the treatment; it carries non-causal association. The backdoor criterion says which variables to adjust for so that every such path is blocked.
+
+## Sessions 4–6: designs for cross-sectional data
+
+**CIA — Conditional Independence Assumption.** Once you account for the observed variables $X$, who got treated is as good as random. Also called *selection on observables* or *unconfoundedness*. It is an assumption about things you cannot see, so it cannot be tested.
+
+**Common support / overlap.** For every type of unit (every value of $X$), there are both treated and untreated examples. Without it you are guessing about people who have no comparison.
+
+**Subclassification / stratification.** Split the data into groups with the same $X$, compare treated and untreated *within* each group, then average the comparisons.
+
+**Propensity score.** The probability that a unit gets treated, given its characteristics $X$. Usually estimated with a logistic regression. Two units with the same score are comparable even if their individual characteristics differ.
+
+**IPW — Inverse Probability Weighting.** Reweight the data so that the treated and untreated groups look alike: treated units get weight $1/p$, untreated units get weight $1/(1-p)$, where $p$ is the propensity score.
+
+**Matching / NN — Nearest Neighbor.** For each treated unit, find the untreated unit that looks most like it (by $X$ or by propensity score) and compare the two.
+
+**RD / RDD — Regression Discontinuity (Design).** A design that uses a cutoff rule: units just above and just below a threshold get different treatments but are otherwise alike.
+
+**Running variable.** The variable with the cutoff in it (a test score, a vote share, an age). Also called the forcing or assignment variable.
+
+**Sharp vs fuzzy RD.** Sharp: crossing the cutoff *always* changes treatment. Fuzzy: crossing the cutoff changes the *probability* of treatment.
+
+**Bandwidth ($h$).** How far on either side of the cutoff you look. Narrower is more credible but noisier.
+
+**Local linear regression.** Fit a straight line separately on each side of the cutoff, using only data within the bandwidth, and measure the jump between the two lines at the cutoff.
+
+**McCrary density test.** A check for cheating at the cutoff: if units can push themselves just past the threshold, there will be a pile-up on one side.
+
+**IV — Instrumental Variable.** A variable that moves the treatment but has no other way of affecting the outcome. It lets you isolate the part of the treatment that is as good as random.
+
+**Relevance, exclusion, independence.** The three conditions an instrument must satisfy: it actually moves the treatment (relevance, testable); it affects the outcome *only* through the treatment (exclusion, not testable); it is itself as good as random (independence, not testable).
+
+**First stage.** The regression of treatment on the instrument. Its coefficient tells you how strongly the instrument moves treatment.
+
+**Reduced form.** The regression of the *outcome* on the instrument. Dividing reduced form by first stage gives the IV estimate (the *Wald ratio*).
+
+**2SLS — Two-Stage Least Squares.** The standard IV estimator: stage one predicts the treatment from the instrument; stage two regresses the outcome on that prediction.
+
+**Weak instrument.** An instrument that barely moves the treatment. The symptom is a small first-stage F-statistic (under about 10); the consequence is an estimate biased toward the naive one and unreliable confidence intervals.
+
+**LATE — Local Average Treatment Effect.** What IV actually estimates when effects differ across people: the average effect for *compliers*, the units whose treatment was changed by the instrument.
+
+**Compliers, always-takers, never-takers, defiers.** Compliers take the treatment when the instrument says to and not otherwise. Always-takers and never-takers ignore the instrument. Defiers do the opposite of what the instrument says; *monotonicity* is the assumption that there are none.
+
+## Sessions 7–9: designs for data over time
+
+**Panel data.** The same units observed repeatedly over time (the same people every year, the same states every quarter).
+
+**FE — Fixed Effects.** A regression that gives every unit its own intercept, so that anything about the unit that never changes is automatically accounted for. Equivalent to comparing each unit only with itself over time.
+
+**Within vs between variation.** *Within*: how a unit changes over time. *Between*: how units differ from each other. FE uses only the within part.
+
+**Strict exogeneity.** The assumption FE needs: the unexplained noise in any period is unrelated to the treatment in *every* period, past and future.
+
+**DiD / DD — Difference-in-Differences.** Compare the change over time in a treated group with the change over time in an untreated group. The second difference removes trends that both groups share.
+
+**Parallel trends.** The assumption DiD needs: without the treatment, the treated group would have moved over time the same way the control group did.
+
+**2×2.** The simplest DiD: two groups (treated, control) and two periods (before, after).
+
+**Event study.** A DiD with a separate effect estimated for each period relative to when treatment started, so you can see effects building up or fading, and check that nothing was happening *before* treatment.
+
+**Leads and lags.** In an event study, *leads* are the pre-treatment periods (they should show no effect); *lags* are the post-treatment periods (they show the dynamic effect).
+
+**Placebo test.** Run the same analysis on a group, period, or outcome where the treatment should have had *no* effect, and check that you find nothing.
+
+**DDD — Triple Difference.** A DiD of two DiDs: the treated group's DiD minus a placebo group's DiD. It removes shocks specific to the treated group's location or time that a plain DiD would mistake for the treatment.
+
+**TWFE — Two-Way Fixed Effects.** A regression with both unit fixed effects and time fixed effects. The standard way to run DiD with many units and periods.
+
+**Staggered adoption.** Different units start treatment at different times.
+
+**Bacon decomposition (Goodman-Bacon).** A way of breaking a staggered TWFE estimate into all the simple 2×2 comparisons it secretly averages, with their weights. It reveals when TWFE is comparing late-treated units to already-treated ones, which can bias the result.
+
+**Callaway–Sant'Anna, Sun–Abraham.** Newer DiD estimators that avoid using already-treated units as controls.
+
+**Synthetic control.** For one treated unit (a state, a country), build a "synthetic" version from a weighted average of untreated units, choosing weights so the synthetic version matches the real one before treatment. The post-treatment gap is the effect.
+
+**Donor pool.** The untreated units available to build the synthetic control from.
+
+**RMSPE — Root Mean Squared Prediction Error.** How far the synthetic unit is from the real one, on average. *Pre-period* RMSPE measures fit quality; the *post/pre ratio* is used for inference.
+
+**Placebo-in-space / placebo-in-time.** Re-run the synthetic control pretending a *different unit* was treated (in space) or that treatment happened at an *earlier date* (in time). If the real result is not unusual compared to the placebos, it is probably noise.

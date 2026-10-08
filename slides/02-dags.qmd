@@ -28,16 +28,30 @@ subtitle: "Session 2 · Mixtape chapter 3"
 
 ::: {.columns}
 ::: {.column}
-**Confounder** $D \leftarrow X \to Y$
+**Confounder** — open by default
 
-- Open by default
-- Conditioning on $X$ closes it
+```{dot}
+//| fig-width: 4
+//| fig-height: 2.2
+digraph {
+graph [rankdir=TB, bgcolor="transparent", fontname="Helvetica"]; node [shape=box, style="rounded,filled", fillcolor="#eef4f9", color="#1f5f8b", fontname="Helvetica", fontsize=16]; edge [color="#52514e", penwidth=1.6];
+  X [fillcolor="#fff8e6", color="#8a6d1d"]; X -> D; X -> Y; D -> Y [style=dashed, color="#c3c2b7"];
+}
+```
+Control for $X$ → path closes
 :::
 ::: {.column}
-**Collider** $D \to C \leftarrow Y$
+**Collider** — closed by default
 
-- Closed by default
-- Conditioning on $C$ **opens** it
+```{dot}
+//| fig-width: 4
+//| fig-height: 2.2
+digraph {
+graph [rankdir=TB, bgcolor="transparent", fontname="Helvetica"]; node [shape=box, style="rounded,filled", fillcolor="#eef4f9", color="#1f5f8b", fontname="Helvetica", fontsize=16]; edge [color="#52514e", penwidth=1.6];
+  C [fillcolor="#fde8e8", color="#e34948"]; D -> C; Y -> C; D -> Y [style=dashed, color="#c3c2b7"];
+}
+```
+Control for $C$ → path **opens**
 :::
 :::
 
@@ -53,10 +67,36 @@ $X$ identifies the effect of $D$ on $Y$ if
 
 ## The discrimination DAG
 
-- female → discrimination → occupation → wage
-- discrimination → wage (direct)
-- ability → occupation, ability → wage (unobserved)
-- "Control for occupation" sounds careful. Occupation is a **collider** on discrimination → occupation ← ability → wage.
+```{dot}
+//| fig-width: 10
+//| fig-height: 3.6
+digraph {
+graph [rankdir=LR, bgcolor="transparent", fontname="Helvetica"]; node [shape=box, style="rounded,filled", fillcolor="#eef4f9", color="#1f5f8b", fontname="Helvetica", fontsize=16]; edge [color="#52514e", penwidth=1.6];
+  female -> discrimination; discrimination -> occupation; discrimination -> wage [color="#2a78d6", penwidth=2.5];
+  occupation -> wage; ability [fillcolor="#fff8e6", color="#8a6d1d", label="ability\n(unobserved)"]; ability -> occupation; ability -> wage;
+  occupation [fillcolor="#fde8e8", color="#e34948", label="occupation\n(collider)"];
+}
+```
+
+::: {.small}
+"Control for occupation" opens discrimination → occupation ← ability → wage. High-ability women who made it into a given occupation despite discrimination are paid for their ability, so *within* occupations discrimination looks harmless.
+:::
+
+## Selection is conditioning too
+
+```{dot}
+//| fig-width: 8
+//| fig-height: 2.6
+digraph {
+graph [rankdir=LR, bgcolor="transparent", fontname="Helvetica"]; node [shape=box, style="rounded,filled", fillcolor="#eef4f9", color="#1f5f8b", fontname="Helvetica", fontsize=16]; edge [color="#52514e", penwidth=1.6];
+  beauty -> star [label=" +"]; talent -> star [label=" +"]; star [fillcolor="#fde8e8", color="#e34948", label="became a\nmovie star"];
+  beauty -> talent [style=invis];
+}
+```
+
+::: {.small}
+Beauty and talent are unrelated in the population. Among *stars* — people selected on the sum of the two — they are strongly negatively related: a star who is not very talented must be very beautiful. Looking only at stars *is* conditioning on the collider.
+:::
 
 ## Walkthrough
 

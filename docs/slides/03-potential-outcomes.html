@@ -142,10 +142,56 @@
 </section>
 <section id="potential-outcomes" class="slide level2">
 <h2>Potential outcomes</h2>
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th>unit</th>
+<th><span class="math inline">\(D\)</span></th>
+<th><span class="math inline">\(Y^1\)</span></th>
+<th><span class="math inline">\(Y^0\)</span></th>
+<th>observed <span class="math inline">\(Y\)</span></th>
+<th>effect <span class="math inline">\(\delta\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Andy</td>
+<td>1</td>
+<td>10</td>
+<td><strong>?</strong></td>
+<td>10</td>
+<td>?</td>
+</tr>
+<tr class="even">
+<td>Ben</td>
+<td>1</td>
+<td>5</td>
+<td><strong>?</strong></td>
+<td>5</td>
+<td>?</td>
+</tr>
+<tr class="odd">
+<td>Edith</td>
+<td>0</td>
+<td><strong>?</strong></td>
+<td>5</td>
+<td>5</td>
+<td>?</td>
+</tr>
+<tr class="even">
+<td>Frank</td>
+<td>0</td>
+<td><strong>?</strong></td>
+<td>7</td>
+<td>7</td>
+<td>?</td>
+</tr>
+</tbody>
+</table>
 <ul>
-<li>Each unit has <span class="math inline">\(Y_i^1\)</span> and <span class="math inline">\(Y_i^0\)</span>; the treatment effect is <span class="math inline">\(\delta_i = Y_i^1 - Y_i^0\)</span></li>
-<li>We see one: <span class="math inline">\(Y_i = D_i Y_i^1 + (1 - D_i) Y_i^0\)</span> (the switching equation)</li>
-<li>The other is missing. That is the <em>fundamental problem of causal inference</em>.</li>
+<li>Each person has two possible futures; we see one</li>
+<li>The <strong>?</strong> cells are the fundamental problem of causal inference</li>
+<li>Every design is a way of filling in the <strong>?</strong> credibly</li>
 </ul>
 </section>
 <section id="estimands" class="slide level2">
@@ -166,6 +212,13 @@
 <li>Every design in this book is a story about killing these two terms</li>
 </ul>
 </section>
+<section id="the-decomposition-as-a-picture" class="slide level2">
+<h2>The decomposition, as a picture</h2>
+
+<img data-src="img/s3_decomp.svg" style="width:95.0%" class="r-stretch"><div class="small">
+<p>Randomization sets the orange and aqua pieces to zero on average. Every other design is an argument for why they are zero anyway.</p>
+</div>
+</section>
 <section id="randomization" class="slide level2">
 <h2>Randomization</h2>
 <ul>
@@ -183,6 +236,13 @@
 <li>Recompute the statistic for every possible assignment</li>
 <li>Exact <span class="math inline">\(p\)</span>-value, no distributional assumptions, no large-sample appeal</li>
 </ul>
+</section>
+<section id="what-randomization-inference-looks-like" class="slide level2">
+<h2>What randomization inference looks like</h2>
+
+<img data-src="img/s3_ri.svg" style="width:90.0%" class="r-stretch"><div class="small">
+<p>Reshuffle who was “treated” 1,000 times; the blue histogram is what a zero effect produces. The real estimate (orange) is nowhere near it.</p>
+</div>
 </section>
 <section id="walkthrough" class="slide level2">
 <h2>Walkthrough</h2>

@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-b6ebfe76373a65f90f03e4eef39a9400.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-88736fcce7d974bfecfee082ef4a0c3c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -136,6 +136,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li class="nav-item">
     <a class="nav-link" href="./facilitating.html"> 
 <span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./glossary.html"> 
+<span class="menu-text">Glossary</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -229,6 +233,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./facilitating.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Facilitating</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -460,8 +470,10 @@ Note
 </section>
 <section id="running-the-code" class="level2">
 <h2 class="anchored" data-anchor-id="running-the-code">Running the code</h2>
-<p>The session pages display code without executing it, so the site builds without needing every package installed. To actually run a session, copy the chunks into a Jupyter notebook or an R script (each session page links its Python and R code files under <code>code/</code> in the header), or open the <code>.qmd</code> file itself in RStudio / VS Code and run chunks interactively.</p>
-<p>If you would rather render the site with live output, set <code>execute: enabled: true</code> in <code>_quarto.yml</code> and add <code>freeze: auto</code> so results are cached; you will then need both a Jupyter kernel and an R installation with the packages above.</p>
+<p>Every walkthrough chunk on the session pages is executed when the site is rendered, and the output you see under each chunk is real. The results are cached in <code>_freeze/</code>, so <code>quarto render</code> only re-runs a page whose code changed; a fresh clone renders from the cache without needing R or Python at all.</p>
+<p>To re-run a page yourself you need both toolchains: R with the packages above, Python with <code>requirements.txt</code>, and the <code>reticulate</code> R package, which is how Quarto runs the Python chunks inside the R session. The repo’s <code>.Rprofile</code> points <code>reticulate</code> at <code>.venv/</code> when that folder exists (otherwise at the first <code>python3</code> on your path), so create the virtual environment in the repo root as shown above and everything lines up.</p>
+<p>To work interactively instead, open the <code>.qmd</code> file in RStudio or VS Code and run chunks one at a time, or use the plain code files under <code>code/</code> (each session page links its Python and R versions in the header) in a notebook or script. Run from the repository root so that <code>data/</code> paths resolve.</p>
+<p>Session 9’s placebo loop fits 51 synthetic controls and takes 20–30 minutes in each language; it is cached like everything else, so you only pay that cost if you edit that page.</p>
 </section>
 <section id="reading-the-book" class="level2">
 <h2 class="anchored" data-anchor-id="reading-the-book">Reading the book</h2>

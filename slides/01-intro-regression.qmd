@@ -14,6 +14,24 @@ subtitle: "Session 1 · Mixtape chapters 1–2"
 Set expectations: this is a study group, not a lecture. The value is in the replication and the argument about assumptions.
 :::
 
+## The problem in one diagram
+
+```{dot}
+//| fig-width: 9
+//| fig-height: 3.2
+digraph {
+graph [rankdir=LR, bgcolor="transparent", fontname="Helvetica"]; node [shape=box, style="rounded,filled", fillcolor="#eef4f9", color="#1f5f8b", fontname="Helvetica", fontsize=16]; edge [color="#52514e", penwidth=1.6];
+  Price -> Quantity [label="  what you want", color="#2a78d6", penwidth=2.5, fontcolor="#2a78d6"];
+  Demand [label="demand shocks\n(income, tastes)", fillcolor="#fff8e6", color="#8a6d1d"];
+  Supply [label="supply shocks\n(weather, costs)", fillcolor="#fff8e6", color="#8a6d1d"];
+  Demand -> Price; Demand -> Quantity; Supply -> Price; Supply -> Quantity;
+}
+```
+
+::: {.small}
+Every observed (price, quantity) pair was produced by *both* kinds of shock. The regression of quantity on price mixes the blue arrow with everything else.
+:::
+
 ## Correlation is not causation — but *why* not?
 
 - People, firms and governments **optimize**
@@ -42,6 +60,14 @@ $$\beta_1 = \frac{\mathrm{Cov}(y, \tilde{x}_1)}{\mathrm{Var}(\tilde{x}_1)}, \qua
 - "Controlling for $x_2$" = using only the part of $x_1$ that $x_2$ cannot predict
 - Today we reproduce a multiple-regression coefficient this way, by hand
 
+## Regression anatomy, in a picture
+
+![](img/s1_anatomy.svg){width=100%}
+
+::: {.small}
+Same 74 cars. Left: longer cars cost more. Right: once weight, headroom and mpg are taken out of length, the *leftover* length is associated with a *lower* price — and that slope is exactly the multiple-regression coefficient.
+:::
+
 ## Standard errors
 
 | Situation | Use |
@@ -52,6 +78,20 @@ $$\beta_1 = \frac{\mathrm{Cov}(y, \tilde{x}_1)}{\mathrm{Var}(\tilde{x}_1)}, \qua
 
 - Changes inference, never the estimate
 - Clustering is not a fix for omitted variables
+
+## Why "robust" standard errors exist
+
+::: {.columns}
+::: {.column width="55%"}
+![](img/s1_hetero.svg){width=100%}
+:::
+::: {.column width="45%"}
+- The line is fine
+- The *spread* around it changes with $x$
+- Conventional SE assumes it doesn't
+- Robust SE measures the spread as it is
+:::
+:::
 
 ## Walkthrough
 

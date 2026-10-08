@@ -11,29 +11,49 @@ subtitle: "Book chapter 5"
 
 ## Learning goals
 
-Participants should be able to state the conditional independence assumption and the common-support condition, compute a subclassification estimate by hand, explain why the propensity score is a sufficient statistic for the covariates, implement inverse-probability weighting and nearest-neighbor matching on the propensity score, and recognize the Dehejia–Wahba result: a good selection-on-observables design can recover an experimental benchmark — and a careless one can be off by $10,000.
+Participants should be able to state the conditional independence assumption (CIA) and the common-support condition, compute a subclassification estimate by hand, explain why the propensity score is a sufficient statistic for the covariates, implement inverse-probability weighting (IPW) and nearest-neighbor matching on the propensity score, and recognize the Dehejia–Wahba result on the National Supported Work (NSW) experiment and Current Population Survey (CPS) comparison group: a good selection-on-observables design can recover an experimental benchmark — and a careless one can be off by $10,000.
 
 ::: {.agenda}
 | Time | Block |
 |------|-------|
-| 0:00 | Recap: SDO = ATE + selection bias + HTE bias |
+| 0:00 | Recap: simple difference in outcomes = average treatment effect (ATE) + selection bias + heterogeneous-effect bias |
 | 0:05 | Concepts: CIA, common support, curse of dimensionality, the propensity-score theorem |
-| 0:20 | Walkthrough: Titanic subclassification; NSW vs CPS; estimate the propensity score; IPW and nearest-neighbor ATT |
+| 0:20 | Walkthrough: Titanic subclassification; NSW experiment vs CPS survey controls; estimate the propensity score; IPW and nearest-neighbor ATT |
 | 0:45 | Exercise 1 kickoff |
-| 0:55 | Assign exercises; preview RDD |
+| 0:55 | Assign exercises; preview regression discontinuity |
 :::
 
 ## Key ideas
 
-**Conditional independence (CIA).** $(Y^0, Y^1) \perp D \mid X$. Within strata of $X$, treatment is as good as random. This is the backdoor criterion in potential-outcomes clothing. It is an assumption about *unobservables*, so no test on the data can confirm it; only the DAG argument can.
+**Conditional independence assumption (CIA).** $(Y^0, Y^1) \perp D \mid X$. Within strata of $X$, treatment is as good as random. This is the backdoor criterion in potential-outcomes clothing; it is also called *selection on observables*. It is an assumption about *unobservables*, so no test on the data can confirm it; only the DAG argument can.
+
+::: {.callout-tip .plain-english title="In plain English"}
+The bet behind matching: "once I line up people with the same age, education, and past earnings, the ones who got the program and the ones who didn't are interchangeable." If something you *can't* see — motivation, say — also drove who signed up, the bet is lost, and no amount of data will tell you so.
+:::
 
 **Common support.** $0 < P(D=1 \mid X) < 1$. For each covariate profile there must be both treated and untreated units; otherwise you are extrapolating.
 
-**Subclassification.** Stratify on $X$, compute the treated-minus-control difference within each stratum, and average using the treated group's stratum shares (for the ATT). It works beautifully with a few discrete covariates and dies of the curse of dimensionality quickly.
+::: {.callout-tip .plain-english title="In plain English"}
+You can only compare like with like if both kinds exist. If every 50-year-old in the data got the program, you have nobody to compare them to, and any "effect" for 50-year-olds is a guess. Check the overlap before you do anything else.
+:::
 
-**Propensity score.** Rosenbaum and Rubin: if CIA holds given $X$, it also holds given $p(X) = P(D=1 \mid X)$. One scalar replaces the whole covariate vector. Estimate it with a logit, then stratify on it, weight by it (IPW), or match on it.
+**Subclassification.** Stratify on $X$, compute the treated-minus-control difference within each stratum, and average using the treated group's stratum shares (for the average treatment effect on the treated, ATT). It works beautifully with a few discrete covariates and dies of the curse of dimensionality quickly.
 
-**Dehejia–Wahba.** LaLonde showed that regressions using a non-experimental control group (CPS) badly missed the NSW experimental estimate. Dehejia and Wahba showed that propensity-score methods with a well-specified score and attention to common support get close. The lesson is double-edged: matching can work, and it can fail silently.
+::: {.callout-tip .plain-english title="In plain English"}
+Sort people into bins — men/women, adult/child — compare treated to untreated inside each bin, then average the bin-by-bin gaps, counting each bin as heavily as it appears in the treated group. Simple and transparent, but with ten characteristics you have thousands of bins and most are empty.
+:::
+
+**Propensity score.** Rosenbaum and Rubin: if CIA holds given $X$, it also holds given $p(X) = P(D=1 \mid X)$. One scalar replaces the whole covariate vector. Estimate it with a logit, then stratify on it, weight by it (inverse probability weighting, IPW), or match on it (nearest neighbor, NN).
+
+::: {.callout-tip .plain-english title="In plain English"}
+Instead of matching on ten characteristics at once, boil them down to one number: how likely was this person to get the treatment, given everything we know about them? Two people with the same likelihood are a fair comparison even if they got there by different routes. IPW uses that number as a weight; matching uses it to find each treated person's closest untreated twin.
+:::
+
+**Dehejia–Wahba.** LaLonde showed that regressions using a non-experimental control group (the Current Population Survey, CPS) badly missed the National Supported Work (NSW) experimental estimate. Dehejia and Wahba showed that propensity-score methods with a well-specified score and attention to common support get close. The lesson is double-edged: matching can work, and it can fail silently.
+
+::: {.callout-tip .plain-english title="In plain English"}
+A famous test case: a real experiment said job training raised earnings by about $1,800. Replacing the experiment's control group with ordinary survey respondents gave *minus* $8,500. Careful propensity-score work got back to roughly $2,000. The method can rescue a bad comparison group — but only when you have the right variables, and nothing warns you when you don't.
+:::
 
 ## Walkthrough
 
@@ -45,7 +65,7 @@ Did first-class passengers survive more because they were first class, or becaus
 
 #### Python
 
-```python
+```{python}
 import pandas as pd
 import numpy as np
 import statsmodels.formula.api as smf
@@ -68,7 +88,7 @@ print("Subclassified ATT:", round((diff * w).sum(), 3))
 
 #### R
 
-```r
+```{r}
 library(tidyverse); library(haven)
 
 t <- read_dta("data/titanic.dta") %>%
@@ -102,7 +122,7 @@ SDO ≈ **0.354**: first-class passengers survived 35 points more often. Within 
 
 #### Python
 
-```python
+```{python}
 nsw = pd.read_stata("data/nsw_mixtape.dta")
 cps = pd.read_stata("data/cps_mixtape.dta")
 
@@ -116,7 +136,7 @@ print("NSW treated vs CPS controls:", round(naive, 0))
 
 #### R
 
-```r
+```{r}
 nsw <- read_dta("data/nsw_mixtape.dta")
 cps <- read_dta("data/cps_mixtape.dta")
 
@@ -140,7 +160,7 @@ The Dehejia–Wahba specification: polynomials in age and education, indicators 
 
 #### Python
 
-```python
+```{python}
 d["age2"] = d.age**2;  d["age3"] = d.age**3;  d["educ2"] = d.educ**2
 d["u74"]  = (d.re74 == 0).astype(int);  d["u75"] = (d.re75 == 0).astype(int)
 d["interaction1"] = d.educ * d.re74
@@ -153,7 +173,7 @@ print(d.groupby("treat")["pscore"].describe()[["mean", "min", "max"]].round(3))
 
 #### R
 
-```r
+```{r}
 d <- d %>% mutate(age2 = age^2, age3 = age^3, educ2 = educ^2,
                   u74 = as.integer(re74 == 0), u75 = as.integer(re75 == 0),
                   interaction1 = educ * re74)
@@ -179,7 +199,7 @@ Mean score ≈ **0.33** for treated and **0.008** for controls. Most CPS people 
 
 #### Python
 
-```python
+```{python}
 ov = d[(d.pscore > 0.1) & (d.pscore < 0.9)].copy()
 print("units in overlap:", len(ov), " treated:", int(ov.treat.sum()))
 
@@ -196,7 +216,7 @@ print("non-normalized IPW:", round((w1 * ov.re78).mean() - (w0 * ov.re78).mean()
 
 #### R
 
-```r
+```{r}
 ov <- d %>% filter(pscore > 0.1, pscore < 0.9) %>%
   mutate(w1 = treat / pscore, w0 = (1 - treat) / (1 - pscore))
 
@@ -219,7 +239,7 @@ About **445** units remain in the overlap region, 147 of them treated. Normalize
 
 #### Python
 
-```python
+```{python}
 from sklearn.neighbors import NearestNeighbors
 
 tr = d[d.treat == 1]; co = d[d.treat == 0]
@@ -231,7 +251,7 @@ print("1-NN ATT on pscore:", round(att, 0))
 
 #### R
 
-```r
+```{r}
 library(MatchIt)
 m <- matchit(treat ~ age + age2 + age3 + educ + educ2 + marr + nodegree + black +
                hisp + re74 + re75 + u74 + u75 + interaction1,

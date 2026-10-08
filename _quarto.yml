@@ -7,9 +7,15 @@ project:
     - "slides/*.qmd"
   resources:
     - "code/*"
+  execute-dir: project    # chunks run from the repo root, so data/ paths resolve
+
+engine: knitr             # R chunks run in knitr; Python chunks run through reticulate
 
 execute:
-  enabled: false   # code is shown, not run, at build time — run the session files locally (see Setup)
+  enabled: true
+  freeze: auto            # results are cached in _freeze/ and only re-run when a page changes
+  warning: false
+  message: false
 
 website:
   title: "Mixtape Workshops"
@@ -26,6 +32,8 @@ website:
         href: setup.qmd
       - text: "Facilitating"
         href: facilitating.qmd
+      - text: "Glossary"
+        href: glossary.qmd
       - text: "Sessions"
         menu:
           - text: "1 · Why causal inference + regression review"
@@ -58,6 +66,7 @@ website:
       - index.qmd
       - setup.qmd
       - facilitating.qmd
+      - glossary.qmd
       - section: "Sessions"
         contents:
           - sessions/01-intro-regression.qmd

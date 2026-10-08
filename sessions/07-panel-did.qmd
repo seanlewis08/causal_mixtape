@@ -5,45 +5,57 @@ subtitle: "Book chapter 8 and sections 9.1–9.3"
 
 ::: {.session-meta}
 **Read before the meeting:** [Chapter 8 — Panel Data](https://mixtape-1ed.netlify.app/08-Panel_Data.html) and [Chapter 9, sections 9.1–9.3](https://mixtape-1ed.netlify.app/09-Difference_in_Differences.html).
-**Data:** `data/sasp_panel.dta`; John Snow's cholera table (typed in).
+**Data:** `data/sasp_panel.dta` (Survey of Adult Service Providers, SASP); John Snow's cholera table (typed in).
 **Code files:** [`code/session07.py`](../code/session07.py) · [`code/session07.R`](../code/session07.R) · [Slides](../slides/07-panel-did.qmd){target="_blank"}
 :::
 
 ## Learning goals
 
-Participants should be able to write the fixed-effects model and explain what *within* variation is, implement FE three ways (dummies, demeaning, a panel routine) and show they agree, say what FE can and cannot fix (time-invariant versus time-varying unobservables), and compute a 2×2 difference-in-differences by hand, as a regression, and in terms of the parallel-trends assumption.
+Participants should be able to write the fixed-effects (FE) model and explain what *within* variation is, implement FE three ways (dummies, demeaning, a panel routine) and show they agree, say what FE can and cannot fix (time-invariant versus time-varying unobservables), and compute a 2×2 difference-in-differences (DiD) by hand, as a regression, and in terms of the parallel-trends assumption.
 
 ::: {.agenda}
 | Time | Block |
 |------|-------|
-| 0:00 | Recap: LATE and compliers |
+| 0:00 | Recap: the local average treatment effect and compliers |
 | 0:05 | Concepts: the FE model, within transformation, strict exogeneity; the 2×2 DiD and parallel trends |
-| 0:20 | Walkthrough: SASP panel — pooled OLS vs FE on the price of unprotected sex; John Snow's cholera DiD by hand and by regression |
+| 0:20 | Walkthrough: SASP panel — pooled regression vs fixed effects on the price of unprotected sex; John Snow's cholera DiD by hand and by regression |
 | 0:45 | Exercise 1 kickoff |
 | 0:55 | Assign exercises; preview event studies |
 :::
 
 ## Key ideas
 
-**The fixed-effects model.** $Y_{it} = \delta D_{it} + \mathbf{X}_{it}\beta + u_i + \varepsilon_{it}$. The unit effect $u_i$ can be correlated with $D_{it}$ in any way; FE removes it by comparing each unit *to itself* across time. Three equivalent implementations: unit dummies, demeaning every variable within unit, or first-differencing (with two periods).
+**The fixed-effects (FE) model.** $Y_{it} = \delta D_{it} + \mathbf{X}_{it}\beta + u_i + \varepsilon_{it}$. The unit effect $u_i$ can be correlated with $D_{it}$ in any way; FE removes it by comparing each unit *to itself* across time. Three equivalent implementations: unit dummies, demeaning every variable within unit, or first-differencing (with two periods).
+
+::: {.callout-tip .plain-english title="In plain English"}
+If you watch the same people over time, you can ask "when *this* person's treatment changed, did *this* person's outcome change?" — and never compare one person to another at all. Everything that is permanently true about a person (their background, their baseline talent) cancels out, because it is the same in every period.
+:::
 
 **What FE needs.** *Strict exogeneity*: $E[\varepsilon_{it} \mid D_{i1}, \dots, D_{iT}, u_i] = 0$. Time-varying unobservables that move with $D$ are still a problem. Reverse causality and feedback (today's shock affects tomorrow's treatment) violate it. FE also needs *within* variation; a regressor that never changes for a unit is absorbed.
 
-**The SASP question.** Sex workers charge more for unprotected sex. Is that a compensating differential for risk, or do higher-priced providers simply differ in ways that also make them more likely to offer it? The panel follows the same provider across clients, so provider-level unobservables drop out.
+::: {.callout-tip .plain-english title="In plain English"}
+Fixed effects handle the things about a unit that never change. They do nothing about things that change over time alongside the treatment — a provider who raises prices *and* starts offering a riskier service in the same month because business got slow. And they can't estimate the effect of anything that never varies for a given unit, because there is no "before and after" to compare.
+:::
 
-**The 2×2 DiD.** Two groups, two periods. $\hat{\delta} = (\bar{Y}_{T,post} - \bar{Y}_{T,pre}) - (\bar{Y}_{C,post} - \bar{Y}_{C,pre})$. The identifying assumption is *parallel trends*: absent treatment, the treated group's outcome would have moved by the same amount as the control group's. It is a statement about a counterfactual and is untestable in the 2×2 case. As a regression: $Y = \alpha + \beta\,\text{Treat} + \gamma\,\text{Post} + \delta\,(\text{Treat} \times \text{Post}) + e$.
+**The SASP question.** Sex workers charge more for unprotected sex. Is that a compensating differential for risk, or do higher-priced providers simply differ in ways that also make them more likely to offer it? The Survey of Adult Service Providers (SASP) panel follows the same provider across clients, so provider-level unobservables drop out.
+
+**The 2×2 difference-in-differences (DiD).** Two groups, two periods. $\hat{\delta} = (\bar{Y}_{T,post} - \bar{Y}_{T,pre}) - (\bar{Y}_{C,post} - \bar{Y}_{C,pre})$. The identifying assumption is *parallel trends*: absent treatment, the treated group's outcome would have moved by the same amount as the control group's. It is a statement about a counterfactual and is untestable in the 2×2 case. As a regression: $Y = \alpha + \beta\,\text{Treat} + \gamma\,\text{Post} + \delta\,(\text{Treat} \times \text{Post}) + e$.
+
+::: {.callout-tip .plain-english title="In plain English"}
+Before-and-after on its own is misleading, because things change over time for everyone. So take the treated group's before-after change and subtract the control group's before-after change; whatever is left over is the treatment. The hidden bet is that, without the treatment, both groups would have changed by the same amount — "parallel trends."
+:::
 
 **John Snow.** In 1854 London, the Lambeth water company had moved its intake upstream of the sewage; Southwark & Vauxhall had not. Cholera deaths fell in Lambeth-served households and rose elsewhere. It is the first DiD and still one of the cleanest.
 
 ## Walkthrough
 
-### Step 1 — SASP: pooled OLS
+### Step 1 — SASP: pooled ordinary least squares (OLS)
 
 ::: {.panel-tabset}
 
 #### Python
 
-```python
+```{python}
 import pandas as pd
 import numpy as np
 import statsmodels.formula.api as smf
@@ -64,7 +76,7 @@ print("pooled OLS, unsafe:", pooled.params["unsafe"].round(3), " SE", pooled.bse
 
 #### R
 
-```r
+```{r}
 library(tidyverse); library(haven); library(fixest)
 
 sasp <- read_dta("data/sasp_panel.dta")
@@ -72,6 +84,7 @@ timevar <- c("unsafe","llength","reg","asq_cl","appearance_cl","provider_second"
              "asian_cl","black_cl","hispanic_cl","othrace_cl","hot","massage_cl","age_cl")
 fixed   <- c("age","asq","bmi","hispanic","black","other","asian","schooling",
              "cohab","married","divorced","separated")
+sasp <- sasp %>% drop_na(all_of(c("lnw", "id", timevar, fixed)))   # same sample as Python
 
 f_pooled <- as.formula(paste("lnw ~", paste(c(timevar, fixed), collapse = " + ")))
 pooled <- feols(f_pooled, data = sasp, cluster = ~id)
@@ -90,7 +103,7 @@ coeftable(pooled)["unsafe", ]
 
 #### Python
 
-```python
+```{python}
 # (a) demeaning by hand
 dm = sasp.copy()
 for v in ["lnw"] + timevar:
@@ -113,7 +126,7 @@ print("demeaned:", fe_dm.params["unsafe"].round(3),
 
 #### R
 
-```r
+```{r}
 f_fe <- as.formula(paste("lnw ~", paste(timevar, collapse = " + "), "| id"))
 fe <- feols(f_fe, data = sasp, cluster = ~id)
 coeftable(fe)["unsafe", ]
@@ -149,7 +162,7 @@ Deaths per 10,000 households, from the book's Table 9.1:
 
 #### Python
 
-```python
+```{python}
 snow = pd.DataFrame({
     "company": ["SV", "SV", "Lambeth", "Lambeth"],
     "year":    [1849, 1854, 1849, 1854],
@@ -165,7 +178,7 @@ print("by hand:", by_hand, "  regression:", reg.params["treat:post"].round(1))
 
 #### R
 
-```r
+```{r}
 snow <- tibble(company = c("SV","SV","Lambeth","Lambeth"),
                year = c(1849, 1854, 1849, 1854),
                deaths = c(135, 147, 85, 19)) %>%

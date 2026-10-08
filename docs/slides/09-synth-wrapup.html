@@ -160,21 +160,17 @@
 </section>
 <section id="inference-by-placebo" class="slide level2">
 <h2>Inference by placebo</h2>
-<ul>
-<li>Reassign treatment to each donor; fit its synthetic control</li>
-<li>Post/pre RMSPE ratio for every unit</li>
-<li>Treated unit’s rank ÷ number of units = the <span class="math inline">\(p\)</span>-value</li>
-<li>Also: placebo-in-time, leave-one-out donors</li>
-</ul>
+
+<img data-src="img/s9_placebo.svg" style="width:100.0%" class="r-stretch"><div class="small">
+<p>Pretend each other state was treated, build its synthetic twin, and compute how much worse the fit got after 1993. Texas is the most extreme of 51 → rank-based <span class="math inline">\(p ≈ 0.02\)</span>.</p>
+</div>
 </section>
 <section id="texas-cunningham-kang-2019" class="slide level2">
 <h2>Texas (Cunningham &amp; Kang 2019)</h2>
-<ul>
-<li>Massive prison construction, 1993–94</li>
-<li>Black male incarceration roughly doubles</li>
-<li>Synthetic Texas: ≈ 25,000 fewer Black men in prison per year after 1995</li>
-<li>Texas’s RMSPE ratio is the largest of 51 → <span class="math inline">\(p ≈ 0.02\)</span></li>
-</ul>
+
+<img data-src="img/s9_synth.svg" style="width:100.0%" class="r-stretch"><div class="small">
+<p>Prison construction 1993–94. Synthetic Texas tracks real Texas before, then falls ≈ 23,000 Black male prisoners per year behind.</p>
+</div>
 </section>
 <section id="walkthrough" class="slide level2">
 <h2>Walkthrough</h2>
@@ -187,47 +183,181 @@
 </section>
 <section id="which-design-when" class="slide level2">
 <h2>Which design, when</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th>Source of variation</th>
-<th>Design</th>
-<th>Key assumption</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Randomization</td>
-<td>Compare means; RI</td>
-<td>—</td>
-</tr>
-<tr class="even">
-<td>Observable selection</td>
-<td>Matching / IPW</td>
-<td>CIA + overlap</td>
-</tr>
-<tr class="odd">
-<td>A threshold</td>
-<td>RDD</td>
-<td>Continuity at cutoff</td>
-</tr>
-<tr class="even">
-<td>An instrument</td>
-<td>IV / 2SLS</td>
-<td>Exclusion; LATE</td>
-</tr>
-<tr class="odd">
-<td>Within-unit change</td>
-<td>FE / DiD</td>
-<td>Strict exogeneity / parallel trends</td>
-</tr>
-<tr class="even">
-<td>One treated aggregate</td>
-<td>Synthetic control</td>
-<td>Pre-period fit</td>
-</tr>
-</tbody>
-</table>
+<div class="cell" data-fig-width="13" data-fig-height="5.8" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<svg width="1248" height="557" viewbox="0.00 0.00 818.93 469.00" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="; max-width: none; max-height: none; display: block; margin: auto auto auto auto">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 465)">
+<!-- q -->
+<g id="node1" class="node">
+<title>q</title>
+<path fill="#fff8e6" stroke="#8a6d1d" d="M168.31,-258C168.31,-258 12.23,-258 12.23,-258 6.23,-258 0.23,-252 0.23,-246 0.23,-246 0.23,-214 0.23,-214 0.23,-208 6.23,-202 12.23,-202 12.23,-202 168.31,-202 168.31,-202 174.31,-202 180.31,-208 180.31,-214 180.31,-214 180.31,-246 180.31,-246 180.31,-252 174.31,-258 168.31,-258"></path>
+<text text-anchor="middle" x="90.27" y="-236" font-family="Helvetica,sans-Serif" font-size="20.00">What decided who</text>
+<text text-anchor="middle" x="90.27" y="-212" font-family="Helvetica,sans-Serif" font-size="20.00">got treated?</text>
+</g>
+<!-- r -->
+<g id="node2" class="node">
+<title>r</title>
+<path fill="#eef4f9" stroke="#1f5f8b" d="M410.88,-442C410.88,-442 333.89,-442 333.89,-442 327.89,-442 321.89,-436 321.89,-430 321.89,-430 321.89,-418 321.89,-418 321.89,-412 327.89,-406 333.89,-406 333.89,-406 410.88,-406 410.88,-406 416.88,-406 422.88,-412 422.88,-418 422.88,-418 422.88,-430 422.88,-430 422.88,-436 416.88,-442 410.88,-442"></path>
+<text text-anchor="middle" x="372.39" y="-418" font-family="Helvetica,sans-Serif" font-size="20.00">a coin flip</text>
+</g>
+<!-- q&#45;&gt;r -->
+<g id="edge1" class="edge">
+<title>q-&gt;r</title>
+<path fill="none" stroke="#52514e" d="M116.34,-258.08C148.26,-292.37 206.53,-350.23 266.54,-386 280.66,-394.41 296.94,-401.43 312.4,-407.04"></path>
+<polygon fill="#52514e" stroke="#52514e" points="311.3,-410.36 321.89,-410.36 313.61,-403.75 311.3,-410.36"></polygon>
+</g>
+<!-- o -->
+<g id="node3" class="node">
+<title>o</title>
+<path fill="#eef4f9" stroke="#1f5f8b" d="M462.84,-373C462.84,-373 281.93,-373 281.93,-373 275.93,-373 269.93,-367 269.93,-361 269.93,-361 269.93,-329 269.93,-329 269.93,-323 275.93,-317 281.93,-317 281.93,-317 462.84,-317 462.84,-317 468.84,-317 474.84,-323 474.84,-329 474.84,-329 474.84,-361 474.84,-361 474.84,-367 468.84,-373 462.84,-373"></path>
+<text text-anchor="middle" x="372.39" y="-351" font-family="Helvetica,sans-Serif" font-size="20.00">observed traits</text>
+<text text-anchor="middle" x="372.39" y="-327" font-family="Helvetica,sans-Serif" font-size="20.00">(you can list them all)</text>
+</g>
+<!-- q&#45;&gt;o -->
+<g id="edge2" class="edge">
+<title>q-&gt;o</title>
+<path fill="none" stroke="#52514e" d="M159.79,-258.13C200.3,-274.76 251.72,-295.87 293.73,-313.12"></path>
+<polygon fill="#52514e" stroke="#52514e" points="292.51,-316.4 303.09,-316.96 295.16,-309.92 292.51,-316.4"></polygon>
+</g>
+<!-- c -->
+<g id="node4" class="node">
+<title>c</title>
+<path fill="#eef4f9" stroke="#1f5f8b" d="M420.39,-286C420.39,-286 324.38,-286 324.38,-286 318.38,-286 312.38,-280 312.38,-274 312.38,-274 312.38,-262 312.38,-262 312.38,-256 318.38,-250 324.38,-250 324.38,-250 420.39,-250 420.39,-250 426.39,-250 432.39,-256 432.39,-262 432.39,-262 432.39,-274 432.39,-274 432.39,-280 426.39,-286 420.39,-286"></path>
+<text text-anchor="middle" x="372.39" y="-262" font-family="Helvetica,sans-Serif" font-size="20.00">a cutoff rule</text>
+</g>
+<!-- q&#45;&gt;c -->
+<g id="edge3" class="edge">
+<title>q-&gt;c</title>
+<path fill="none" stroke="#52514e" d="M180.67,-242.13C219.89,-247.45 265.24,-253.6 301.88,-258.57"></path>
+<polygon fill="#52514e" stroke="#52514e" points="301.59,-262.06 311.97,-259.94 302.53,-255.13 301.59,-262.06"></polygon>
+</g>
+<!-- i -->
+<g id="node5" class="node">
+<title>i</title>
+<path fill="#eef4f9" stroke="#1f5f8b" d="M466.08,-223C466.08,-223 278.69,-223 278.69,-223 272.69,-223 266.69,-217 266.69,-211 266.69,-211 266.69,-179 266.69,-179 266.69,-173 272.69,-167 278.69,-167 278.69,-167 466.08,-167 466.08,-167 472.08,-167 478.08,-173 478.08,-179 478.08,-179 478.08,-211 478.08,-211 478.08,-217 472.08,-223 466.08,-223"></path>
+<text text-anchor="middle" x="372.39" y="-201" font-family="Helvetica,sans-Serif" font-size="20.00">something exogenous</text>
+<text text-anchor="middle" x="372.39" y="-177" font-family="Helvetica,sans-Serif" font-size="20.00">that nudges treatment</text>
+</g>
+<!-- q&#45;&gt;i -->
+<g id="edge4" class="edge">
+<title>q-&gt;i</title>
+<path fill="none" stroke="#52514e" d="M180.67,-218.83C204.7,-215.83 231.03,-212.54 256.25,-209.39"></path>
+<polygon fill="#52514e" stroke="#52514e" points="256.73,-212.85 266.22,-208.14 255.86,-205.91 256.73,-212.85"></polygon>
+</g>
+<!-- t -->
+<g id="node6" class="node">
+<title>t</title>
+<path fill="#eef4f9" stroke="#1f5f8b" d="M453.49,-142C453.49,-142 291.29,-142 291.29,-142 285.29,-142 279.29,-136 279.29,-130 279.29,-130 279.29,-98 279.29,-98 279.29,-92 285.29,-86 291.29,-86 291.29,-86 453.49,-86 453.49,-86 459.49,-86 465.49,-92 465.49,-98 465.49,-98 465.49,-130 465.49,-130 465.49,-136 459.49,-142 453.49,-142"></path>
+<text text-anchor="middle" x="372.39" y="-120" font-family="Helvetica,sans-Serif" font-size="20.00">a change over time</text>
+<text text-anchor="middle" x="372.39" y="-96" font-family="Helvetica,sans-Serif" font-size="20.00">within units</text>
+</g>
+<!-- q&#45;&gt;t -->
+<g id="edge5" class="edge">
+<title>q-&gt;t</title>
+<path fill="none" stroke="#52514e" d="M155.58,-201.91C188.64,-187.61 229.63,-170.11 266.54,-155 273.94,-151.97 281.64,-148.87 289.37,-145.79"></path>
+<polygon fill="#52514e" stroke="#52514e" points="290.79,-148.99 298.79,-142.04 288.21,-142.48 290.79,-148.99"></polygon>
+</g>
+<!-- a -->
+<g id="node7" class="node">
+<title>a</title>
+<path fill="#eef4f9" stroke="#1f5f8b" d="M464.16,-61C464.16,-61 280.62,-61 280.62,-61 274.62,-61 268.62,-55 268.62,-49 268.62,-49 268.62,-17 268.62,-17 268.62,-11 274.62,-5 280.62,-5 280.62,-5 464.16,-5 464.16,-5 470.16,-5 476.16,-11 476.16,-17 476.16,-17 476.16,-49 476.16,-49 476.16,-55 470.16,-61 464.16,-61"></path>
+<text text-anchor="middle" x="372.39" y="-39" font-family="Helvetica,sans-Serif" font-size="20.00">one big unit changed,</text>
+<text text-anchor="middle" x="372.39" y="-15" font-family="Helvetica,sans-Serif" font-size="20.00">others did not</text>
+</g>
+<!-- q&#45;&gt;a -->
+<g id="edge6" class="edge">
+<title>q-&gt;a</title>
+<path fill="none" stroke="#52514e" d="M116.77,-201.87C148.9,-167.78 207.16,-110.41 266.54,-74 271.45,-70.99 276.62,-68.13 281.92,-65.42"></path>
+<polygon fill="#52514e" stroke="#52514e" points="283.5,-68.55 290.95,-61.02 280.43,-62.26 283.5,-68.55"></polygon>
+</g>
+<!-- R -->
+<g id="node8" class="node">
+<title>R</title>
+<path fill="#e3f4e9" stroke="#1f5f3a" d="M798.77,-461C798.77,-461 576.39,-461 576.39,-461 570.39,-461 564.39,-455 564.39,-449 564.39,-449 564.39,-417 564.39,-417 564.39,-411 570.39,-405 576.39,-405 576.39,-405 798.77,-405 798.77,-405 804.77,-405 810.77,-411 810.77,-417 810.77,-417 810.77,-449 810.77,-449 810.77,-455 804.77,-461 798.77,-461"></path>
+<text text-anchor="middle" x="687.58" y="-439" font-family="Helvetica,sans-Serif" font-size="20.00">compare means</text>
+<text text-anchor="middle" x="687.58" y="-415" font-family="Helvetica,sans-Serif" font-size="20.00">+ randomization inference</text>
+</g>
+<!-- r&#45;&gt;R -->
+<g id="edge7" class="edge">
+<title>r-&gt;R</title>
+<path fill="none" stroke="#52514e" d="M422.67,-425.42C458.06,-426.43 507.53,-427.85 554.09,-429.19"></path>
+<polygon fill="#52514e" stroke="#52514e" points="554.19,-432.7 564.29,-429.49 554.39,-425.7 554.19,-432.7"></polygon>
+</g>
+<!-- O -->
+<g id="node9" class="node">
+<title>O</title>
+<path fill="#e3f4e9" stroke="#1f5f3a" d="M774.91,-380C774.91,-380 600.26,-380 600.26,-380 594.26,-380 588.26,-374 588.26,-368 588.26,-368 588.26,-336 588.26,-336 588.26,-330 594.26,-324 600.26,-324 600.26,-324 774.91,-324 774.91,-324 780.91,-324 786.91,-330 786.91,-336 786.91,-336 786.91,-368 786.91,-368 786.91,-374 780.91,-380 774.91,-380"></path>
+<text text-anchor="middle" x="687.58" y="-358" font-family="Helvetica,sans-Serif" font-size="20.00">matching / weighting</text>
+<text text-anchor="middle" x="687.58" y="-334" font-family="Helvetica,sans-Serif" font-size="20.00">(check overlap)</text>
+</g>
+<!-- o&#45;&gt;O -->
+<g id="edge8" class="edge">
+<title>o-&gt;O</title>
+<path fill="none" stroke="#52514e" d="M475.07,-347.27C508.01,-348.01 544.66,-348.83 578.08,-349.57"></path>
+<polygon fill="#52514e" stroke="#52514e" points="578.26,-353.08 588.34,-349.8 578.42,-346.08 578.26,-353.08"></polygon>
+</g>
+<!-- C -->
+<g id="node10" class="node">
+<title>C</title>
+<path fill="#e3f4e9" stroke="#1f5f3a" d="M788.08,-299C788.08,-299 587.09,-299 587.09,-299 581.09,-299 575.09,-293 575.09,-287 575.09,-287 575.09,-255 575.09,-255 575.09,-249 581.09,-243 587.09,-243 587.09,-243 788.08,-243 788.08,-243 794.08,-243 800.08,-249 800.08,-255 800.08,-255 800.08,-287 800.08,-287 800.08,-293 794.08,-299 788.08,-299"></path>
+<text text-anchor="middle" x="687.58" y="-277" font-family="Helvetica,sans-Serif" font-size="20.00">regression discontinuity</text>
+<text text-anchor="middle" x="687.58" y="-253" font-family="Helvetica,sans-Serif" font-size="20.00">(plot it; density test)</text>
+</g>
+<!-- c&#45;&gt;C -->
+<g id="edge9" class="edge">
+<title>c-&gt;C</title>
+<path fill="none" stroke="#52514e" d="M432.67,-268.57C469.93,-268.92 519.37,-269.4 564.71,-269.83"></path>
+<polygon fill="#52514e" stroke="#52514e" points="564.89,-273.33 574.93,-269.93 564.96,-266.33 564.89,-273.33"></polygon>
+</g>
+<!-- I -->
+<g id="node11" class="node">
+<title>I</title>
+<path fill="#e3f4e9" stroke="#1f5f3a" d="M780.61,-218C780.61,-218 594.55,-218 594.55,-218 588.55,-218 582.55,-212 582.55,-206 582.55,-206 582.55,-174 582.55,-174 582.55,-168 588.55,-162 594.55,-162 594.55,-162 780.61,-162 780.61,-162 786.61,-162 792.61,-168 792.61,-174 792.61,-174 792.61,-206 792.61,-206 792.61,-212 786.61,-218 780.61,-218"></path>
+<text text-anchor="middle" x="687.58" y="-196" font-family="Helvetica,sans-Serif" font-size="20.00">instrumental variables</text>
+<text text-anchor="middle" x="687.58" y="-172" font-family="Helvetica,sans-Serif" font-size="20.00">(first-stage F; LATE)</text>
+</g>
+<!-- i&#45;&gt;I -->
+<g id="edge10" class="edge">
+<title>i-&gt;I</title>
+<path fill="none" stroke="#52514e" d="M478.11,-193.33C508.31,-192.85 541.4,-192.32 572.16,-191.83"></path>
+<polygon fill="#52514e" stroke="#52514e" points="572.55,-195.32 582.49,-191.66 572.43,-188.32 572.55,-195.32"></polygon>
+</g>
+<!-- T -->
+<g id="node12" class="node">
+<title>T</title>
+<path fill="#e3f4e9" stroke="#1f5f3a" d="M768.66,-137C768.66,-137 606.5,-137 606.5,-137 600.5,-137 594.5,-131 594.5,-125 594.5,-125 594.5,-93 594.5,-93 594.5,-87 600.5,-81 606.5,-81 606.5,-81 768.66,-81 768.66,-81 774.66,-81 780.66,-87 780.66,-93 780.66,-93 780.66,-125 780.66,-125 780.66,-131 774.66,-137 768.66,-137"></path>
+<text text-anchor="middle" x="687.58" y="-115" font-family="Helvetica,sans-Serif" font-size="20.00">fixed effects / DiD</text>
+<text text-anchor="middle" x="687.58" y="-91" font-family="Helvetica,sans-Serif" font-size="20.00">(event-study leads)</text>
+</g>
+<!-- t&#45;&gt;T -->
+<g id="edge11" class="edge">
+<title>t-&gt;T</title>
+<path fill="none" stroke="#52514e" d="M465.66,-112.53C502.93,-111.93 546.08,-111.24 584.3,-110.63"></path>
+<polygon fill="#52514e" stroke="#52514e" points="584.48,-114.13 594.43,-110.47 584.37,-107.13 584.48,-114.13"></polygon>
+</g>
+<!-- A -->
+<g id="node13" class="node">
+<title>A</title>
+<path fill="#e3f4e9" stroke="#1f5f3a" d="M761.2,-56C761.2,-56 613.97,-56 613.97,-56 607.97,-56 601.97,-50 601.97,-44 601.97,-44 601.97,-12 601.97,-12 601.97,-6 607.97,0 613.97,0 613.97,0 761.2,0 761.2,0 767.2,0 773.2,-6 773.2,-12 773.2,-12 773.2,-44 773.2,-44 773.2,-50 767.2,-56 761.2,-56"></path>
+<text text-anchor="middle" x="687.58" y="-34" font-family="Helvetica,sans-Serif" font-size="20.00">synthetic control</text>
+<text text-anchor="middle" x="687.58" y="-10" font-family="Helvetica,sans-Serif" font-size="20.00">(pre-fit; placebos)</text>
+</g>
+<!-- a&#45;&gt;A -->
+<g id="edge12" class="edge">
+<title>a-&gt;A</title>
+<path fill="none" stroke="#52514e" d="M476.37,-31.36C513.53,-30.76 555.27,-30.1 591.7,-29.51"></path>
+<polygon fill="#52514e" stroke="#52514e" points="591.88,-33.01 601.82,-29.35 591.77,-26.01 591.88,-33.01"></polygon>
+</g>
+</g>
+</svg>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
 </section>
 <section id="three-new-questions" class="slide level2">
 <h2>Three new questions</h2>

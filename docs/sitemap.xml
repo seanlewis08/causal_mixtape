@@ -2,71 +2,75 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/slides/09-synth-wrapup.html</loc>
-    <lastmod>2026-10-08T16:31:37.567Z</lastmod>
+    <lastmod>2026-10-08T18:11:27.206Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/slides/07-panel-did.html</loc>
-    <lastmod>2026-10-08T16:31:11.211Z</lastmod>
+    <lastmod>2026-10-08T18:09:44.670Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/slides/05-rdd.html</loc>
-    <lastmod>2026-10-08T16:30:48.791Z</lastmod>
+    <lastmod>2026-10-08T18:09:44.666Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/slides/03-potential-outcomes.html</loc>
-    <lastmod>2026-10-08T16:30:25.103Z</lastmod>
+    <lastmod>2026-10-08T18:09:44.678Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/slides/01-intro-regression.html</loc>
-    <lastmod>2026-10-08T16:30:02.235Z</lastmod>
+    <lastmod>2026-10-08T18:09:44.662Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/setup.html</loc>
-    <lastmod>2026-10-08T17:39:09.901Z</lastmod>
+    <lastmod>2026-10-08T18:19:32.639Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/sessions/08-did-deep-dive.html</loc>
-    <lastmod>2026-10-08T16:17:34.444Z</lastmod>
+    <lastmod>2026-10-08T18:18:05.319Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/sessions/06-iv.html</loc>
-    <lastmod>2026-10-08T16:11:07.195Z</lastmod>
+    <lastmod>2026-10-08T18:14:59.848Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/sessions/04-matching.html</loc>
-    <lastmod>2026-10-08T16:07:06.192Z</lastmod>
+    <lastmod>2026-10-08T18:14:17.779Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/sessions/02-dags.html</loc>
-    <lastmod>2026-10-08T16:04:13.513Z</lastmod>
+    <lastmod>2026-10-08T18:14:17.778Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/index.html</loc>
-    <lastmod>2026-10-08T16:00:36.927Z</lastmod>
+    <lastmod>2026-10-08T18:19:41.268Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/facilitating.html</loc>
     <lastmod>2026-10-08T16:01:13.963Z</lastmod>
   </url>
   <url>
+    <loc>https://seanlewis08.github.io/causal_mixtape/glossary.html</loc>
+    <lastmod>2026-10-08T18:01:21.243Z</lastmod>
+  </url>
+  <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/sessions/01-intro-regression.html</loc>
-    <lastmod>2026-10-08T16:02:58.875Z</lastmod>
+    <lastmod>2026-10-08T18:14:17.777Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/sessions/03-potential-outcomes.html</loc>
-    <lastmod>2026-10-08T16:05:22.415Z</lastmod>
+    <lastmod>2026-10-08T18:14:17.779Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/sessions/05-rdd.html</loc>
-    <lastmod>2026-10-08T16:33:12.218Z</lastmod>
+    <lastmod>2026-10-08T18:14:17.779Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/sessions/07-panel-did.html</loc>
-    <lastmod>2026-10-08T16:12:58.735Z</lastmod>
+    <lastmod>2026-10-08T18:19:01.382Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/sessions/09-synth-wrapup.html</loc>
-    <lastmod>2026-10-08T17:01:09.613Z</lastmod>
+    <lastmod>2026-10-08T18:33:03.175Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/slides.html</loc>
@@ -74,18 +78,18 @@
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/slides/02-dags.html</loc>
-    <lastmod>2026-10-08T16:30:14.267Z</lastmod>
+    <lastmod>2026-10-08T18:09:44.673Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/slides/04-matching.html</loc>
-    <lastmod>2026-10-08T16:30:37.759Z</lastmod>
+    <lastmod>2026-10-08T18:09:44.658Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/slides/06-iv.html</loc>
-    <lastmod>2026-10-08T16:30:59.071Z</lastmod>
+    <lastmod>2026-10-08T18:09:44.654Z</lastmod>
   </url>
   <url>
     <loc>https://seanlewis08.github.io/causal_mixtape/slides/08-did-deep-dive.html</loc>
-    <lastmod>2026-10-08T16:31:24.511Z</lastmod>
+    <lastmod>2026-10-08T18:09:44.650Z</lastmod>
   </url>
 </urlset>

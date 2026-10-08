@@ -11,12 +11,12 @@ subtitle: "Book chapter 7"
 
 ## Learning goals
 
-Participants should be able to state the three IV conditions (relevance, exclusion, independence) and the fourth that makes the estimand interpretable (monotonicity), compute a Wald/2SLS estimate and explain it as reduced form divided by first stage, diagnose weak instruments with the first-stage F, and explain why the IV estimand under heterogeneous effects is a LATE for compliers — and who the compliers are in the judge-leniency design.
+Participants should be able to state the three instrumental-variable (IV) conditions (relevance, exclusion, independence) and the fourth that makes the estimand interpretable (monotonicity), compute a Wald / two-stage least squares (2SLS) estimate and explain it as reduced form divided by first stage, diagnose weak instruments with the first-stage F, and explain why the IV estimand under heterogeneous effects is a local average treatment effect (LATE) for compliers — and who the compliers are in the judge-leniency design.
 
 ::: {.agenda}
 | Time | Block |
 |------|-------|
-| 0:00 | Recap: fuzzy RD as an IV |
+| 0:00 | Recap: fuzzy regression discontinuity as an instrumental variable |
 | 0:05 | Concepts: Wright's problem, the IV conditions, 2SLS, weak instruments, LATE and compliers |
 | 0:20 | Walkthrough: Card's college-proximity instrument; the judge-leniency design |
 | 0:45 | Exercise 1 kickoff |
@@ -25,16 +25,32 @@ Participants should be able to state the three IV conditions (relevance, exclusi
 
 ## Key ideas
 
-**The problem IV solves.** $Y = \alpha + \delta D + u$ with $\mathrm{Cov}(D, u) \neq 0$. Regression cannot recover $\delta$. But if some instrument $Z$ moves $D$ and is otherwise unrelated to $Y$, then the *only* reason $Y$ moves with $Z$ is through $D$, so
+**The problem IV solves.** $Y = \alpha + \delta D + u$ with $\mathrm{Cov}(D, u) \neq 0$. Regression cannot recover $\delta$. But if some instrumental variable (IV) $Z$ moves $D$ and is otherwise unrelated to $Y$, then the *only* reason $Y$ moves with $Z$ is through $D$, so
 $$\delta_{IV} = \frac{\mathrm{Cov}(Z, Y)}{\mathrm{Cov}(Z, D)} = \frac{\text{reduced form}}{\text{first stage}}.$$
+
+::: {.callout-tip .plain-english title="In plain English"}
+You can't trust the raw relationship between schooling and wages because ambitious people get more of both. But suppose some people happened to grow up near a college. That nudges them toward more schooling, and — if it has no *other* effect on wages — any wage difference between near-college and far-from-college people must have come through schooling. Divide the wage gap by the schooling gap and you have the effect of schooling.
+:::
 
 **The conditions.** *Relevance*: $Z$ predicts $D$ (testable; look at the first-stage F). *Exclusion*: $Z$ affects $Y$ only through $D$ (untestable; argued from the DAG). *Independence*: $Z$ is as good as random with respect to $u$ (untestable). Philip Wright's 1928 appendix is the origin story: identify a demand curve with a supply shifter (weather) that does not enter demand.
 
-**2SLS.** Regress $D$ on $Z$ and covariates, take the fitted values $\hat{D}$, regress $Y$ on $\hat{D}$ and the same covariates. The second-stage SEs must account for the first stage; use a proper IV routine, not two `lm` calls.
+::: {.callout-tip .plain-english title="In plain English"}
+An instrument has one job and one restriction. The job: it has to actually move the treatment (you can check this). The restriction: it must not touch the outcome any other way, and it must not itself be chosen by people for reasons related to the outcome (you cannot check either; you have to argue them). Most IV debates are about the restriction.
+:::
+
+**Two-stage least squares (2SLS).** Regress $D$ on $Z$ and covariates, take the fitted values $\hat{D}$, regress $Y$ on $\hat{D}$ and the same covariates. The second-stage standard errors must account for the first stage; use a proper IV routine, not two `lm` calls.
 
 **Weak instruments.** When the first stage is weak, 2SLS is biased toward OLS and its sampling distribution is badly behaved. The rule of thumb is first-stage F above 10 for one endogenous regressor; the modern advice is to report it, prefer just-identified models, and be nervous below 20.
 
-**LATE.** With heterogeneous effects, IV identifies the average effect for *compliers* — units whose treatment is moved by the instrument — under monotonicity (no defiers). Different instruments identify different LATEs for the same treatment. The judge-leniency design makes this vivid: the compliers are defendants who would be detained by a strict judge and released by a lenient one.
+::: {.callout-tip .plain-english title="In plain English"}
+If the instrument barely nudges the treatment, you are dividing a small number by another small number, and the answer swings wildly — and, worse, tends to drift back toward the naive estimate you were trying to avoid. The first-stage F-statistic measures how hard the nudge is; under 10 is a warning light.
+:::
+
+**Local average treatment effect (LATE).** With heterogeneous effects, IV identifies the average effect for *compliers* — units whose treatment is moved by the instrument — under monotonicity (no defiers). Different instruments identify different LATEs for the same treatment. The judge-leniency design makes this vivid: the compliers are defendants who would be detained by a strict judge and released by a lenient one.
+
+::: {.callout-tip .plain-english title="In plain English"}
+IV only tells you about the people the instrument actually moved. Growing up near a college changes the plans of some teenagers and not others; the IV estimate is the return to schooling *for those teenagers*, not for everyone. A different instrument moves different people and can honestly give a different answer. "Local" means "for the movers."
+:::
 
 ## Walkthrough
 
@@ -44,7 +60,7 @@ $$\delta_{IV} = \frac{\mathrm{Cov}(Z, Y)}{\mathrm{Cov}(Z, D)} = \frac{\text{redu
 
 #### Python
 
-```python
+```{python}
 import pandas as pd
 import numpy as np
 import statsmodels.formula.api as smf
@@ -59,7 +75,7 @@ print("OLS return to a year of schooling:", ols.params["educ"].round(4))
 
 #### R
 
-```r
+```{r}
 library(tidyverse); library(haven); library(estimatr); library(ivreg)
 
 card <- read_dta("data/card.dta")
@@ -79,7 +95,7 @@ coef(ols)["educ"]
 
 #### Python
 
-```python
+```{python}
 fs = smf.ols(f"educ ~ nearc4 + {ctrl}", data=card).fit()
 print("first stage:", fs.params["nearc4"].round(3), " t =", (fs.params["nearc4"] / fs.bse["nearc4"]).round(2))
 
@@ -90,7 +106,7 @@ print("Wald ratio:", (rf.params["nearc4"] / fs.params["nearc4"]).round(4))
 
 #### R
 
-```r
+```{r}
 fs <- lm(educ ~ nearc4 + exper + black + south + married + smsa, data = card)
 rf <- lm(lwage ~ nearc4 + exper + black + south + married + smsa, data = card)
 coef(fs)["nearc4"]; coef(rf)["nearc4"]
@@ -109,7 +125,7 @@ First stage ≈ **0.33** more years of schooling for those near a college, $t �
 
 #### Python
 
-```python
+```{python}
 cc = card.dropna(subset=["lwage", "educ", "exper", "black", "south", "married", "smsa", "nearc4"])
 iv = IV2SLS.from_formula(f"lwage ~ 1 + {ctrl} + [educ ~ nearc4]", data=cc).fit(cov_type="robust")
 print(iv.summary.tables[1])
@@ -118,7 +134,7 @@ print(iv.first_stage.diagnostics[["f.stat", "partial.rsquared"]])
 
 #### R
 
-```r
+```{r}
 iv <- ivreg(lwage ~ educ + exper + black + south + married + smsa |
               nearc4 + exper + black + south + married + smsa, data = card)
 summary(iv, diagnostics = TRUE)
@@ -127,7 +143,7 @@ summary(iv, diagnostics = TRUE)
 :::
 
 ::: {.expect}
-2SLS `educ` ≈ **0.124** (SE ≈ 0.05), versus OLS 0.071. The IV estimate is *larger*, which the book reads as evidence that measurement error and the LATE population (people on the margin of attending because a college was nearby) matter more than ability bias. The 95% CI runs roughly 0.03 to 0.22: honest, and wide.
+2SLS `educ` ≈ **0.124** (standard error, SE, ≈ 0.05), versus ordinary least squares (OLS) 0.071. The IV estimate is *larger*, which the book reads as evidence that measurement error and the LATE population (people on the margin of attending because a college was nearby) matter more than ability bias. The 95% CI runs roughly 0.03 to 0.22: honest, and wide.
 :::
 
 ### Step 4 — Judge leniency as an instrument (Stevenson 2018)
@@ -138,10 +154,11 @@ Defendants are quasi-randomly assigned to magistrates who differ in how often th
 
 #### Python
 
-```python
-# Large file: download once from the book's repo
+```{python}
+# Large file (58 MB): read the local copy if you saved one, otherwise download from the book's repo
+import os
 url = "https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta"
-judge = pd.read_stata(url)        # or pd.read_stata("data/judge_fe.dta") if you saved it
+judge = pd.read_stata("data/judge_fe.dta" if os.path.exists("data/judge_fe.dta") else url)
 
 controls = ("white + age + male + black + possess + robbery + DUI1st + aggAss + drugSell "
             "+ fel + mis + threePriors + F1 + F2 + F3 + M1 + M2 + M3 "
@@ -159,8 +176,10 @@ print(iv.first_stage.diagnostics[["f.stat"]])
 
 #### R
 
-```r
-judge <- read_dta("https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta")
+```{r}
+judge_path <- if (file.exists("data/judge_fe.dta")) "data/judge_fe.dta" else
+  "https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta"
+judge <- read_dta(judge_path)
 
 ctrl <- ~ white + age + male + black + possess + robbery + DUI1st + aggAss + drugSell +
   fel + mis + sum + threePriors + F1 + F2 + F3 + M1 + M2 + M3 + day + day2 + day3 +

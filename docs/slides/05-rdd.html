@@ -149,6 +149,10 @@
 <li>Units just above and just below differ in <span class="math inline">\(D\)</span> and, if nothing else jumps, in nothing else</li>
 </ul>
 </section>
+<section id="the-picture-that-is-the-argument" class="slide level2">
+<h2>The picture that is the argument</h2>
+
+<img data-src="img/s5_rd.svg" style="width:85.0%" class="r-stretch"></section>
 <section id="identification-by-continuity" class="slide level2">
 <h2>Identification by continuity</h2>
 <p><span class="math display">\[\delta_{SRD} = \lim_{x \downarrow c_0} E[Y \mid X = x] - \lim_{x \uparrow c_0} E[Y \mid X = x]\]</span></p>
@@ -160,12 +164,10 @@
 </section>
 <section id="estimation-is-bias-vs-variance" class="slide level2">
 <h2>Estimation is bias vs variance</h2>
-<ul>
-<li>Global polynomials: all the data, but far-away points steer the fit at the cutoff</li>
-<li>Local linear within bandwidth <span class="math inline">\(h\)</span>: the modern default</li>
-<li><code>rdrobust</code> picks <span class="math inline">\(h\)</span> and bias-corrects the CI</li>
-<li>Report several; show the bandwidth curve</li>
-</ul>
+
+<img data-src="img/s5_bandwidth.svg" style="width:85.0%" class="r-stretch"><div class="small">
+<p>Each point is the same regression with a different window around the cutoff. <code>rdrobust</code> picks the window that balances the two errors.</p>
+</div>
 </section>
 <section id="threats" class="slide level2">
 <h2>Threats</h2>

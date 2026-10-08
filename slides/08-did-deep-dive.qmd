@@ -10,10 +10,11 @@ subtitle: "Session 8 · Mixtape §9.4–9.7"
 
 ## Event studies
 
-- Replace $\text{Treat} \times \text{Post}$ with $\text{Treat} \times \text{Year}_t$ for every $t$ (omit one)
-- **Leads** (pre-treatment) should be ≈ 0
-- **Lags** trace the dynamic effect
-- Flat leads make parallel trends plausible; they do not prove it
+![](img/s8_eventstudy.svg){width=95%}
+
+::: {.small}
+One coefficient per year relative to 1985. Flat before 1986 (nothing was happening yet); a parabola during the years the treated cohorts were 15–19; back to zero after.
+:::
 
 ## Placebos and triple differences
 
@@ -30,10 +31,18 @@ subtitle: "Session 8 · Mixtape §9.4–9.7"
 
 ## Staggered adoption
 
-- Units treated at different times; TWFE: $Y_{it} = \alpha_i + \lambda_t + \delta D_{it} + e_{it}$
-- Goodman-Bacon: $\hat{\delta}$ is a weighted average of **every** 2×2 in the data
-- Including late-treated vs **already-treated** as "control"
-- If effects grow over time, those 2×2s are biased — sometimes to the wrong sign
+![](img/s8_timing.svg){width=100%}
+
+- TWFE: $Y_{it} = \alpha_i + \lambda_t + \delta D_{it} + e_{it}$
+- Goodman-Bacon: $\hat{\delta}$ is a weighted average of **every** 2×2 among these groups — including late-treated vs *already-treated*
+
+## What the decomposition shows
+
+![](img/s8_bacon.svg){width=95%}
+
+::: {.small}
+Here the forbidden comparisons carry 2% of the weight, so TWFE is safe. With no never-treated states, that share can dominate.
+:::
 
 ## Modern estimators
 

@@ -11,31 +11,47 @@ subtitle: "Book chapter 6"
 
 ## Learning goals
 
-Participants should be able to explain what continuity of the potential-outcome CEFs at the cutoff buys, estimate a sharp RD with global and local polynomials and see how much the answer depends on those choices, run the two standard validity checks (covariate smoothness and the McCrary density test), and say what the estimand is — a *local* effect at the threshold — and why that is sometimes exactly what you want.
+Participants should be able to explain what continuity of the potential outcomes at the cutoff buys, estimate a sharp regression discontinuity (RD) with global and local polynomials and see how much the answer depends on those choices, run the two standard validity checks (covariate smoothness and the McCrary density test), and say what the estimand is — a *local* effect at the threshold — and why that is sometimes exactly what you want.
 
 ::: {.agenda}
 | Time | Block |
 |------|-------|
-| 0:00 | Recap: CIA and common support |
+| 0:00 | Recap: conditional independence and common support |
 | 0:05 | Concepts: running variable, cutoff, continuity, sharp vs fuzzy, bandwidth, manipulation |
 | 0:20 | Walkthrough: Lee–Moretti–Butler — plot, estimate with four specifications, density test |
 | 0:45 | Exercise 1 kickoff |
-| 0:55 | Assign exercises; preview IV |
+| 0:55 | Assign exercises; preview instrumental variables (IV) |
 :::
 
 ## Key ideas
 
-**The design.** Treatment $D$ is a deterministic function of a running variable $X$ relative to a cutoff $c_0$: $D = 1[X \geq c_0]$ (sharp) or jumps in *probability* there (fuzzy). Units just above and just below the cutoff differ in treatment but, if nothing *else* jumps at $c_0$, in nothing else.
+**The design.** Treatment $D$ is a deterministic function of a running variable $X$ relative to a cutoff $c_0$: $D = 1[X \geq c_0]$ (sharp regression discontinuity) or jumps in *probability* there (fuzzy). Units just above and just below the cutoff differ in treatment but, if nothing *else* jumps at $c_0$, in nothing else.
+
+::: {.callout-tip .plain-english title="In plain English"}
+Some rule says: score 50 or above and you get the treatment, 49 and you don't. A person at 49 and a person at 50 are practically identical — a little luck on the test is all that separates them — yet one got treated and one didn't. Compare those two groups and you have something close to an experiment, at least near the line.
+:::
 
 **Identification by continuity.** $E[Y^0 \mid X]$ and $E[Y^1 \mid X]$ must be continuous at $c_0$. Then
 $$\delta_{SRD} = \lim_{x \downarrow c_0} E[Y \mid X = x] - \lim_{x \uparrow c_0} E[Y \mid X = x].$$
 No conditional-independence assumption, no need to observe confounders: everything that matters is a smooth function of $X$ except the treatment.
 
+::: {.callout-tip .plain-english title="In plain English"}
+The only assumption is that nothing *else* changes abruptly at the cutoff. People's background characteristics, motivation, whatever — all of it should drift smoothly across the line. If the outcome jumps at the line anyway, the treatment did it.
+:::
+
 **Estimation is a bias–variance problem.** You need the two limits. Global polynomials use all the data but let far-away observations drive the fit at the cutoff (Gelman and Imbens's warning against high-order polynomials). Local linear regression within a bandwidth $h$ is the modern default, with `rdrobust` choosing $h$ and correcting for bias. The honest report shows several.
 
-**Threats and checks.** If units can precisely manipulate $X$ (sorting just above a test-score cutoff), continuity fails. Check that the *density* of $X$ is smooth at $c_0$ (McCrary) and that pre-determined covariates do not jump there. Fuzzy RD is IV with the cutoff as instrument, which is next session's topic.
+::: {.callout-tip .plain-english title="In plain English"}
+You want to know the height of the two curves exactly at the cutoff. Use lots of data far from the cutoff and you get a precise but possibly wrong answer, because far-away points bend the curve. Use only data close to the cutoff and you get the right shape but a noisier estimate. The bandwidth is that dial; show more than one setting.
+:::
 
-**The LMB question.** Do close elections reveal whether politicians *converge* to the median voter (Downs) or *diverge* to their party's preferences? In a 50–50 district the party barely won is as-good-as random; if the winner's voting score jumps at the 50% line, parties do not converge.
+**Threats and checks.** If units can precisely manipulate $X$ (sorting just above a test-score cutoff), continuity fails. Check that the *density* of $X$ is smooth at $c_0$ (McCrary) and that pre-determined covariates do not jump there. Fuzzy RD is instrumental variables with the cutoff as instrument, which is next session's topic.
+
+::: {.callout-tip .plain-english title="In plain English"}
+The design breaks if people can nudge themselves across the line — retaking a test until they pass, say. The tell-tale sign is a pile-up of observations just on the favorable side of the cutoff. Also check that things decided *before* treatment (age, prior income) don't jump at the line; if they do, something other than the rule is going on.
+:::
+
+**The Lee–Moretti–Butler (LMB) question.** Do close elections reveal whether politicians *converge* to the median voter (Downs) or *diverge* to their party's preferences? In a 50–50 district the party that barely won is as-good-as random; if the winner's voting score jumps at the 50% line, parties do not converge.
 
 ## Walkthrough
 
@@ -45,7 +61,7 @@ No conditional-independence assumption, no need to observe confounders: everythi
 
 #### Python
 
-```python
+```{python}
 import pandas as pd
 import numpy as np
 import statsmodels.formula.api as smf
@@ -65,7 +81,7 @@ plt.show()
 
 #### R
 
-```r
+```{r}
 library(tidyverse); library(haven); library(estimatr)
 
 lmb <- read_dta("data/close_elections_lmb.dta") %>%
@@ -90,7 +106,7 @@ A cloud of points rising with Democratic vote share, with a visible vertical jum
 
 #### Python
 
-```python
+```{python}
 def fit(df, formula):
     return smf.ols(formula, data=df).fit(cov_type="cluster", cov_kwds={"groups": df["id"]})
 
@@ -103,7 +119,7 @@ print("within ±2 points:", close.params["lagdemocrat"].round(2), close.bse["lag
 
 #### R
 
-```r
+```{r}
 lm_robust(score ~ lagdemocrat, data = lmb, clusters = id)
 lm_robust(score ~ lagdemocrat,
           data = filter(lmb, lagdemvoteshare > 0.48, lagdemvoteshare < 0.52),
@@ -113,7 +129,7 @@ lm_robust(score ~ lagdemocrat,
 :::
 
 ::: {.expect}
-All elections: ≈ **31.5**. Within ±2 points of the cutoff: ≈ **21.3** (SE ≈ 2, n = 915). The simple comparison is contaminated by district ideology; the close-election estimate is the book's headline number.
+All elections: ≈ **31.5**. Within ±2 points of the cutoff: ≈ **21.3** (standard error, SE, ≈ 2; n = 915). The simple comparison is contaminated by district ideology; the close-election estimate is the book's headline number.
 :::
 
 ### Step 3 — Polynomial specifications, global and local
@@ -124,7 +140,7 @@ Interact the treatment with the centered running variable so each side gets its 
 
 #### Python
 
-```python
+```{python}
 lmb["dem_c2"] = lmb.dem_c**2
 local = lmb[(lmb.lagdemvoteshare > 0.45) & (lmb.lagdemvoteshare < 0.55)]
 
@@ -140,7 +156,7 @@ for k, m in specs.items():
 
 #### R
 
-```r
+```{r}
 local <- filter(lmb, lagdemvoteshare > 0.45, lagdemvoteshare < 0.55)
 lmb   <- mutate(lmb, dem_c2 = dem_c^2); local <- mutate(local, dem_c2 = dem_c^2)
 
@@ -164,7 +180,7 @@ Linear/all ≈ **37.7**; linear/±5 ≈ **19.8**; quadratic/all ≈ **18.1**; qu
 
 #### Python
 
-```python
+```{python}
 # pip install rdrobust
 from rdrobust import rdrobust, rdplot
 r = rdrobust(y=lmb["score"], x=lmb["lagdemvoteshare"], c=0.5, cluster=lmb["id"])
@@ -174,7 +190,7 @@ rdplot(y=lmb["score"], x=lmb["lagdemvoteshare"], c=0.5)
 
 #### R
 
-```r
+```{r}
 library(rdrobust)
 r <- rdrobust(y = lmb$score, x = lmb$lagdemvoteshare, c = 0.5, cluster = lmb$id)
 summary(r)
@@ -195,7 +211,7 @@ If incumbents could engineer bare wins, there would be a pile-up just above 0.5.
 
 #### Python
 
-```python
+```{python}
 counts, edges = np.histogram(lmb.lagdemvoteshare.dropna(), bins=np.arange(0.40, 0.61, 0.01))
 print(pd.Series(counts, index=edges[:-1].round(2)))
 
@@ -207,7 +223,7 @@ print(dens.test)           # t_jk is the jackknife test statistic, p_jk its p-va
 
 #### R
 
-```r
+```{r}
 library(rddensity)
 dens <- rddensity(X = lmb$lagdemvoteshare, c = 0.5)
 summary(dens)

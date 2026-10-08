@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b6ebfe76373a65f90f03e4eef39a9400.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-88736fcce7d974bfecfee082ef4a0c3c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -165,6 +165,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link" href="../facilitating.html"> 
 <span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../glossary.html"> 
+<span class="menu-text">Glossary</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -258,6 +262,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../facilitating.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Facilitating</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -385,7 +395,7 @@ window.Quarto = {
 </div>
 <section id="learning-goals" class="level2">
 <h2 class="anchored" data-anchor-id="learning-goals">Learning goals</h2>
-<p>Participants should be able to estimate and plot an event study and read pre-trends and dynamics off it, build a triple-difference with a placebo cohort, run a two-way fixed-effects DiD with staggered adoption and explain why it is a weighted average of 2×2 comparisons — some of which use already-treated units as controls — and know what the modern estimators (Callaway–Sant’Anna, Sun–Abraham) do differently.</p>
+<p>Participants should be able to estimate and plot an event study and read pre-trends and dynamics off it, build a triple-difference with a placebo cohort, run a two-way fixed-effects (TWFE) difference-in-differences (DiD) with staggered adoption and explain why it is a weighted average of 2×2 comparisons — some of which use already-treated units as controls — and know what the modern estimators (Callaway–Sant’Anna, Sun–Abraham) do differently.</p>
 <div class="agenda">
 <table class="caption-top table">
 <colgroup>
@@ -405,7 +415,7 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td>0:05</td>
-<td>Concepts: event studies and leads; placebos and DDD; staggered TWFE and the Bacon decomposition</td>
+<td>Concepts: event studies and leads; placebos and triple differences; staggered TWFE and the Bacon decomposition</td>
 </tr>
 <tr class="odd">
 <td>0:20</td>
@@ -426,10 +436,62 @@ window.Quarto = {
 <section id="key-ideas" class="level2">
 <h2 class="anchored" data-anchor-id="key-ideas">Key ideas</h2>
 <p><strong>Event studies.</strong> With many periods, replace the single <span class="math inline">\(\text{Treat} \times \text{Post}\)</span> with a full set of <span class="math inline">\(\text{Treat} \times \text{Year}\)</span> interactions (omitting one reference year). The <em>leads</em> (pre-treatment interactions) should be near zero if parallel trends is plausible; the <em>lags</em> trace the dynamic effect. Passing a pre-trends test is not proof of parallel trends — the counterfactual is still unobserved — but failing it is close to disqualifying.</p>
-<p><strong>Placebos and triple differences.</strong> If theory says an effect should show up only for a specific group, cohort, or window, estimate the same model where it should <em>not</em> and demand a null. A DDD nets the placebo group’s DD out of the treated group’s DD, absorbing group-specific shocks that a plain DD would attribute to treatment.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Instead of one “after” effect, estimate a separate effect for every year: three years before the policy, two years before, the year of, the year after, and so on. The years <em>before</em> the policy are a sanity check — if the treated group was already pulling away before anything happened, the design is in trouble. The years after show the effect building or fading.</p>
+</div>
+</div>
+<p><strong>Placebos and triple differences (DDD).</strong> If theory says an effect should show up only for a specific group, cohort, or window, estimate the same model where it should <em>not</em> and demand a null. A DDD nets the placebo group’s DiD out of the treated group’s DiD, absorbing group-specific shocks that a plain DiD would attribute to treatment.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A placebo test runs your analysis somewhere the policy couldn’t possibly have mattered — an older age group, a different outcome — and checks that you find nothing. A triple difference goes one step further and <em>subtracts</em> that placebo result from the real one, so anything weird that happened in those states in those years, affecting everyone, gets cancelled out.</p>
+</div>
+</div>
 <p><strong>The abortion study.</strong> <em>Roe v. Wade</em> legalized abortion nationally in 1973; five states had repealed their bans in 1970. Cohorts born 1971–1973 in repeal states were “treated” three years earlier than the rest of the country. If legalization reduced the share of unwanted births, those cohorts should show lower gonorrhea incidence as 15–19 year olds in 1986–1992, with the effect tracing a parabola as the treated cohort moves into and out of the age bracket. The placebo is 25–29 year olds in the same states.</p>
-<p><strong>Staggered adoption and TWFE.</strong> With treatment switching on at different times for different units, the TWFE coefficient is a variance-weighted average of <em>every</em> 2×2 DD in the data (Goodman-Bacon 2021): early vs never-treated, late vs never-treated, early vs late (before late is treated), and <em>late vs early (after early is treated)</em>. In that last type the “control” is already treated; if effects grow over time, its trend is contaminated and the 2×2 is biased — sometimes to the wrong sign. The decomposition tells you how much weight these comparisons get.</p>
-<p><strong>Modern estimators.</strong> Callaway and Sant’Anna estimate each cohort-by-time ATT using only never-treated or not-yet-treated controls and aggregate them with transparent weights. Sun and Abraham do the analogous thing within an interaction-weighted event-study regression. Both avoid the forbidden comparisons; both need a clean control group.</p>
+<p><strong>Staggered adoption and two-way fixed effects (TWFE).</strong> With treatment switching on at different times for different units, the TWFE coefficient (unit fixed effects plus year fixed effects) is a variance-weighted average of <em>every</em> 2×2 DiD in the data (Goodman-Bacon 2021): early vs never-treated, late vs never-treated, early vs late (before late is treated), and <em>late vs early (after early is treated)</em>. In that last type the “control” is already treated; if effects grow over time, its trend is contaminated and the 2×2 is biased — sometimes to the wrong sign. The decomposition tells you how much weight these comparisons get.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When states adopt a law in different years, the standard regression quietly runs every possible two-group comparison and averages them. Some of those comparisons use a state that <em>already has the law</em> as the “control” for a state that is just getting it. If the law’s effect grows over time, the early state’s growing effect looks like a trend, gets subtracted, and the estimate shrinks or even flips sign. The Bacon decomposition shows you how much of your estimate rests on those bad comparisons.</p>
+</div>
+</div>
+<p><strong>Modern estimators.</strong> Callaway and Sant’Anna estimate each cohort-by-time average treatment effect on the treated (ATT) using only never-treated or not-yet-treated controls and aggregate them with transparent weights. Sun and Abraham do the analogous thing within an interaction-weighted event-study regression. Both avoid the forbidden comparisons; both need a clean control group.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The newer methods just refuse to use already-treated units as a comparison group. They compare each adopting cohort to units that haven’t adopted <em>yet</em> (or never will), one period at a time, and then average those clean comparisons however you like. If you have plenty of never-treated units, they agree with the standard regression; if you don’t, they can differ a lot.</p>
+</div>
+</div>
 </section>
 <section id="walkthrough" class="level2">
 <h2 class="anchored" data-anchor-id="walkthrough">Walkthrough</h2>
@@ -440,7 +502,8 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -463,24 +526,76 @@ window.Quarto = {
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>bf15 <span class="op">=</span> ab[(ab.sex <span class="op">==</span> <span class="dv">2</span>) <span class="op">&amp;</span> (ab.race <span class="op">==</span> <span class="dv">2</span>) <span class="op">&amp;</span> (ab.age <span class="op">==</span> <span class="dv">15</span>)]     <span class="co"># black females 15–19</span></span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>dd <span class="op">=</span> event_study(bf15)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dd.<span class="bu">round</span>(<span class="dv">3</span>))</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> dd[<span class="st">"coef"</span>].plot(marker<span class="op">=</span><span class="st">"o"</span>)</span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>ax.fill_between(dd.index, dd.coef <span class="op">-</span> <span class="fl">1.96</span><span class="op">*</span>dd.se, dd.coef <span class="op">+</span> <span class="fl">1.96</span><span class="op">*</span>dd.se, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"grey"</span>)<span class="op">;</span> ax.axvspan(<span class="dv">1986</span>, <span class="dv">1992</span>, alpha<span class="op">=</span><span class="fl">0.1</span>, color<span class="op">=</span><span class="st">"orange"</span>)</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Repeal × year, black women 15–19 (ref. 1985)"</span>)<span class="op">;</span> plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dd.<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       coef     se
+1986 -0.259  0.063
+1987 -0.342  0.168
+1988 -0.611  0.203
+1989 -0.785  0.237
+1990 -0.632  0.176
+1991 -0.553  0.139
+1992 -0.442  0.160
+1993 -0.306  0.181
+1994 -0.118  0.207
+1995  0.021  0.223
+1996 -0.124  0.207
+1997  0.021  0.264
+1998 -0.036  0.347
+1999  0.015  0.357
+2000  0.041  0.387</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> dd[<span class="st">"coef"</span>].plot(marker<span class="op">=</span><span class="st">"o"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ax.fill_between(dd.index, dd.coef <span class="op">-</span> <span class="fl">1.96</span><span class="op">*</span>dd.se, dd.coef <span class="op">+</span> <span class="fl">1.96</span><span class="op">*</span>dd.se, alpha<span class="op">=</span><span class="fl">0.2</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"grey"</span>)<span class="op">;</span> ax.axvspan(<span class="dv">1986</span>, <span class="dv">1992</span>, alpha<span class="op">=</span><span class="fl">0.1</span>, color<span class="op">=</span><span class="st">"orange"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Repeal × year, black women 15–19 (ref. 1985)"</span>)<span class="op">;</span> plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08-did-deep-dive_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(fixest)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>ab <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/abortion.dta"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>bf15 <span class="ot">&lt;-</span> ab <span class="sc">%&gt;%</span> <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">2</span>, race <span class="sc">==</span> <span class="dv">2</span>, age <span class="sc">==</span> <span class="dv">15</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">feols</span>(lnr <span class="sc">~</span> <span class="fu">i</span>(year, repeal, <span class="at">ref =</span> <span class="dv">1985</span>) <span class="sc">+</span> acc <span class="sc">+</span> ir <span class="sc">+</span> pi <span class="sc">+</span> alcohol <span class="sc">+</span> crack <span class="sc">+</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>              poverty <span class="sc">+</span> income <span class="sc">+</span> ur <span class="sc">|</span> fip <span class="sc">+</span> year,</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> bf15, <span class="at">weights =</span> <span class="sc">~</span>totpop, <span class="at">cluster =</span> <span class="sc">~</span>fip)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftable</span>(dd)[<span class="fu">grepl</span>(<span class="st">"year::"</span>, <span class="fu">rownames</span>(<span class="fu">coeftable</span>(dd))), <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">iplot</span>(dd, <span class="at">main =</span> <span class="st">"Repeal × year, black women 15–19 (ref. 1985)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(fixest)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>ab <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/abortion.dta"</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>bf15 <span class="ot">&lt;-</span> ab <span class="sc">%&gt;%</span> <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">2</span>, race <span class="sc">==</span> <span class="dv">2</span>, age <span class="sc">==</span> <span class="dv">15</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="fu">feols</span>(lnr <span class="sc">~</span> <span class="fu">i</span>(year, repeal, <span class="at">ref =</span> <span class="dv">1985</span>) <span class="sc">+</span> acc <span class="sc">+</span> ir <span class="sc">+</span> pi <span class="sc">+</span> alcohol <span class="sc">+</span> crack <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>              poverty <span class="sc">+</span> income <span class="sc">+</span> ur <span class="sc">|</span> fip <span class="sc">+</span> year,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">data =</span> bf15, <span class="at">weights =</span> <span class="sc">~</span>totpop, <span class="at">cluster =</span> <span class="sc">~</span>fip)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftable</span>(dd)[<span class="fu">grepl</span>(<span class="st">"year::"</span>, <span class="fu">rownames</span>(<span class="fu">coeftable</span>(dd))), <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     Estimate Std. Error
+year::1986:repeal -0.25905382 0.06099696
+year::1987:repeal -0.34173798 0.16218663
+year::1988:repeal -0.61055324 0.19521113
+year::1989:repeal -0.78500028 0.22854541
+year::1990:repeal -0.63163148 0.16923156
+year::1991:repeal -0.55260264 0.13426793
+year::1992:repeal -0.44241661 0.15452765
+year::1993:repeal -0.30606258 0.17415627
+year::1994:repeal -0.11788972 0.19912781
+year::1995:repeal  0.02102913 0.21447052
+year::1996:repeal -0.12353414 0.19902015
+year::1997:repeal  0.02085286 0.25451470
+year::1998:repeal -0.03605240 0.33463200
+year::1999:repeal  0.01470912 0.34443602
+year::2000:repeal  0.04145081 0.37318993</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">iplot</span>(dd, <span class="at">main =</span> <span class="st">"Repeal × year, black women 15–19 (ref. 1985)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08-did-deep-dive_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -495,38 +610,91 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bf25 <span class="op">=</span> ab[(ab.sex <span class="op">==</span> <span class="dv">2</span>) <span class="op">&amp;</span> (ab.race <span class="op">==</span> <span class="dv">2</span>) <span class="op">&amp;</span> (ab.age <span class="op">==</span> <span class="dv">25</span>)]</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>placebo <span class="op">=</span> event_study(bf25)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(placebo.<span class="bu">round</span>(<span class="dv">2</span>))</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>both <span class="op">=</span> ab[(ab.sex <span class="op">==</span> <span class="dv">2</span>) <span class="op">&amp;</span> (ab.race <span class="op">==</span> <span class="dv">2</span>) <span class="op">&amp;</span> (ab.age.isin([<span class="dv">15</span>, <span class="dv">25</span>]))].dropna(subset<span class="op">=</span>needed).copy()</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>both[<span class="st">"younger"</span>] <span class="op">=</span> (both.age <span class="op">==</span> <span class="dv">15</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> y <span class="kw">in</span> yrs:</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    both[<span class="ss">f"rep_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span>] <span class="op">=</span> ((both.year <span class="op">==</span> y) <span class="op">&amp;</span> (both.repeal <span class="op">==</span> <span class="dv">1</span>)).astype(<span class="bu">int</span>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    both[<span class="ss">f"ry_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span>]  <span class="op">=</span> both[<span class="ss">f"rep_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span>] <span class="op">*</span> both.younger             <span class="co"># the DDD terms</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    both[<span class="ss">f"yy_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span>]  <span class="op">=</span> ((both.year <span class="op">==</span> y) <span class="op">&amp;</span> (both.younger <span class="op">==</span> <span class="dv">1</span>)).astype(<span class="bu">int</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>both[<span class="st">"fip_young"</span>] <span class="op">=</span> both.fip.astype(<span class="bu">str</span>) <span class="op">+</span> <span class="st">"_"</span> <span class="op">+</span> both.younger.astype(<span class="bu">str</span>)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> (<span class="st">"lnr ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(<span class="ss">f"rep_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> y <span class="kw">in</span> yrs) <span class="op">+</span> <span class="st">" + "</span> <span class="op">+</span> <span class="st">" + "</span>.join(<span class="ss">f"ry_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> y <span class="kw">in</span> yrs)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>     <span class="op">+</span> <span class="st">" + "</span> <span class="op">+</span> <span class="st">" + "</span>.join(<span class="ss">f"yy_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> y <span class="kw">in</span> yrs) <span class="op">+</span> <span class="st">" + C(fip_young) + C(year) + "</span> <span class="op">+</span> ctrl)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>ddd <span class="op">=</span> smf.wls(f, data<span class="op">=</span>both, weights<span class="op">=</span>both.totpop).fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: both[<span class="st">"fip"</span>]})</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.DataFrame({<span class="st">"coef"</span>: ddd.params[[<span class="ss">f"ry_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> y <span class="kw">in</span> yrs]].to_numpy(),</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"se"</span>:   ddd.bse[[<span class="ss">f"ry_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> y <span class="kw">in</span> yrs]].to_numpy()}, index<span class="op">=</span>yrs).<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>bf25 <span class="op">=</span> ab[(ab.sex <span class="op">==</span> <span class="dv">2</span>) <span class="op">&amp;</span> (ab.race <span class="op">==</span> <span class="dv">2</span>) <span class="op">&amp;</span> (ab.age <span class="op">==</span> <span class="dv">25</span>)]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>placebo <span class="op">=</span> event_study(bf25)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(placebo.<span class="bu">round</span>(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      coef    se
+1986  0.19  0.19
+1987  0.17  0.18
+1988 -0.02  0.25
+1989 -0.22  0.29
+1990 -0.25  0.26
+1991 -0.27  0.27
+1992 -0.18  0.30
+1993  0.22  0.48
+1994  0.02  0.32
+1995  0.19  0.38
+1996 -0.03  0.34
+1997 -0.10  0.37
+1998  0.07  0.40
+1999  0.10  0.45
+2000  0.08  0.38</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>both <span class="op">=</span> ab[(ab.sex <span class="op">==</span> <span class="dv">2</span>) <span class="op">&amp;</span> (ab.race <span class="op">==</span> <span class="dv">2</span>) <span class="op">&amp;</span> (ab.age.isin([<span class="dv">15</span>, <span class="dv">25</span>]))].dropna(subset<span class="op">=</span>needed).copy()</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>both[<span class="st">"younger"</span>] <span class="op">=</span> (both.age <span class="op">==</span> <span class="dv">15</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> y <span class="kw">in</span> yrs:</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    both[<span class="ss">f"rep_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span>] <span class="op">=</span> ((both.year <span class="op">==</span> y) <span class="op">&amp;</span> (both.repeal <span class="op">==</span> <span class="dv">1</span>)).astype(<span class="bu">int</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    both[<span class="ss">f"ry_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span>]  <span class="op">=</span> both[<span class="ss">f"rep_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span>] <span class="op">*</span> both.younger             <span class="co"># the DDD terms</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    both[<span class="ss">f"yy_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span>]  <span class="op">=</span> ((both.year <span class="op">==</span> y) <span class="op">&amp;</span> (both.younger <span class="op">==</span> <span class="dv">1</span>)).astype(<span class="bu">int</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>both[<span class="st">"fip_young"</span>] <span class="op">=</span> both.fip.astype(<span class="bu">str</span>) <span class="op">+</span> <span class="st">"_"</span> <span class="op">+</span> both.younger.astype(<span class="bu">str</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> (<span class="st">"lnr ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(<span class="ss">f"rep_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> y <span class="kw">in</span> yrs) <span class="op">+</span> <span class="st">" + "</span> <span class="op">+</span> <span class="st">" + "</span>.join(<span class="ss">f"ry_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> y <span class="kw">in</span> yrs)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>     <span class="op">+</span> <span class="st">" + "</span> <span class="op">+</span> <span class="st">" + "</span>.join(<span class="ss">f"yy_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> y <span class="kw">in</span> yrs) <span class="op">+</span> <span class="st">" + C(fip_young) + C(year) + "</span> <span class="op">+</span> ctrl)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>ddd <span class="op">=</span> smf.wls(f, data<span class="op">=</span>both, weights<span class="op">=</span>both.totpop).fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: both[<span class="st">"fip"</span>]})</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.DataFrame({<span class="st">"coef"</span>: ddd.params[[<span class="ss">f"ry_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> y <span class="kw">in</span> yrs]].to_numpy(),</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"se"</span>:   ddd.bse[[<span class="ss">f"ry_</span><span class="sc">{</span>y<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> y <span class="kw">in</span> yrs]].to_numpy()}, index<span class="op">=</span>yrs).<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       coef     se
+1986 -0.357  0.124
+1987 -0.407  0.161
+1988 -0.435  0.177
+1989 -0.326  0.176
+1990 -0.093  0.192
+1991  0.027  0.191
+1992  0.080  0.188
+1993 -0.185  0.385
+1994  0.185  0.176
+1995  0.130  0.173
+1996  0.166  0.148
+1997  0.329  0.149
+1998  0.064  0.132
+1999  0.060  0.157
+2000  0.043  0.151</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bf25 <span class="ot">&lt;-</span> ab <span class="sc">%&gt;%</span> <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">2</span>, race <span class="sc">==</span> <span class="dv">2</span>, age <span class="sc">==</span> <span class="dv">25</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>placebo <span class="ot">&lt;-</span> <span class="fu">feols</span>(lnr <span class="sc">~</span> <span class="fu">i</span>(year, repeal, <span class="at">ref =</span> <span class="dv">1985</span>) <span class="sc">+</span> acc <span class="sc">+</span> ir <span class="sc">+</span> pi <span class="sc">+</span> alcohol <span class="sc">+</span> crack <span class="sc">+</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                   poverty <span class="sc">+</span> income <span class="sc">+</span> ur <span class="sc">|</span> fip <span class="sc">+</span> year,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> bf25, <span class="at">weights =</span> <span class="sc">~</span>totpop, <span class="at">cluster =</span> <span class="sc">~</span>fip)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">iplot</span>(placebo, <span class="at">main =</span> <span class="st">"Placebo: black women 25–29"</span>)</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>both <span class="ot">&lt;-</span> ab <span class="sc">%&gt;%</span> <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">2</span>, race <span class="sc">==</span> <span class="dv">2</span>, age <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">25</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">younger =</span> <span class="fu">as.integer</span>(age <span class="sc">==</span> <span class="dv">15</span>), <span class="at">fip_young =</span> <span class="fu">paste</span>(fip, younger))</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>ddd <span class="ot">&lt;-</span> <span class="fu">feols</span>(lnr <span class="sc">~</span> <span class="fu">i</span>(year, repeal, <span class="at">ref =</span> <span class="dv">1985</span>) <span class="sc">+</span> <span class="fu">i</span>(year, repeal <span class="sc">*</span> younger, <span class="at">ref =</span> <span class="dv">1985</span>) <span class="sc">+</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>               <span class="fu">i</span>(year, younger, <span class="at">ref =</span> <span class="dv">1985</span>) <span class="sc">+</span> acc <span class="sc">+</span> ir <span class="sc">+</span> pi <span class="sc">+</span> alcohol <span class="sc">+</span> crack <span class="sc">+</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>               poverty <span class="sc">+</span> income <span class="sc">+</span> ur <span class="sc">|</span> fip_young <span class="sc">+</span> year,</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> both, <span class="at">weights =</span> <span class="sc">~</span>totpop, <span class="at">cluster =</span> <span class="sc">~</span>fip)</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">iplot</span>(ddd, <span class="at">i.select =</span> <span class="dv">2</span>, <span class="at">main =</span> <span class="st">"DDD: repeal × year × younger"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>bf25 <span class="ot">&lt;-</span> ab <span class="sc">%&gt;%</span> <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">2</span>, race <span class="sc">==</span> <span class="dv">2</span>, age <span class="sc">==</span> <span class="dv">25</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>placebo <span class="ot">&lt;-</span> <span class="fu">feols</span>(lnr <span class="sc">~</span> <span class="fu">i</span>(year, repeal, <span class="at">ref =</span> <span class="dv">1985</span>) <span class="sc">+</span> acc <span class="sc">+</span> ir <span class="sc">+</span> pi <span class="sc">+</span> alcohol <span class="sc">+</span> crack <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                   poverty <span class="sc">+</span> income <span class="sc">+</span> ur <span class="sc">|</span> fip <span class="sc">+</span> year,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> bf25, <span class="at">weights =</span> <span class="sc">~</span>totpop, <span class="at">cluster =</span> <span class="sc">~</span>fip)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">iplot</span>(placebo, <span class="at">main =</span> <span class="st">"Placebo: black women 25–29"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08-did-deep-dive_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>both <span class="ot">&lt;-</span> ab <span class="sc">%&gt;%</span> <span class="fu">filter</span>(sex <span class="sc">==</span> <span class="dv">2</span>, race <span class="sc">==</span> <span class="dv">2</span>, age <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">25</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">younger =</span> <span class="fu">as.integer</span>(age <span class="sc">==</span> <span class="dv">15</span>), <span class="at">repeal_young =</span> repeal <span class="sc">*</span> younger,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">fip_young =</span> <span class="fu">paste</span>(fip, younger))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>ddd <span class="ot">&lt;-</span> <span class="fu">feols</span>(lnr <span class="sc">~</span> <span class="fu">i</span>(year, repeal, <span class="at">ref =</span> <span class="dv">1985</span>) <span class="sc">+</span> <span class="fu">i</span>(year, repeal_young, <span class="at">ref =</span> <span class="dv">1985</span>) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>               <span class="fu">i</span>(year, younger, <span class="at">ref =</span> <span class="dv">1985</span>) <span class="sc">+</span> acc <span class="sc">+</span> ir <span class="sc">+</span> pi <span class="sc">+</span> alcohol <span class="sc">+</span> crack <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>               poverty <span class="sc">+</span> income <span class="sc">+</span> ur <span class="sc">|</span> fip_young <span class="sc">+</span> year,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> both, <span class="at">weights =</span> <span class="sc">~</span>totpop, <span class="at">cluster =</span> <span class="sc">~</span>fip)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">iplot</span>(ddd, <span class="at">i.select =</span> <span class="dv">2</span>, <span class="at">main =</span> <span class="st">"DDD: repeal × year × younger"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08-did-deep-dive_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -541,26 +709,58 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>castle <span class="op">=</span> pd.read_stata(<span class="st">"data/castle.dta"</span>, convert_categoricals<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>cs <span class="op">=</span> castle.dropna(subset<span class="op">=</span>[<span class="st">"l_homicide"</span>, <span class="st">"post"</span>, <span class="st">"popwt"</span>, <span class="st">"sid"</span>, <span class="st">"year"</span>])</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>twfe <span class="op">=</span> smf.wls(<span class="st">"l_homicide ~ post + C(sid) + C(year)"</span>, data<span class="op">=</span>cs, weights<span class="op">=</span>cs.popwt)<span class="op">\</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>          .fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: cs[<span class="st">"sid"</span>]})</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"TWFE post:"</span>, twfe.params[<span class="st">"post"</span>].<span class="bu">round</span>(<span class="dv">4</span>), <span class="st">" SE"</span>, twfe.bse[<span class="st">"post"</span>].<span class="bu">round</span>(<span class="dv">4</span>))</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># adoption timing</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>castle[<span class="st">"D"</span>] <span class="op">=</span> (castle.post <span class="op">&gt;</span> <span class="dv">0</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>first <span class="op">=</span> castle[castle.D <span class="op">==</span> <span class="dv">1</span>].groupby(<span class="st">"sid"</span>).year.<span class="bu">min</span>()</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>castle[<span class="st">"g"</span>] <span class="op">=</span> castle.sid.<span class="bu">map</span>(first).fillna(<span class="dv">0</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(castle.groupby(<span class="st">"g"</span>).sid.nunique())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>castle <span class="op">=</span> pd.read_stata(<span class="st">"data/castle.dta"</span>, convert_categoricals<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>cs <span class="op">=</span> castle.dropna(subset<span class="op">=</span>[<span class="st">"l_homicide"</span>, <span class="st">"post"</span>, <span class="st">"popwt"</span>, <span class="st">"sid"</span>, <span class="st">"year"</span>])</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>twfe <span class="op">=</span> smf.wls(<span class="st">"l_homicide ~ post + C(sid) + C(year)"</span>, data<span class="op">=</span>cs, weights<span class="op">=</span>cs.popwt)<span class="op">\</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>          .fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: cs[<span class="st">"sid"</span>]})</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"TWFE post:"</span>, twfe.params[<span class="st">"post"</span>].<span class="bu">round</span>(<span class="dv">4</span>), <span class="st">" SE"</span>, twfe.bse[<span class="st">"post"</span>].<span class="bu">round</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>TWFE post: 0.0755  SE 0.0348</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># adoption timing</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>castle[<span class="st">"D"</span>] <span class="op">=</span> (castle.post <span class="op">&gt;</span> <span class="dv">0</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>first <span class="op">=</span> castle[castle.D <span class="op">==</span> <span class="dv">1</span>].groupby(<span class="st">"sid"</span>).year.<span class="bu">min</span>()</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>castle[<span class="st">"g"</span>] <span class="op">=</span> castle.sid.<span class="bu">map</span>(first).fillna(<span class="dv">0</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(castle.groupby(<span class="st">"g"</span>).sid.nunique())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>g
+0       29
+2006     1
+2007    13
+2008     4
+2009     2
+2010     1
+Name: sid, dtype: int64</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>castle <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/castle.dta"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>twfe <span class="ot">&lt;-</span> <span class="fu">feols</span>(l_homicide <span class="sc">~</span> post <span class="sc">|</span> sid <span class="sc">+</span> year, <span class="at">data =</span> castle, <span class="at">weights =</span> <span class="sc">~</span>popwt, <span class="at">cluster =</span> <span class="sc">~</span>sid)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftable</span>(twfe)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>castle <span class="ot">&lt;-</span> castle <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(sid) <span class="sc">%&gt;%</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">g =</span> <span class="cf">if</span> (<span class="fu">any</span>(post <span class="sc">&gt;</span> <span class="dv">0</span>)) <span class="fu">min</span>(year[post <span class="sc">&gt;</span> <span class="dv">0</span>]) <span class="cf">else</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">ungroup</span>()</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(<span class="fu">distinct</span>(castle, sid, g), g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>castle <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/castle.dta"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>twfe <span class="ot">&lt;-</span> <span class="fu">feols</span>(l_homicide <span class="sc">~</span> post <span class="sc">|</span> sid <span class="sc">+</span> year, <span class="at">data =</span> castle, <span class="at">weights =</span> <span class="sc">~</span>popwt, <span class="at">cluster =</span> <span class="sc">~</span>sid)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftable</span>(twfe)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Estimate Std. Error  t value   Pr(&gt;|t|)
+post 0.07553324 0.03319361 2.275536 0.02728344
+attr(,"vcov_type")
+[1] "Clustered (sid)"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>castle <span class="ot">&lt;-</span> castle <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(sid) <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">g =</span> <span class="cf">if</span> (<span class="fu">any</span>(post <span class="sc">&gt;</span> <span class="dv">0</span>)) <span class="fu">min</span>(year[post <span class="sc">&gt;</span> <span class="dv">0</span>]) <span class="cf">else</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">ungroup</span>()</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(<span class="fu">distinct</span>(castle, sid, g), g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 x 2
+      g     n
+  &lt;dbl&gt; &lt;int&gt;
+1     0    29
+2  2006     1
+3  2007    13
+4  2008     4
+5  2009     2
+6  2010     1</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -575,51 +775,102 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>years <span class="op">=</span> <span class="bu">sorted</span>(castle.year.unique())</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span> smf.ols(<span class="st">"l_homicide ~ D + C(sid) + C(year)"</span>, data<span class="op">=</span>castle).fit()</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"unweighted binary TWFE:"</span>, base.params[<span class="st">"D"</span>].<span class="bu">round</span>(<span class="dv">4</span>))</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>n    <span class="op">=</span> castle.groupby(<span class="st">"g"</span>).sid.nunique() <span class="op">/</span> castle.sid.nunique()        <span class="co"># group shares</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>Dbar <span class="op">=</span> {g: (np.array(years) <span class="op">&gt;=</span> g).mean() <span class="cf">if</span> g <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span> <span class="cf">for</span> g <span class="kw">in</span> n.index}  <span class="co"># share of periods treated</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dd_2x2(sub):</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""TWFE on a two-group subsample = the 2x2 DD for that comparison."""</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> sub.copy()</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> v <span class="kw">in</span> [<span class="st">"D"</span>, <span class="st">"l_homicide"</span>]:</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        s[v <span class="op">+</span> <span class="st">"_t"</span>] <span class="op">=</span> s[v] <span class="op">-</span> s.groupby(<span class="st">"sid"</span>)[v].transform(<span class="st">"mean"</span>) <span class="op">-</span> s.groupby(<span class="st">"year"</span>)[v].transform(<span class="st">"mean"</span>) <span class="op">+</span> s[v].mean()</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (s.D_t <span class="op">*</span> s.l_homicide_t).<span class="bu">sum</span>() <span class="op">/</span> (s.D_t <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>()</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> [g <span class="cf">for</span> g <span class="kw">in</span> n.index <span class="cf">if</span> g <span class="op">&gt;</span> <span class="dv">0</span>]</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> G:</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    rows.append((k, <span class="st">"never-treated"</span>, dd_2x2(castle[castle.g.isin([k, <span class="dv">0</span>])]),</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>                 n[k] <span class="op">*</span> n[<span class="dv">0</span>] <span class="op">*</span> Dbar[k] <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> Dbar[k])))</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> l <span class="kw">in</span> G:</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> l <span class="op">&lt;=</span> k: <span class="cf">continue</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        nkl <span class="op">=</span> n[k] <span class="op">/</span> (n[k] <span class="op">+</span> n[l])</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="co"># k treated earlier; l (not yet treated) is the control in years before l adopts</span></span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        s_kl <span class="op">=</span> ((n[k] <span class="op">+</span> n[l]) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> Dbar[l]))<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> nkl <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> nkl) <span class="op">*</span> (Dbar[k] <span class="op">-</span> Dbar[l]) <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> Dbar[l]) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> Dbar[k]) <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> Dbar[l])</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        rows.append((k, <span class="ss">f"later-treated (</span><span class="sc">{</span>l<span class="sc">}</span><span class="ss">) as control"</span>, dd_2x2(castle[castle.g.isin([k, l]) <span class="op">&amp;</span> (castle.year <span class="op">&lt;</span> l)]), s_kl))</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="co"># l treated later; k (already treated) is the control in years from k's adoption on</span></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        s_lk <span class="op">=</span> ((n[k] <span class="op">+</span> n[l]) <span class="op">*</span> Dbar[k])<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> nkl <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> nkl) <span class="op">*</span> Dbar[l] <span class="op">/</span> Dbar[k] <span class="op">*</span> (Dbar[k] <span class="op">-</span> Dbar[l]) <span class="op">/</span> Dbar[k]</span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        rows.append((l, <span class="ss">f"earlier-treated (</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">) as control"</span>, dd_2x2(castle[castle.g.isin([k, l]) <span class="op">&amp;</span> (castle.year <span class="op">&gt;=</span> k)]), s_lk))</span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>bacon <span class="op">=</span> pd.DataFrame(rows, columns<span class="op">=</span>[<span class="st">"treated"</span>, <span class="st">"control"</span>, <span class="st">"dd"</span>, <span class="st">"s"</span>])</span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>bacon[<span class="st">"weight"</span>] <span class="op">=</span> bacon.s <span class="op">/</span> bacon.s.<span class="bu">sum</span>()</span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>bacon[<span class="st">"type"</span>] <span class="op">=</span> bacon.control.<span class="bu">str</span>.split(<span class="st">" "</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(bacon.sort_values(<span class="st">"weight"</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">8</span>).<span class="bu">round</span>(<span class="dv">3</span>))</span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"weighted sum of 2x2s:"</span>, (bacon.weight <span class="op">*</span> bacon.dd).<span class="bu">sum</span>().<span class="bu">round</span>(<span class="dv">4</span>))</span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(bacon.groupby(<span class="st">"type"</span>).<span class="bu">apply</span>(<span class="kw">lambda</span> x: pd.Series({<span class="st">"weight"</span>: x.weight.<span class="bu">sum</span>(),</span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>                                                       <span class="st">"avg_dd"</span>: (x.weight <span class="op">*</span> x.dd).<span class="bu">sum</span>() <span class="op">/</span> x.weight.<span class="bu">sum</span>()})).<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>years <span class="op">=</span> <span class="bu">sorted</span>(castle.year.unique())</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>base <span class="op">=</span> smf.ols(<span class="st">"l_homicide ~ D + C(sid) + C(year)"</span>, data<span class="op">=</span>castle).fit()</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"unweighted binary TWFE:"</span>, base.params[<span class="st">"D"</span>].<span class="bu">round</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>unweighted binary TWFE: 0.0694</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>n    <span class="op">=</span> castle.groupby(<span class="st">"g"</span>).sid.nunique() <span class="op">/</span> castle.sid.nunique()        <span class="co"># group shares</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>Dbar <span class="op">=</span> {g: (np.array(years) <span class="op">&gt;=</span> g).mean() <span class="cf">if</span> g <span class="op">&gt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="dv">0</span> <span class="cf">for</span> g <span class="kw">in</span> n.index}  <span class="co"># share of periods treated</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dd_2x2(sub):</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""TWFE on a two-group subsample = the 2x2 DD for that comparison."""</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> sub.copy()</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> v <span class="kw">in</span> [<span class="st">"D"</span>, <span class="st">"l_homicide"</span>]:</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>        s[v <span class="op">+</span> <span class="st">"_t"</span>] <span class="op">=</span> s[v] <span class="op">-</span> s.groupby(<span class="st">"sid"</span>)[v].transform(<span class="st">"mean"</span>) <span class="op">-</span> s.groupby(<span class="st">"year"</span>)[v].transform(<span class="st">"mean"</span>) <span class="op">+</span> s[v].mean()</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (s.D_t <span class="op">*</span> s.l_homicide_t).<span class="bu">sum</span>() <span class="op">/</span> (s.D_t <span class="op">**</span> <span class="dv">2</span>).<span class="bu">sum</span>()</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> [g <span class="cf">for</span> g <span class="kw">in</span> n.index <span class="cf">if</span> g <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> G:</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    rows.append((k, <span class="st">"never-treated"</span>, dd_2x2(castle[castle.g.isin([k, <span class="dv">0</span>])]),</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>                 n[k] <span class="op">*</span> n[<span class="dv">0</span>] <span class="op">*</span> Dbar[k] <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> Dbar[k])))</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> l <span class="kw">in</span> G:</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> l <span class="op">&lt;=</span> k: <span class="cf">continue</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>        nkl <span class="op">=</span> n[k] <span class="op">/</span> (n[k] <span class="op">+</span> n[l])</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># k treated earlier; l (not yet treated) is the control in years before l adopts</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>        s_kl <span class="op">=</span> ((n[k] <span class="op">+</span> n[l]) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> Dbar[l]))<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> nkl <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> nkl) <span class="op">*</span> (Dbar[k] <span class="op">-</span> Dbar[l]) <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> Dbar[l]) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> Dbar[k]) <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> Dbar[l])</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>        rows.append((k, <span class="ss">f"later-treated (</span><span class="sc">{</span>l<span class="sc">}</span><span class="ss">) as control"</span>, dd_2x2(castle[castle.g.isin([k, l]) <span class="op">&amp;</span> (castle.year <span class="op">&lt;</span> l)]), s_kl))</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># l treated later; k (already treated) is the control in years from k's adoption on</span></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>        s_lk <span class="op">=</span> ((n[k] <span class="op">+</span> n[l]) <span class="op">*</span> Dbar[k])<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> nkl <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> nkl) <span class="op">*</span> Dbar[l] <span class="op">/</span> Dbar[k] <span class="op">*</span> (Dbar[k] <span class="op">-</span> Dbar[l]) <span class="op">/</span> Dbar[k]</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>        rows.append((l, <span class="ss">f"earlier-treated (</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">) as control"</span>, dd_2x2(castle[castle.g.isin([k, l]) <span class="op">&amp;</span> (castle.year <span class="op">&gt;=</span> k)]), s_lk))</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>bacon <span class="op">=</span> pd.DataFrame(rows, columns<span class="op">=</span>[<span class="st">"treated"</span>, <span class="st">"control"</span>, <span class="st">"dd"</span>, <span class="st">"s"</span>])</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>bacon[<span class="st">"weight"</span>] <span class="op">=</span> bacon.s <span class="op">/</span> bacon.s.<span class="bu">sum</span>()</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>bacon[<span class="st">"type"</span>] <span class="op">=</span> bacon.control.<span class="bu">str</span>.split(<span class="st">" "</span>).<span class="bu">str</span>[<span class="dv">0</span>]</span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(bacon.sort_values(<span class="st">"weight"</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">8</span>).<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    treated                          control  ...  weight           type
+9      2007                    never-treated  ...   0.610  never-treated
+16     2008                    never-treated  ...   0.161  never-treated
+21     2009                    never-treated  ...   0.060  never-treated
+0      2006                    never-treated  ...   0.050  never-treated
+10     2007  later-treated (2008) as control  ...   0.021  later-treated
+12     2007  later-treated (2009) as control  ...   0.021  later-treated
+24     2010                    never-treated  ...   0.017  never-treated
+14     2007  later-treated (2010) as control  ...   0.016  later-treated
+
+[8 rows x 6 columns]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"weighted sum of 2x2s:"</span>, (bacon.weight <span class="op">*</span> bacon.dd).<span class="bu">sum</span>().<span class="bu">round</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>weighted sum of 2x2s: 0.0694</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(bacon.groupby(<span class="st">"type"</span>).<span class="bu">apply</span>(<span class="kw">lambda</span> x: pd.Series({<span class="st">"weight"</span>: x.weight.<span class="bu">sum</span>(),</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>                                                       <span class="st">"avg_dd"</span>: (x.weight <span class="op">*</span> x.dd).<span class="bu">sum</span>() <span class="op">/</span> x.weight.<span class="bu">sum</span>()})).<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 weight  avg_dd
+type                           
+earlier-treated   0.024   0.046
+later-treated     0.077  -0.029
+never-treated     0.899   0.078</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bacondecomp)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>castle <span class="ot">&lt;-</span> <span class="fu">mutate</span>(castle, <span class="at">D =</span> <span class="fu">as.integer</span>(post <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>bd <span class="ot">&lt;-</span> <span class="fu">bacon</span>(l_homicide <span class="sc">~</span> D, <span class="at">data =</span> castle, <span class="at">id_var =</span> <span class="st">"sid"</span>, <span class="at">time_var =</span> <span class="st">"year"</span>)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># prints the weight and average estimate by comparison type</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>bd <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(type) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">weight =</span> <span class="fu">sum</span>(weight), <span class="at">avg_est =</span> <span class="fu">weighted.mean</span>(estimate, weight))</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bd, <span class="fu">aes</span>(weight, estimate, <span class="at">shape =</span> type, <span class="at">colour =</span> type)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">sum</span>(bd<span class="sc">$</span>estimate <span class="sc">*</span> bd<span class="sc">$</span>weight)) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bacondecomp)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>castle <span class="ot">&lt;-</span> <span class="fu">mutate</span>(castle, <span class="at">D =</span> <span class="fu">as.integer</span>(post <span class="sc">&gt;</span> <span class="dv">0</span>))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>bd <span class="ot">&lt;-</span> <span class="fu">bacon</span>(l_homicide <span class="sc">~</span> D, <span class="at">data =</span> castle, <span class="at">id_var =</span> <span class="st">"sid"</span>, <span class="at">time_var =</span> <span class="st">"year"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                      type  weight  avg_est
+1 Earlier vs Later Treated 0.07708 -0.02858
+2 Later vs Earlier Treated 0.02411  0.04563
+3     Treated vs Untreated 0.89881  0.07844</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prints the weight and average estimate by comparison type</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>bd <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(type) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">avg_est =</span> <span class="fu">sum</span>(estimate <span class="sc">*</span> weight) <span class="sc">/</span> <span class="fu">sum</span>(weight), <span class="at">weight =</span> <span class="fu">sum</span>(weight))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 x 3
+  type                     avg_est weight
+  &lt;chr&gt;                      &lt;dbl&gt;  &lt;dbl&gt;
+1 Earlier vs Later Treated -0.0286 0.0771
+2 Later vs Earlier Treated  0.0456 0.0241
+3 Treated vs Untreated      0.0784 0.899 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bd, <span class="fu">aes</span>(weight, estimate, <span class="at">shape =</span> type, <span class="at">colour =</span> type)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">sum</span>(bd<span class="sc">$</span>estimate <span class="sc">*</span> bd<span class="sc">$</span>weight)) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08-did-deep-dive_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -633,35 +884,106 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Option A: an event study in event time, with never-treated states as the pure controls</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>cs2 <span class="op">=</span> castle.copy()</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>cs2[<span class="st">"rel"</span>] <span class="op">=</span> (cs2.year <span class="op">-</span> cs2.g).clip(<span class="op">-</span><span class="dv">5</span>, <span class="dv">4</span>)          <span class="co"># event time, binned at the ends</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>):</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> k <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>: <span class="cf">continue</span>                              <span class="co"># reference period</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    cs2[<span class="ss">f"ev_</span><span class="sc">{</span><span class="st">'m'</span> <span class="cf">if</span> k <span class="op">&lt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="st">'p'</span><span class="sc">}{</span><span class="bu">abs</span>(k)<span class="sc">}</span><span class="ss">"</span>] <span class="op">=</span> ((cs2.g <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (cs2.rel <span class="op">==</span> k)).astype(<span class="bu">int</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>ev <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> cs2.columns <span class="cf">if</span> c.startswith(<span class="st">"ev_"</span>)]</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>es <span class="op">=</span> smf.wls(<span class="st">"l_homicide ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(ev) <span class="op">+</span> <span class="st">" + C(sid) + C(year)"</span>, data<span class="op">=</span>cs2, weights<span class="op">=</span>cs2.popwt)<span class="op">\</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        .fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: cs2[<span class="st">"sid"</span>]})</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.DataFrame({<span class="st">"coef"</span>: es.params[ev], <span class="st">"se"</span>: es.bse[ev]}).<span class="bu">round</span>(<span class="dv">3</span>))</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Option B: Callaway–Sant'Anna via the `csdid` or `differences` packages (pip install differences)</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># from differences import ATTgt</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># att = ATTgt(data=castle.set_index(["sid", "year"]), cohort_name="g").fit(formula="l_homicide")</span></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># att.aggregate("event")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Option A: an event study in event time, with never-treated states as the pure controls</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>cs2 <span class="op">=</span> castle.copy()</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>cs2[<span class="st">"rel"</span>] <span class="op">=</span> (cs2.year <span class="op">-</span> cs2.g).clip(<span class="op">-</span><span class="dv">5</span>, <span class="dv">4</span>)          <span class="co"># event time, binned at the ends</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>):</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> k <span class="op">==</span> <span class="op">-</span><span class="dv">1</span>: <span class="cf">continue</span>                              <span class="co"># reference period</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    cs2[<span class="ss">f"ev_</span><span class="sc">{</span><span class="st">'m'</span> <span class="cf">if</span> k <span class="op">&lt;</span> <span class="dv">0</span> <span class="cf">else</span> <span class="st">'p'</span><span class="sc">}{</span><span class="bu">abs</span>(k)<span class="sc">}</span><span class="ss">"</span>] <span class="op">=</span> ((cs2.g <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (cs2.rel <span class="op">==</span> k)).astype(<span class="bu">int</span>)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>ev <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> cs2.columns <span class="cf">if</span> c.startswith(<span class="st">"ev_"</span>)]</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>es <span class="op">=</span> smf.wls(<span class="st">"l_homicide ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(ev) <span class="op">+</span> <span class="st">" + C(sid) + C(year)"</span>, data<span class="op">=</span>cs2, weights<span class="op">=</span>cs2.popwt)<span class="op">\</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>        .fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: cs2[<span class="st">"sid"</span>]})</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.DataFrame({<span class="st">"coef"</span>: es.params[ev], <span class="st">"se"</span>: es.bse[ev]}).<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        coef     se
+ev_m5 -0.002  0.049
+ev_m4  0.006  0.037
+ev_m3 -0.006  0.035
+ev_m2 -0.045  0.036
+ev_p0  0.078  0.034
+ev_p1  0.067  0.052
+ev_p2  0.064  0.064
+ev_p3  0.043  0.066
+ev_p4  0.100  0.057</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Option B: Callaway–Sant'Anna via the `csdid` or `differences` packages (pip install differences)</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># from differences import ATTgt</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># att = ATTgt(data=castle.set_index(["sid", "year"]), cohort_name="g").fit(formula="l_homicide")</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="co"># att.aggregate("event")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
-<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(did)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>castle_cs <span class="ot">&lt;-</span> castle <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">g_cs =</span> <span class="fu">ifelse</span>(g <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">0</span>, g))</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>att <span class="ot">&lt;-</span> <span class="fu">att_gt</span>(<span class="at">yname =</span> <span class="st">"l_homicide"</span>, <span class="at">tname =</span> <span class="st">"year"</span>, <span class="at">idname =</span> <span class="st">"sid"</span>, <span class="at">gname =</span> <span class="st">"g_cs"</span>,</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> castle_cs, <span class="at">control_group =</span> <span class="st">"nevertreated"</span>, <span class="at">weightsname =</span> <span class="st">"popwt"</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>es <span class="ot">&lt;-</span> <span class="fu">aggte</span>(att, <span class="at">type =</span> <span class="st">"dynamic"</span>, <span class="at">min_e =</span> <span class="sc">-</span><span class="dv">5</span>, <span class="at">max_e =</span> <span class="dv">4</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(es); <span class="fu">ggdid</span>(es)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">aggte</span>(att, <span class="at">type =</span> <span class="st">"simple"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(did)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>castle_cs <span class="ot">&lt;-</span> castle <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">g_cs =</span> <span class="fu">ifelse</span>(g <span class="sc">==</span> <span class="dv">0</span>, <span class="dv">0</span>, g))</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>att <span class="ot">&lt;-</span> <span class="fu">att_gt</span>(<span class="at">yname =</span> <span class="st">"l_homicide"</span>, <span class="at">tname =</span> <span class="st">"year"</span>, <span class="at">idname =</span> <span class="st">"sid"</span>, <span class="at">gname =</span> <span class="st">"g_cs"</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">data =</span> castle_cs, <span class="at">control_group =</span> <span class="st">"nevertreated"</span>, <span class="at">weightsname =</span> <span class="st">"popwt"</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>es <span class="ot">&lt;-</span> <span class="fu">aggte</span>(att, <span class="at">type =</span> <span class="st">"dynamic"</span>, <span class="at">min_e =</span> <span class="sc">-</span><span class="dv">5</span>, <span class="at">max_e =</span> <span class="dv">4</span>)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(es); <span class="fu">ggdid</span>(es)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+aggte(MP = att, type = "dynamic", min_e = -5, max_e = 4)
+
+Reference: Callaway, Brantly and Pedro H.C. Sant'Anna.  "Difference-in-Differences with Multiple Time Periods." Journal of Econometrics, Vol. 225, No. 2, pp. 200-230, 2021. &lt;https://doi.org/10.1016/j.jeconom.2020.12.001&gt;, &lt;https://arxiv.org/abs/1803.09015&gt; 
+
+
+Overall summary of ATT's based on event-study/dynamic aggregation:  
+    ATT    Std. Error     [ 95%  Conf. Int.]  
+ 0.1074        0.0443     0.0206      0.1941 *
+
+
+Dynamic Effects:
+ Event time Estimate Std. Error [95% Simult.  Conf. Band]  
+         -5  -0.0375     0.0282       -0.1035      0.0285  
+         -4   0.0233     0.0264       -0.0382      0.0849  
+         -3  -0.0118     0.0213       -0.0616      0.0380  
+         -2  -0.0362     0.0276       -0.1007      0.0283  
+         -1   0.0537     0.0361       -0.0307      0.1382  
+          0   0.0821     0.0398       -0.0110      0.1752  
+          1   0.0665     0.0609       -0.0757      0.2087  
+          2   0.0736     0.0675       -0.0840      0.2312  
+          3   0.0592     0.0791       -0.1257      0.2440  
+          4   0.2555     0.0521        0.1338      0.3771 *
+---
+Signif. codes: `*' confidence band does not cover 0
+
+Control Group:  Never Treated,  Anticipation Periods:  0
+Estimation Method:  Doubly Robust</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="08-did-deep-dive_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">aggte</span>(att, <span class="at">type =</span> <span class="st">"simple"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+aggte(MP = att, type = "simple")
+
+Reference: Callaway, Brantly and Pedro H.C. Sant'Anna.  "Difference-in-Differences with Multiple Time Periods." Journal of Econometrics, Vol. 225, No. 2, pp. 200-230, 2021. &lt;https://doi.org/10.1016/j.jeconom.2020.12.001&gt;, &lt;https://arxiv.org/abs/1803.09015&gt; 
+
+    ATT    Std. Error     [ 95%  Conf. Int.] 
+ 0.0785        0.0593    -0.0378      0.1948 
+
+
+---
+Signif. codes: `*' confidence band does not cover 0
+
+Control Group:  Never Treated,  Anticipation Periods:  0
+Estimation Method:  Doubly Robust</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="expect">
-<p>The event-study leads are ≈ 0.00, 0.01, −0.01, −0.05 (SEs ≈ 0.04): flat. The lags are ≈ <strong>0.08, 0.07, 0.06, 0.04, 0.10</strong> for event years 0–4, each with SE 0.03–0.07. Callaway–Sant’Anna’s simple aggregate ATT comes out close to the TWFE number, as the Bacon decomposition predicted. The point of running it is not a different answer here; it is that you would have <em>known</em> if TWFE had gone wrong.</p>
+<p>The event-study leads are ≈ 0.00, 0.01, −0.01, −0.05 (SEs ≈ 0.04): flat. The lags are ≈ <strong>0.08, 0.07, 0.06, 0.04, 0.10</strong> for event years 0–4, each with standard error (SE) 0.03–0.07. Callaway–Sant’Anna’s simple aggregate ATT is ≈ <strong>0.079</strong> (SE 0.06), essentially the TWFE number, as the Bacon decomposition predicted; its event-study aggregate is ≈ 0.11 with leads within ±0.05 of zero. The point of running it is not a different answer here; it is that you would have <em>known</em> if TWFE had gone wrong.</p>
 </div>
 </section>
 </section>
@@ -676,7 +998,7 @@ window.Quarto = {
 <section id="solutions" class="level2">
 <h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -685,21 +1007,21 @@ Solutions (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>1.</strong> Each coefficient is now the repeal-vs-Roe gap in year <span class="math inline">\(t\)</span> <em>relative to the gap in 1990</em>. Since 1990 is mid-treatment, the “pre-period” coefficients for 1986–1989 are differences between two treated years and no longer test for differential pre-trends; the only clean reference is a year before anyone was treated.</p>
 <p><strong>2.</strong> With no never-treated units and growing effects, the late-vs-early comparisons receive substantial weight and have <em>negative</em> 2×2 estimates (the early cohort’s growing effect is differenced out as a “trend”); TWFE badly understates the true average effect (in the simulation below the true average effect among treated observations is 1.5, TWFE gives ≈ 0.35 with no never-treated units) and can flip sign when the dynamic is steep. Adding 20 never-treated units pulls TWFE to ≈ 0.9 — better, still biased, because the forbidden comparisons still get weight; a Callaway–Sant’Anna aggregate would recover 1.5.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> panel(n_never):</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    units <span class="op">=</span> [(i, <span class="dv">4</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>)] <span class="op">+</span> [(i, <span class="dv">7</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>, <span class="dv">40</span>)] <span class="op">+</span> [(i, <span class="dv">0</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">40</span>, <span class="dv">40</span> <span class="op">+</span> n_never)]</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> [(i, g, t, (g <span class="op">&gt;</span> <span class="dv">0</span> <span class="kw">and</span> t <span class="op">&gt;=</span> g) <span class="op">*</span> (t <span class="op">-</span> g <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span> <span class="fl">0.5</span> <span class="op">+</span> rng.normal()) <span class="cf">for</span> i, g <span class="kw">in</span> units <span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>)]</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(rows, columns<span class="op">=</span>[<span class="st">"sid"</span>, <span class="st">"g"</span>, <span class="st">"year"</span>, <span class="st">"l_homicide"</span>])</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"D"</span>] <span class="op">=</span> ((df.g <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (df.year <span class="op">&gt;=</span> df.g)).astype(<span class="bu">int</span>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n_never <span class="kw">in</span> [<span class="dv">0</span>, <span class="dv">20</span>]:</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> panel(n_never)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(n_never, smf.ols(<span class="st">"l_homicide ~ D + C(sid) + C(year)"</span>, df).fit().params[<span class="st">"D"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># then re-run the Step 4 decomposition on `df`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> panel(n_never):</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    units <span class="op">=</span> [(i, <span class="dv">4</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>)] <span class="op">+</span> [(i, <span class="dv">7</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">20</span>, <span class="dv">40</span>)] <span class="op">+</span> [(i, <span class="dv">0</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">40</span>, <span class="dv">40</span> <span class="op">+</span> n_never)]</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>    rows <span class="op">=</span> [(i, g, t, (g <span class="op">&gt;</span> <span class="dv">0</span> <span class="kw">and</span> t <span class="op">&gt;=</span> g) <span class="op">*</span> (t <span class="op">-</span> g <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span> <span class="fl">0.5</span> <span class="op">+</span> rng.normal()) <span class="cf">for</span> i, g <span class="kw">in</span> units <span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>)]</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(rows, columns<span class="op">=</span>[<span class="st">"sid"</span>, <span class="st">"g"</span>, <span class="st">"year"</span>, <span class="st">"l_homicide"</span>])</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"D"</span>] <span class="op">=</span> ((df.g <span class="op">&gt;</span> <span class="dv">0</span>) <span class="op">&amp;</span> (df.year <span class="op">&gt;=</span> df.g)).astype(<span class="bu">int</span>)</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n_never <span class="kw">in</span> [<span class="dv">0</span>, <span class="dv">20</span>]:</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> panel(n_never)</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(n_never, smf.ols(<span class="st">"l_homicide ~ D + C(sid) + C(year)"</span>, df).fit().params[<span class="st">"D"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a><span class="co"># then re-run the Step 4 decomposition on `df`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>3.</strong> <code>l_larceny</code>: ≈ 0.00 (SE 0.015); <code>l_motor</code>: ≈ 0.04 (SE 0.05). Both small and insignificant. That supports the claim that adopting states were not simply on a different crime trajectory; it does not prove parallel trends for homicide, but it rules out one broad alternative.</p>
 </div>
 </div>
@@ -708,7 +1030,7 @@ Solutions (click to expand)
 <section id="facilitator-notes" class="level2">
 <h2 class="anchored" data-anchor-id="facilitator-notes">Facilitator notes</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Facilitator notes (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -717,7 +1039,7 @@ Facilitator notes (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>The event-study figure is the deliverable.</strong> Make sure every participant can produce Step 1’s plot and read it: leads, reference year, dynamics, confidence band. Everything in modern DiD is a conversation about that picture.</p>
 <p><strong>Misconception: flat pre-trends prove parallel trends.</strong> They make it more plausible. The counterfactual post-period trend is unobserved, full stop. Use the DDD to show what <em>further</em> evidence looks like.</p>

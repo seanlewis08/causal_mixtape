@@ -20,12 +20,12 @@ Nine sessions cover the book's eleven chapters. Short chapters are paired, and t
 | 4 | [Matching & subclassification](sessions/04-matching.qmd) | 5 | Titanic subclassification; NSW/CPS propensity scores |
 | 5 | [Regression discontinuity](sessions/05-rdd.qmd) | 6 | Lee, Moretti & Butler close elections |
 | 6 | [Instrumental variables](sessions/06-iv.qmd) | 7 | Card's college proximity; judge-leniency design |
-| 7 | [Panel data + the 2×2 DiD](sessions/07-panel-did.qmd) | 8, 9.1–9.3 | Fixed effects on the SASP panel; John Snow as a DiD |
-| 8 | [DiD deep dive](sessions/08-did-deep-dive.qmd) | 9.4–9.7 | Abortion-legalization event study; castle-doctrine TWFE |
+| 7 | [Panel data + the 2×2 difference-in-differences](sessions/07-panel-did.qmd) | 8, 9.1–9.3 | Fixed effects on the SASP panel; John Snow as a DiD |
+| 8 | [DiD deep dive](sessions/08-did-deep-dive.qmd) | 9.4–9.7 | Abortion-legalization event study; castle-doctrine two-way fixed effects |
 | 9 | [Synthetic control + wrap-up](sessions/09-synth-wrapup.qmd) | 10, 11 | Texas prison construction |
 
 ## How to use this site
 
 Before the first meeting, everyone should work through [Setup](setup.qmd) so that the data loads and both toolchains run. If you are facilitating, [Facilitating](facilitating.qmd) has the 60-minute template and the norms the sessions assume. Each session page is self-contained: read **Key ideas** before the meeting, follow the **Walkthrough** live, and do the **Exercises** before the next session. Solutions and facilitator notes are collapsed at the bottom of every page so they do not spoil the exercises.
 
-Code on this site is displayed but not executed at build time. Every snippet was run against the bundled data while the site was written, and each walkthrough step has a *What you should see* box with the numbers to check against. Copy the code into a notebook or script to reproduce them.
+Every walkthrough chunk is executed when the site is built, so the output under each block is real, and each step also has a *What you should see* box that calls out the numbers that matter. Acronyms are spelled out on first use and collected in the [Glossary](glossary.qmd); each key idea comes with an *In plain English* restatement for anyone meeting the concept for the first time.

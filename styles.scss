@@ -33,3 +33,13 @@ $font-size-root: 16px;
   margin-bottom: 0.25rem;
 }
 .panel-tabset .nav-link { font-weight: 600; }
+
+/* "In plain English" callouts */
+div.callout.plain-english {
+  border-left-color: #2e8b57;
+  background: #f1faf4;
+}
+div.callout.plain-english .callout-header {
+  background: #e3f4e9;
+  color: #1f5f3a;
+}

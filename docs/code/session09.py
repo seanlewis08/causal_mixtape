@@ -42,6 +42,7 @@ path["gap"].plot(ax=ax[1]); ax[1].axhline(0, color="grey"); ax[1].axvline(1993, 
 ax[0].set_ylabel("Black male prisoners"); ax[1].set_ylabel("Texas − synthetic"); plt.tight_layout()
 
 # ---- step 3 ----
+#| eval: false
 def fit_state(st):
     d = Dataprep(foo=tx, dependent="bmprison", unit_variable="statefip", time_variable="year",
                  treatment_identifier=st, controls_identifier=[s for s in tx.statefip.unique() if s != st],
@@ -57,5 +58,11 @@ def fit_state(st):
 placebo = pd.DataFrame({names[st]: fit_state(st) for st in tx.statefip.unique()}).T
 placebo = placebo.sort_values("ratio", ascending=False)
 print(placebo.head(10).round(1))
+rank = int((placebo.index == "Texas").argmax()) + 1
+print(f"Texas rank: {rank} of {len(placebo)}  ->  p = {rank/len(placebo):.3f}")
+
+# ---- step 4 ----
+placebo = pd.read_csv("data/texas_placebo_ratios.csv", index_col="state")
+print(placebo.head(10))
 rank = int((placebo.index == "Texas").argmax()) + 1
 print(f"Texas rank: {rank} of {len(placebo)}  ->  p = {rank/len(placebo):.3f}")

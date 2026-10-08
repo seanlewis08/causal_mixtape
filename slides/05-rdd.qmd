@@ -15,6 +15,10 @@ subtitle: "Session 5 · Mixtape chapter 6"
 - Fuzzy: $P(D = 1 \mid X)$ jumps at $c_0$
 - Units just above and just below differ in $D$ and, if nothing else jumps, in nothing else
 
+## The picture that is the argument
+
+![](img/s5_rd.svg){width=85%}
+
 ## Identification by continuity
 
 $$\delta_{SRD} = \lim_{x \downarrow c_0} E[Y \mid X = x] - \lim_{x \uparrow c_0} E[Y \mid X = x]$$
@@ -25,10 +29,11 @@ $$\delta_{SRD} = \lim_{x \downarrow c_0} E[Y \mid X = x] - \lim_{x \uparrow c_0}
 
 ## Estimation is bias vs variance
 
-- Global polynomials: all the data, but far-away points steer the fit at the cutoff
-- Local linear within bandwidth $h$: the modern default
-- `rdrobust` picks $h$ and bias-corrects the CI
-- Report several; show the bandwidth curve
+![](img/s5_bandwidth.svg){width=85%}
+
+::: {.small}
+Each point is the same regression with a different window around the cutoff. `rdrobust` picks the window that balances the two errors.
+:::
 
 ## Threats
 

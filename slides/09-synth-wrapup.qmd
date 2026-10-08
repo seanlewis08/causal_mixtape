@@ -24,17 +24,19 @@ subtitle: "Session 9 · Mixtape chapters 10–11"
 
 ## Inference by placebo
 
-- Reassign treatment to each donor; fit its synthetic control
-- Post/pre RMSPE ratio for every unit
-- Treated unit's rank ÷ number of units = the $p$-value
-- Also: placebo-in-time, leave-one-out donors
+![](img/s9_placebo.svg){width=100%}
+
+::: {.small}
+Pretend each other state was treated, build its synthetic twin, and compute how much worse the fit got after 1993. Texas is the most extreme of 51 → rank-based $p ≈ 0.02$.
+:::
 
 ## Texas (Cunningham & Kang 2019)
 
-- Massive prison construction, 1993–94
-- Black male incarceration roughly doubles
-- Synthetic Texas: ≈ 25,000 fewer Black men in prison per year after 1995
-- Texas's RMSPE ratio is the largest of 51 → $p ≈ 0.02$
+![](img/s9_synth.svg){width=100%}
+
+::: {.small}
+Prison construction 1993–94. Synthetic Texas tracks real Texas before, then falls ≈ 23,000 Black male prisoners per year behind.
+:::
 
 ## Walkthrough
 
@@ -45,14 +47,22 @@ subtitle: "Session 9 · Mixtape chapters 10–11"
 
 ## Which design, when
 
-| Source of variation | Design | Key assumption |
-|---|---|---|
-| Randomization | Compare means; RI | — |
-| Observable selection | Matching / IPW | CIA + overlap |
-| A threshold | RDD | Continuity at cutoff |
-| An instrument | IV / 2SLS | Exclusion; LATE |
-| Within-unit change | FE / DiD | Strict exogeneity / parallel trends |
-| One treated aggregate | Synthetic control | Pre-period fit |
+```{dot}
+//| fig-width: 13
+//| fig-height: 5.8
+digraph {
+graph [rankdir=LR, bgcolor="transparent", fontname="Helvetica", nodesep=0.35, ranksep=1.2]; node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=20, fillcolor="#eef4f9", color="#1f5f8b"]; edge [color="#52514e", fontname="Helvetica", fontsize=12];
+  q [label="What decided who\ngot treated?", fillcolor="#fff8e6", color="#8a6d1d"];
+  r [label="a coin flip"]; o [label="observed traits\n(you can list them all)"]; c [label="a cutoff rule"]; i [label="something exogenous\nthat nudges treatment"]; t [label="a change over time\nwithin units"]; a [label="one big unit changed,\nothers did not"];
+  q -> r; q -> o; q -> c; q -> i; q -> t; q -> a;
+  r -> R [label=""]; R [label="compare means\n+ randomization inference", fillcolor="#e3f4e9", color="#1f5f3a"];
+  o -> O; O [label="matching / weighting\n(check overlap)", fillcolor="#e3f4e9", color="#1f5f3a"];
+  c -> C; C [label="regression discontinuity\n(plot it; density test)", fillcolor="#e3f4e9", color="#1f5f3a"];
+  i -> I; I [label="instrumental variables\n(first-stage F; LATE)", fillcolor="#e3f4e9", color="#1f5f3a"];
+  t -> T; T [label="fixed effects / DiD\n(event-study leads)", fillcolor="#e3f4e9", color="#1f5f3a"];
+  a -> A; A [label="synthetic control\n(pre-fit; placebos)", fillcolor="#e3f4e9", color="#1f5f3a"];
+}
+```
 
 ## Three new questions
 

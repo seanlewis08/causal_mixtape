@@ -142,12 +142,10 @@
 </section>
 <section id="event-studies" class="slide level2">
 <h2>Event studies</h2>
-<ul>
-<li>Replace <span class="math inline">\(\text{Treat} \times \text{Post}\)</span> with <span class="math inline">\(\text{Treat} \times \text{Year}_t\)</span> for every <span class="math inline">\(t\)</span> (omit one)</li>
-<li><strong>Leads</strong> (pre-treatment) should be ≈ 0</li>
-<li><strong>Lags</strong> trace the dynamic effect</li>
-<li>Flat leads make parallel trends plausible; they do not prove it</li>
-</ul>
+
+<img data-src="img/s8_eventstudy.svg" style="width:95.0%" class="r-stretch"><div class="small">
+<p>One coefficient per year relative to 1985. Flat before 1986 (nothing was happening yet); a parabola during the years the treated cohorts were 15–19; back to zero after.</p>
+</div>
 </section>
 <section id="placebos-and-triple-differences" class="slide level2">
 <h2>Placebos and triple differences</h2>
@@ -168,12 +166,18 @@
 </section>
 <section id="staggered-adoption" class="slide level2">
 <h2>Staggered adoption</h2>
-<ul>
-<li>Units treated at different times; TWFE: <span class="math inline">\(Y_{it} = \alpha_i + \lambda_t + \delta D_{it} + e_{it}\)</span></li>
-<li>Goodman-Bacon: <span class="math inline">\(\hat{\delta}\)</span> is a weighted average of <strong>every</strong> 2×2 in the data</li>
-<li>Including late-treated vs <strong>already-treated</strong> as “control”</li>
-<li>If effects grow over time, those 2×2s are biased — sometimes to the wrong sign</li>
+
+<img data-src="img/s8_timing.svg" style="width:100.0%" class="r-stretch"><ul>
+<li>TWFE: <span class="math inline">\(Y_{it} = \alpha_i + \lambda_t + \delta D_{it} + e_{it}\)</span></li>
+<li>Goodman-Bacon: <span class="math inline">\(\hat{\delta}\)</span> is a weighted average of <strong>every</strong> 2×2 among these groups — including late-treated vs <em>already-treated</em></li>
 </ul>
+</section>
+<section id="what-the-decomposition-shows" class="slide level2">
+<h2>What the decomposition shows</h2>
+
+<img data-src="img/s8_bacon.svg" style="width:95.0%" class="r-stretch"><div class="small">
+<p>Here the forbidden comparisons carry 2% of the weight, so TWFE is safe. With no never-treated states, that share can dominate.</p>
+</div>
 </section>
 <section id="modern-estimators" class="slide level2">
 <h2>Modern estimators</h2>

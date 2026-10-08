@@ -11,7 +11,7 @@ subtitle: "Book chapter 3"
 
 ## Learning goals
 
-Everyone should leave able to read a DAG (nodes, arrows, missing arrows), list the backdoor paths between a treatment and an outcome, apply the backdoor criterion to decide what to condition on, and explain — with a simulation they ran — why conditioning on a collider *creates* bias where none existed.
+Everyone should leave able to read a directed acyclic graph (DAG: nodes, arrows, missing arrows), list the backdoor paths between a treatment and an outcome, apply the backdoor criterion to decide what to condition on, and explain — with a simulation they ran — why conditioning on a collider *creates* bias where none existed.
 
 ::: {.agenda}
 | Time | Block |
@@ -25,13 +25,29 @@ Everyone should leave able to read a DAG (nodes, arrows, missing arrows), list t
 
 ## Key ideas
 
-**A DAG is a set of causal claims, including the arrows you leave out.** Nodes are variables; a directed edge $A \to B$ says $A$ causes $B$; the absence of an edge is the strong claim that there is no direct effect. The DAG encodes your prior knowledge of the data-generating process — theory, institutional detail, previous studies — and that is what makes it useful: it forces you to write down what you believe before you touch data.
+**A directed acyclic graph (DAG) is a set of causal claims, including the arrows you leave out.** Nodes are variables; a directed edge $A \to B$ says $A$ causes $B$; the absence of an edge is the strong claim that there is no direct effect. "Acyclic" means you can never follow arrows in a loop back to where you started. The DAG encodes your prior knowledge of the data-generating process — theory, institutional detail, previous studies — and that is what makes it useful: it forces you to write down what you believe before you touch data.
+
+::: {.callout-tip .plain-english title="In plain English"}
+A DAG is a sketch of your story about how the world works: boxes for the things you measure, arrows for "this one causes that one." Drawing it before you run anything makes your assumptions visible, which is the point — you can argue about a picture, but you can't argue about an assumption nobody wrote down.
+:::
 
 **Paths and what blocks them.** A *backdoor path* from $D$ to $Y$ is any path starting with an arrow *into* $D$. Backdoor paths carry non-causal association. A path is blocked if it contains a *non-collider* you condition on, or a *collider* you do **not** condition on. A collider is a node where two arrows meet ($A \to C \leftarrow B$). Conditioning on a collider (or its descendant) *opens* the path.
 
+::: {.callout-tip .plain-english title="In plain English"}
+Think of paths as pipes that can carry a fake correlation from the treatment to the outcome. A *confounder* (a common cause of both) is a pipe that is open by default; you close it by controlling for the confounder. A *collider* (something caused by both) is a pipe that is closed by default; controlling for it *opens* the pipe. Same action, opposite effect, depending only on which way the arrows point.
+:::
+
 **The backdoor criterion.** A set of variables $X$ satisfies the backdoor criterion for $(D, Y)$ if $X$ blocks every backdoor path and contains no descendant of $D$. Then conditioning on $X$ identifies the causal effect of $D$ on $Y$. This is the formal version of "conditional independence" and "selection on observables" that Sessions 4 and 7 rely on.
 
+::: {.callout-tip .plain-english title="In plain English"}
+The backdoor criterion is a checklist for what to put in your regression: enough variables to close every fake pipe, and nothing that sits downstream of the treatment. It can say "control for nothing" (if the treatment was randomized) or "you cannot fix this with controls at all" (if a confounder is unmeasured). Both are legitimate answers.
+:::
+
 **Collider bias is the chapter's main warning.** The book's discrimination example: female $\to$ discrimination $\to$ occupation $\to$ wage, with discrimination $\to$ wage directly and unobserved ability $\to$ occupation and ability $\to$ wage. Occupation is a collider on the path discrimination $\to$ occupation $\leftarrow$ ability $\to$ wage. "Controlling for occupation," which sounds like good practice, opens that path and makes discrimination look like it *raises* wages. The second example — a negative talent–beauty correlation among movie stars when both are independent in the population — is the same mechanism via sample selection.
+
+::: {.callout-tip .plain-english title="In plain English"}
+Suppose discrimination pushes women out of high-paying jobs, and high-ability people get into them. Among women in a *given* job, the ones who made it there against the headwind tend to be unusually able — and are paid for it. Comparing men and women within the same job therefore makes discrimination look harmless or even helpful. The job variable is the collider; comparing "within" it is the mistake.
+:::
 
 ## Walkthrough
 
@@ -43,7 +59,7 @@ The DGP, following the book: discrimination is a deterministic function of being
 
 #### Python
 
-```python
+```{python}
 import numpy as np
 import pandas as pd
 import statsmodels.formula.api as smf
@@ -62,7 +78,7 @@ tb = pd.DataFrame(dict(female=female, ability=ability, discrimination=discrimina
 
 #### R
 
-```r
+```{r}
 library(tidyverse)
 library(estimatr)
 
@@ -85,7 +101,7 @@ tb <- tibble(
 
 #### Python
 
-```python
+```{python}
 for f in ["wage ~ female",
           "wage ~ female + occupation",
           "wage ~ female + occupation + ability"]:
@@ -94,7 +110,7 @@ for f in ["wage ~ female",
 
 #### R
 
-```r
+```{r}
 lm_1 <- lm(wage ~ female, data = tb)
 lm_2 <- lm(wage ~ female + occupation, data = tb)
 lm_3 <- lm(wage ~ female + occupation + ability, data = tb)
@@ -128,7 +144,7 @@ Conditioning on `occupation` removes the mediated effect you probably wanted to 
 
 #### Python
 
-```python
+```{python}
 rng = np.random.default_rng(3)
 pop = pd.DataFrame({"beauty": rng.normal(size=10_000),
                     "talent": rng.normal(size=10_000)})
@@ -142,7 +158,7 @@ print("stars corr:     ", pop.loc[pop.star, ["beauty", "talent"]].corr().iloc[0,
 
 #### R
 
-```r
+```{r}
 set.seed(3)
 pop <- tibble(beauty = rnorm(10000), talent = rnorm(10000)) %>%
   mutate(score = beauty + talent,
@@ -163,7 +179,7 @@ Population correlation ≈ **0** ; among "stars" it is strongly **negative** (ar
 
 ### Step 5 — (Optional, R only) Let `dagitty` find the adjustment set
 
-```r
+```{r}
 library(dagitty); library(ggdag)
 
 g <- dagitty("dag {
@@ -222,5 +238,5 @@ print(smf.ols("severity ~ smoke", d[d.hosp]).fit().params["smoke"])    # < 0
 
 **Discussion prompts.** (a) Where did the arrows in the discrimination DAG come from — data or theory? (b) Can a DAG be tested? (Partially: it implies conditional independencies you can check, but it cannot be derived from data alone.)
 
-**Bridge to next session.** DAGs tell you what must be true for conditioning to work. Potential outcomes give you the language for *what* you are estimating — ATE, ATT — and what randomization buys you.
+**Bridge to next session.** DAGs tell you what must be true for conditioning to work. Potential outcomes give you the language for *what* you are estimating — the average treatment effect (ATE) and the effect on the treated (ATT) — and what randomization buys you.
 :::

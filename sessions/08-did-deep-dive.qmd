@@ -11,13 +11,13 @@ subtitle: "Book sections 9.4–9.7"
 
 ## Learning goals
 
-Participants should be able to estimate and plot an event study and read pre-trends and dynamics off it, build a triple-difference with a placebo cohort, run a two-way fixed-effects DiD with staggered adoption and explain why it is a weighted average of 2×2 comparisons — some of which use already-treated units as controls — and know what the modern estimators (Callaway–Sant'Anna, Sun–Abraham) do differently.
+Participants should be able to estimate and plot an event study and read pre-trends and dynamics off it, build a triple-difference with a placebo cohort, run a two-way fixed-effects (TWFE) difference-in-differences (DiD) with staggered adoption and explain why it is a weighted average of 2×2 comparisons — some of which use already-treated units as controls — and know what the modern estimators (Callaway–Sant'Anna, Sun–Abraham) do differently.
 
 ::: {.agenda}
 | Time | Block |
 |------|-------|
 | 0:00 | Recap: the 2×2 and parallel trends |
-| 0:05 | Concepts: event studies and leads; placebos and DDD; staggered TWFE and the Bacon decomposition |
+| 0:05 | Concepts: event studies and leads; placebos and triple differences; staggered TWFE and the Bacon decomposition |
 | 0:20 | Walkthrough: abortion legalization event study and DDD; castle doctrine TWFE; decompose it |
 | 0:45 | Exercise 1 kickoff |
 | 0:55 | Assign exercises; preview synthetic control |
@@ -27,13 +27,29 @@ Participants should be able to estimate and plot an event study and read pre-tre
 
 **Event studies.** With many periods, replace the single $\text{Treat} \times \text{Post}$ with a full set of $\text{Treat} \times \text{Year}$ interactions (omitting one reference year). The *leads* (pre-treatment interactions) should be near zero if parallel trends is plausible; the *lags* trace the dynamic effect. Passing a pre-trends test is not proof of parallel trends — the counterfactual is still unobserved — but failing it is close to disqualifying.
 
-**Placebos and triple differences.** If theory says an effect should show up only for a specific group, cohort, or window, estimate the same model where it should *not* and demand a null. A DDD nets the placebo group's DD out of the treated group's DD, absorbing group-specific shocks that a plain DD would attribute to treatment.
+::: {.callout-tip .plain-english title="In plain English"}
+Instead of one "after" effect, estimate a separate effect for every year: three years before the policy, two years before, the year of, the year after, and so on. The years *before* the policy are a sanity check — if the treated group was already pulling away before anything happened, the design is in trouble. The years after show the effect building or fading.
+:::
+
+**Placebos and triple differences (DDD).** If theory says an effect should show up only for a specific group, cohort, or window, estimate the same model where it should *not* and demand a null. A DDD nets the placebo group's DiD out of the treated group's DiD, absorbing group-specific shocks that a plain DiD would attribute to treatment.
+
+::: {.callout-tip .plain-english title="In plain English"}
+A placebo test runs your analysis somewhere the policy couldn't possibly have mattered — an older age group, a different outcome — and checks that you find nothing. A triple difference goes one step further and *subtracts* that placebo result from the real one, so anything weird that happened in those states in those years, affecting everyone, gets cancelled out.
+:::
 
 **The abortion study.** *Roe v. Wade* legalized abortion nationally in 1973; five states had repealed their bans in 1970. Cohorts born 1971–1973 in repeal states were "treated" three years earlier than the rest of the country. If legalization reduced the share of unwanted births, those cohorts should show lower gonorrhea incidence as 15–19 year olds in 1986–1992, with the effect tracing a parabola as the treated cohort moves into and out of the age bracket. The placebo is 25–29 year olds in the same states.
 
-**Staggered adoption and TWFE.** With treatment switching on at different times for different units, the TWFE coefficient is a variance-weighted average of *every* 2×2 DD in the data (Goodman-Bacon 2021): early vs never-treated, late vs never-treated, early vs late (before late is treated), and *late vs early (after early is treated)*. In that last type the "control" is already treated; if effects grow over time, its trend is contaminated and the 2×2 is biased — sometimes to the wrong sign. The decomposition tells you how much weight these comparisons get.
+**Staggered adoption and two-way fixed effects (TWFE).** With treatment switching on at different times for different units, the TWFE coefficient (unit fixed effects plus year fixed effects) is a variance-weighted average of *every* 2×2 DiD in the data (Goodman-Bacon 2021): early vs never-treated, late vs never-treated, early vs late (before late is treated), and *late vs early (after early is treated)*. In that last type the "control" is already treated; if effects grow over time, its trend is contaminated and the 2×2 is biased — sometimes to the wrong sign. The decomposition tells you how much weight these comparisons get.
 
-**Modern estimators.** Callaway and Sant'Anna estimate each cohort-by-time ATT using only never-treated or not-yet-treated controls and aggregate them with transparent weights. Sun and Abraham do the analogous thing within an interaction-weighted event-study regression. Both avoid the forbidden comparisons; both need a clean control group.
+::: {.callout-tip .plain-english title="In plain English"}
+When states adopt a law in different years, the standard regression quietly runs every possible two-group comparison and averages them. Some of those comparisons use a state that *already has the law* as the "control" for a state that is just getting it. If the law's effect grows over time, the early state's growing effect looks like a trend, gets subtracted, and the estimate shrinks or even flips sign. The Bacon decomposition shows you how much of your estimate rests on those bad comparisons.
+:::
+
+**Modern estimators.** Callaway and Sant'Anna estimate each cohort-by-time average treatment effect on the treated (ATT) using only never-treated or not-yet-treated controls and aggregate them with transparent weights. Sun and Abraham do the analogous thing within an interaction-weighted event-study regression. Both avoid the forbidden comparisons; both need a clean control group.
+
+::: {.callout-tip .plain-english title="In plain English"}
+The newer methods just refuse to use already-treated units as a comparison group. They compare each adopting cohort to units that haven't adopted *yet* (or never will), one period at a time, and then average those clean comparisons however you like. If you have plenty of never-treated units, they agree with the standard regression; if you don't, they can differ a lot.
+:::
 
 ## Walkthrough
 
@@ -45,7 +61,7 @@ Black women aged 15–19; log gonorrhea rate; `repeal` marks the five early-repe
 
 #### Python
 
-```python
+```{python}
 import pandas as pd
 import numpy as np
 import statsmodels.formula.api as smf
@@ -79,7 +95,7 @@ ax.set_title("Repeal × year, black women 15–19 (ref. 1985)"); plt.show()
 
 #### R
 
-```r
+```{r}
 library(tidyverse); library(haven); library(fixest)
 
 ab <- read_dta("data/abortion.dta")
@@ -106,7 +122,7 @@ Run the same event study for black women aged 25–29, who were born before lega
 
 #### Python
 
-```python
+```{python}
 bf25 = ab[(ab.sex == 2) & (ab.race == 2) & (ab.age == 25)]
 placebo = event_study(bf25)
 print(placebo.round(2))
@@ -128,7 +144,7 @@ print(pd.DataFrame({"coef": ddd.params[[f"ry_{y}" for y in yrs]].to_numpy(),
 
 #### R
 
-```r
+```{r}
 bf25 <- ab %>% filter(sex == 2, race == 2, age == 25)
 placebo <- feols(lnr ~ i(year, repeal, ref = 1985) + acc + ir + pi + alcohol + crack +
                    poverty + income + ur | fip + year,
@@ -136,8 +152,9 @@ placebo <- feols(lnr ~ i(year, repeal, ref = 1985) + acc + ir + pi + alcohol + c
 iplot(placebo, main = "Placebo: black women 25–29")
 
 both <- ab %>% filter(sex == 2, race == 2, age %in% c(15, 25)) %>%
-  mutate(younger = as.integer(age == 15), fip_young = paste(fip, younger))
-ddd <- feols(lnr ~ i(year, repeal, ref = 1985) + i(year, repeal * younger, ref = 1985) +
+  mutate(younger = as.integer(age == 15), repeal_young = repeal * younger,
+         fip_young = paste(fip, younger))
+ddd <- feols(lnr ~ i(year, repeal, ref = 1985) + i(year, repeal_young, ref = 1985) +
                i(year, younger, ref = 1985) + acc + ir + pi + alcohol + crack +
                poverty + income + ur | fip_young + year,
              data = both, weights = ~totpop, cluster = ~fip)
@@ -158,7 +175,7 @@ States adopted "stand your ground" laws between 2005 and 2010. The book's regres
 
 #### Python
 
-```python
+```{python}
 castle = pd.read_stata("data/castle.dta", convert_categoricals=False)
 cs = castle.dropna(subset=["l_homicide", "post", "popwt", "sid", "year"])
 twfe = smf.wls("l_homicide ~ post + C(sid) + C(year)", data=cs, weights=cs.popwt)\
@@ -174,7 +191,7 @@ print(castle.groupby("g").sid.nunique())
 
 #### R
 
-```r
+```{r}
 castle <- read_dta("data/castle.dta")
 twfe <- feols(l_homicide ~ post | sid + year, data = castle, weights = ~popwt, cluster = ~sid)
 coeftable(twfe)
@@ -198,7 +215,7 @@ The exact Goodman-Bacon decomposition needs a balanced panel, a binary treatment
 
 #### Python
 
-```python
+```{python}
 years = sorted(castle.year.unique())
 base = smf.ols("l_homicide ~ D + C(sid) + C(year)", data=castle).fit()
 print("unweighted binary TWFE:", base.params["D"].round(4))
@@ -239,12 +256,13 @@ print(bacon.groupby("type").apply(lambda x: pd.Series({"weight": x.weight.sum(),
 
 #### R
 
-```r
+```{r}
 library(bacondecomp)
 castle <- mutate(castle, D = as.integer(post > 0))
 bd <- bacon(l_homicide ~ D, data = castle, id_var = "sid", time_var = "year")
 # prints the weight and average estimate by comparison type
-bd %>% group_by(type) %>% summarise(weight = sum(weight), avg_est = weighted.mean(estimate, weight))
+bd %>% group_by(type) %>%
+  summarise(avg_est = sum(estimate * weight) / sum(weight), weight = sum(weight))
 ggplot(bd, aes(weight, estimate, shape = type, colour = type)) + geom_point(size = 3) +
   geom_hline(yintercept = sum(bd$estimate * bd$weight)) + theme_minimal()
 ```
@@ -261,7 +279,7 @@ Unweighted binary TWFE ≈ **0.069**, and the weighted sum of the 25 two-by-twos
 
 #### Python
 
-```python
+```{python}
 # Option A: an event study in event time, with never-treated states as the pure controls
 cs2 = castle.copy()
 cs2["rel"] = (cs2.year - cs2.g).clip(-5, 4)          # event time, binned at the ends
@@ -281,7 +299,7 @@ print(pd.DataFrame({"coef": es.params[ev], "se": es.bse[ev]}).round(3))
 
 #### R
 
-```r
+```{r}
 library(did)
 castle_cs <- castle %>% mutate(g_cs = ifelse(g == 0, 0, g))
 att <- att_gt(yname = "l_homicide", tname = "year", idname = "sid", gname = "g_cs",
@@ -294,7 +312,7 @@ aggte(att, type = "simple")
 :::
 
 ::: {.expect}
-The event-study leads are ≈ 0.00, 0.01, −0.01, −0.05 (SEs ≈ 0.04): flat. The lags are ≈ **0.08, 0.07, 0.06, 0.04, 0.10** for event years 0–4, each with SE 0.03–0.07. Callaway–Sant'Anna's simple aggregate ATT comes out close to the TWFE number, as the Bacon decomposition predicted. The point of running it is not a different answer here; it is that you would have *known* if TWFE had gone wrong.
+The event-study leads are ≈ 0.00, 0.01, −0.01, −0.05 (SEs ≈ 0.04): flat. The lags are ≈ **0.08, 0.07, 0.06, 0.04, 0.10** for event years 0–4, each with standard error (SE) 0.03–0.07. Callaway–Sant'Anna's simple aggregate ATT is ≈ **0.079** (SE 0.06), essentially the TWFE number, as the Bacon decomposition predicted; its event-study aggregate is ≈ 0.11 with leads within ±0.05 of zero. The point of running it is not a different answer here; it is that you would have *known* if TWFE had gone wrong.
 :::
 
 ## Exercises

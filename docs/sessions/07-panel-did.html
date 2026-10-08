@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b6ebfe76373a65f90f03e4eef39a9400.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-88736fcce7d974bfecfee082ef4a0c3c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -165,6 +165,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link" href="../facilitating.html"> 
 <span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../glossary.html"> 
+<span class="menu-text">Glossary</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -260,6 +264,12 @@ window.Quarto = {
  <span class="menu-text">Facilitating</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
+  </div>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
@@ -345,7 +355,7 @@ window.Quarto = {
   <li><a href="#key-ideas" id="toc-key-ideas" class="nav-link" data-scroll-target="#key-ideas">Key ideas</a></li>
   <li><a href="#walkthrough" id="toc-walkthrough" class="nav-link" data-scroll-target="#walkthrough">Walkthrough</a>
   <ul class="collapse">
-  <li><a href="#step-1-sasp-pooled-ols" id="toc-step-1-sasp-pooled-ols" class="nav-link" data-scroll-target="#step-1-sasp-pooled-ols">Step 1 — SASP: pooled OLS</a></li>
+  <li><a href="#step-1-sasp-pooled-ordinary-least-squares-ols" id="toc-step-1-sasp-pooled-ordinary-least-squares-ols" class="nav-link" data-scroll-target="#step-1-sasp-pooled-ordinary-least-squares-ols">Step 1 — SASP: pooled ordinary least squares (OLS)</a></li>
   <li><a href="#step-2-fixed-effects-three-ways" id="toc-step-2-fixed-effects-three-ways" class="nav-link" data-scroll-target="#step-2-fixed-effects-three-ways">Step 2 — Fixed effects, three ways</a></li>
   <li><a href="#step-3-why-they-differ" id="toc-step-3-why-they-differ" class="nav-link" data-scroll-target="#step-3-why-they-differ">Step 3 — Why they differ</a></li>
   <li><a href="#step-4-john-snows-cholera-did-by-hand" id="toc-step-4-john-snows-cholera-did-by-hand" class="nav-link" data-scroll-target="#step-4-john-snows-cholera-did-by-hand">Step 4 — John Snow’s cholera DiD by hand</a></li>
@@ -381,11 +391,11 @@ window.Quarto = {
 
 
 <div class="session-meta">
-<p><strong>Read before the meeting:</strong> <a href="https://mixtape-1ed.netlify.app/08-Panel_Data.html">Chapter 8 — Panel Data</a> and <a href="https://mixtape-1ed.netlify.app/09-Difference_in_Differences.html">Chapter 9, sections 9.1–9.3</a>. <strong>Data:</strong> <code>data/sasp_panel.dta</code>; John Snow’s cholera table (typed in). <strong>Code files:</strong> <a href="../code/session07.py"><code>code/session07.py</code></a> · <a href="../code/session07.R"><code>code/session07.R</code></a> · <a href="../slides/07-panel-did.html" target="_blank">Slides</a></p>
+<p><strong>Read before the meeting:</strong> <a href="https://mixtape-1ed.netlify.app/08-Panel_Data.html">Chapter 8 — Panel Data</a> and <a href="https://mixtape-1ed.netlify.app/09-Difference_in_Differences.html">Chapter 9, sections 9.1–9.3</a>. <strong>Data:</strong> <code>data/sasp_panel.dta</code> (Survey of Adult Service Providers, SASP); John Snow’s cholera table (typed in). <strong>Code files:</strong> <a href="../code/session07.py"><code>code/session07.py</code></a> · <a href="../code/session07.R"><code>code/session07.R</code></a> · <a href="../slides/07-panel-did.html" target="_blank">Slides</a></p>
 </div>
 <section id="learning-goals" class="level2">
 <h2 class="anchored" data-anchor-id="learning-goals">Learning goals</h2>
-<p>Participants should be able to write the fixed-effects model and explain what <em>within</em> variation is, implement FE three ways (dummies, demeaning, a panel routine) and show they agree, say what FE can and cannot fix (time-invariant versus time-varying unobservables), and compute a 2×2 difference-in-differences by hand, as a regression, and in terms of the parallel-trends assumption.</p>
+<p>Participants should be able to write the fixed-effects (FE) model and explain what <em>within</em> variation is, implement FE three ways (dummies, demeaning, a panel routine) and show they agree, say what FE can and cannot fix (time-invariant versus time-varying unobservables), and compute a 2×2 difference-in-differences (DiD) by hand, as a regression, and in terms of the parallel-trends assumption.</p>
 <div class="agenda">
 <table class="caption-top table">
 <colgroup>
@@ -401,7 +411,7 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td>0:00</td>
-<td>Recap: LATE and compliers</td>
+<td>Recap: the local average treatment effect and compliers</td>
 </tr>
 <tr class="even">
 <td>0:05</td>
@@ -409,7 +419,7 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td>0:20</td>
-<td>Walkthrough: SASP panel — pooled OLS vs FE on the price of unprotected sex; John Snow’s cholera DiD by hand and by regression</td>
+<td>Walkthrough: SASP panel — pooled regression vs fixed effects on the price of unprotected sex; John Snow’s cholera DiD by hand and by regression</td>
 </tr>
 <tr class="even">
 <td>0:45</td>
@@ -425,21 +435,61 @@ window.Quarto = {
 </section>
 <section id="key-ideas" class="level2">
 <h2 class="anchored" data-anchor-id="key-ideas">Key ideas</h2>
-<p><strong>The fixed-effects model.</strong> <span class="math inline">\(Y_{it} = \delta D_{it} + \mathbf{X}_{it}\beta + u_i + \varepsilon_{it}\)</span>. The unit effect <span class="math inline">\(u_i\)</span> can be correlated with <span class="math inline">\(D_{it}\)</span> in any way; FE removes it by comparing each unit <em>to itself</em> across time. Three equivalent implementations: unit dummies, demeaning every variable within unit, or first-differencing (with two periods).</p>
+<p><strong>The fixed-effects (FE) model.</strong> <span class="math inline">\(Y_{it} = \delta D_{it} + \mathbf{X}_{it}\beta + u_i + \varepsilon_{it}\)</span>. The unit effect <span class="math inline">\(u_i\)</span> can be correlated with <span class="math inline">\(D_{it}\)</span> in any way; FE removes it by comparing each unit <em>to itself</em> across time. Three equivalent implementations: unit dummies, demeaning every variable within unit, or first-differencing (with two periods).</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you watch the same people over time, you can ask “when <em>this</em> person’s treatment changed, did <em>this</em> person’s outcome change?” — and never compare one person to another at all. Everything that is permanently true about a person (their background, their baseline talent) cancels out, because it is the same in every period.</p>
+</div>
+</div>
 <p><strong>What FE needs.</strong> <em>Strict exogeneity</em>: <span class="math inline">\(E[\varepsilon_{it} \mid D_{i1}, \dots, D_{iT}, u_i] = 0\)</span>. Time-varying unobservables that move with <span class="math inline">\(D\)</span> are still a problem. Reverse causality and feedback (today’s shock affects tomorrow’s treatment) violate it. FE also needs <em>within</em> variation; a regressor that never changes for a unit is absorbed.</p>
-<p><strong>The SASP question.</strong> Sex workers charge more for unprotected sex. Is that a compensating differential for risk, or do higher-priced providers simply differ in ways that also make them more likely to offer it? The panel follows the same provider across clients, so provider-level unobservables drop out.</p>
-<p><strong>The 2×2 DiD.</strong> Two groups, two periods. <span class="math inline">\(\hat{\delta} = (\bar{Y}_{T,post} - \bar{Y}_{T,pre}) - (\bar{Y}_{C,post} - \bar{Y}_{C,pre})\)</span>. The identifying assumption is <em>parallel trends</em>: absent treatment, the treated group’s outcome would have moved by the same amount as the control group’s. It is a statement about a counterfactual and is untestable in the 2×2 case. As a regression: <span class="math inline">\(Y = \alpha + \beta\,\text{Treat} + \gamma\,\text{Post} + \delta\,(\text{Treat} \times \text{Post}) + e\)</span>.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Fixed effects handle the things about a unit that never change. They do nothing about things that change over time alongside the treatment — a provider who raises prices <em>and</em> starts offering a riskier service in the same month because business got slow. And they can’t estimate the effect of anything that never varies for a given unit, because there is no “before and after” to compare.</p>
+</div>
+</div>
+<p><strong>The SASP question.</strong> Sex workers charge more for unprotected sex. Is that a compensating differential for risk, or do higher-priced providers simply differ in ways that also make them more likely to offer it? The Survey of Adult Service Providers (SASP) panel follows the same provider across clients, so provider-level unobservables drop out.</p>
+<p><strong>The 2×2 difference-in-differences (DiD).</strong> Two groups, two periods. <span class="math inline">\(\hat{\delta} = (\bar{Y}_{T,post} - \bar{Y}_{T,pre}) - (\bar{Y}_{C,post} - \bar{Y}_{C,pre})\)</span>. The identifying assumption is <em>parallel trends</em>: absent treatment, the treated group’s outcome would have moved by the same amount as the control group’s. It is a statement about a counterfactual and is untestable in the 2×2 case. As a regression: <span class="math inline">\(Y = \alpha + \beta\,\text{Treat} + \gamma\,\text{Post} + \delta\,(\text{Treat} \times \text{Post}) + e\)</span>.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Before-and-after on its own is misleading, because things change over time for everyone. So take the treated group’s before-after change and subtract the control group’s before-after change; whatever is left over is the treatment. The hidden bet is that, without the treatment, both groups would have changed by the same amount — “parallel trends.”</p>
+</div>
+</div>
 <p><strong>John Snow.</strong> In 1854 London, the Lambeth water company had moved its intake upstream of the sewage; Southwark &amp; Vauxhall had not. Cholera deaths fell in Lambeth-served households and rose elsewhere. It is the first DiD and still one of the cleanest.</p>
 </section>
 <section id="walkthrough" class="level2">
 <h2 class="anchored" data-anchor-id="walkthrough">Walkthrough</h2>
-<section id="step-1-sasp-pooled-ols" class="level3">
-<h3 class="anchored" data-anchor-id="step-1-sasp-pooled-ols">Step 1 — SASP: pooled OLS</h3>
+<section id="step-1-sasp-pooled-ordinary-least-squares-ols" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-sasp-pooled-ordinary-least-squares-ols">Step 1 — SASP: pooled ordinary least squares (OLS)</h3>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> linearmodels.panel <span class="im">import</span> PanelOLS</span>
@@ -455,19 +505,30 @@ window.Quarto = {
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>pooled <span class="op">=</span> smf.ols(<span class="st">"lnw ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(timevar <span class="op">+</span> fixed), data<span class="op">=</span>sasp)<span class="op">\</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>            .fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: sasp[<span class="st">"id"</span>]})</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"pooled OLS, unsafe:"</span>, pooled.params[<span class="st">"unsafe"</span>].<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">" SE"</span>, pooled.bse[<span class="st">"unsafe"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>pooled OLS, unsafe: 0.002  SE 0.034</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(fixest)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sasp <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/sasp_panel.dta"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>timevar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"unsafe"</span>,<span class="st">"llength"</span>,<span class="st">"reg"</span>,<span class="st">"asq_cl"</span>,<span class="st">"appearance_cl"</span>,<span class="st">"provider_second"</span>,</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">"asian_cl"</span>,<span class="st">"black_cl"</span>,<span class="st">"hispanic_cl"</span>,<span class="st">"othrace_cl"</span>,<span class="st">"hot"</span>,<span class="st">"massage_cl"</span>,<span class="st">"age_cl"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>fixed   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"age"</span>,<span class="st">"asq"</span>,<span class="st">"bmi"</span>,<span class="st">"hispanic"</span>,<span class="st">"black"</span>,<span class="st">"other"</span>,<span class="st">"asian"</span>,<span class="st">"schooling"</span>,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>             <span class="st">"cohab"</span>,<span class="st">"married"</span>,<span class="st">"divorced"</span>,<span class="st">"separated"</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>f_pooled <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"lnw ~"</span>, <span class="fu">paste</span>(<span class="fu">c</span>(timevar, fixed), <span class="at">collapse =</span> <span class="st">" + "</span>)))</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>pooled <span class="ot">&lt;-</span> <span class="fu">feols</span>(f_pooled, <span class="at">data =</span> sasp, <span class="at">cluster =</span> <span class="sc">~</span>id)</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftable</span>(pooled)[<span class="st">"unsafe"</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(fixest)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>sasp <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/sasp_panel.dta"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>timevar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"unsafe"</span>,<span class="st">"llength"</span>,<span class="st">"reg"</span>,<span class="st">"asq_cl"</span>,<span class="st">"appearance_cl"</span>,<span class="st">"provider_second"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>             <span class="st">"asian_cl"</span>,<span class="st">"black_cl"</span>,<span class="st">"hispanic_cl"</span>,<span class="st">"othrace_cl"</span>,<span class="st">"hot"</span>,<span class="st">"massage_cl"</span>,<span class="st">"age_cl"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>fixed   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"age"</span>,<span class="st">"asq"</span>,<span class="st">"bmi"</span>,<span class="st">"hispanic"</span>,<span class="st">"black"</span>,<span class="st">"other"</span>,<span class="st">"asian"</span>,<span class="st">"schooling"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>             <span class="st">"cohab"</span>,<span class="st">"married"</span>,<span class="st">"divorced"</span>,<span class="st">"separated"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>sasp <span class="ot">&lt;-</span> sasp <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">"lnw"</span>, <span class="st">"id"</span>, timevar, fixed)))   <span class="co"># same sample as Python</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>f_pooled <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"lnw ~"</span>, <span class="fu">paste</span>(<span class="fu">c</span>(timevar, fixed), <span class="at">collapse =</span> <span class="st">" + "</span>)))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>pooled <span class="ot">&lt;-</span> <span class="fu">feols</span>(f_pooled, <span class="at">data =</span> sasp, <span class="at">cluster =</span> <span class="sc">~</span>id)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftable</span>(pooled)[<span class="st">"unsafe"</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Estimate  Std. Error     t value    Pr(&gt;|t|) 
+0.002022831 0.034227312 0.059099906 0.952898255 </code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -481,36 +542,64 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (a) demeaning by hand</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dm <span class="op">=</span> sasp.copy()</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> v <span class="kw">in</span> [<span class="st">"lnw"</span>] <span class="op">+</span> timevar:</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    dm[v] <span class="op">=</span> sasp[v] <span class="op">-</span> sasp.groupby(<span class="st">"id"</span>)[v].transform(<span class="st">"mean"</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>fe_dm <span class="op">=</span> smf.ols(<span class="st">"lnw ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(timevar), data<span class="op">=</span>dm)<span class="op">\</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>           .fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: dm[<span class="st">"id"</span>]})</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># (b) unit dummies (slow with many ids, but transparent)</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>fe_dummy <span class="op">=</span> smf.ols(<span class="st">"lnw ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(timevar) <span class="op">+</span> <span class="st">" + C(id)"</span>, data<span class="op">=</span>sasp).fit()</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># (c) PanelOLS</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> sasp.set_index([<span class="st">"id"</span>, <span class="st">"session"</span>])</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>fe_panel <span class="op">=</span> PanelOLS.from_formula(<span class="st">"lnw ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(timevar) <span class="op">+</span> <span class="st">" + EntityEffects"</span>, data<span class="op">=</span>p)<span class="op">\</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>             .fit(cov_type<span class="op">=</span><span class="st">"clustered"</span>, cluster_entity<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"demeaned:"</span>, fe_dm.params[<span class="st">"unsafe"</span>].<span class="bu">round</span>(<span class="dv">3</span>),</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      <span class="st">" dummies:"</span>, fe_dummy.params[<span class="st">"unsafe"</span>].<span class="bu">round</span>(<span class="dv">3</span>),</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>      <span class="st">" PanelOLS:"</span>, fe_panel.params[<span class="st">"unsafe"</span>].<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">" SE"</span>, fe_panel.std_errors[<span class="st">"unsafe"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (a) demeaning by hand</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>dm <span class="op">=</span> sasp.copy()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> v <span class="kw">in</span> [<span class="st">"lnw"</span>] <span class="op">+</span> timevar:</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    dm[v] <span class="op">=</span> sasp[v] <span class="op">-</span> sasp.groupby(<span class="st">"id"</span>)[v].transform(<span class="st">"mean"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>fe_dm <span class="op">=</span> smf.ols(<span class="st">"lnw ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(timevar), data<span class="op">=</span>dm)<span class="op">\</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>           .fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: dm[<span class="st">"id"</span>]})</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># (b) unit dummies (slow with many ids, but transparent)</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>fe_dummy <span class="op">=</span> smf.ols(<span class="st">"lnw ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(timevar) <span class="op">+</span> <span class="st">" + C(id)"</span>, data<span class="op">=</span>sasp).fit()</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># (c) PanelOLS</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> sasp.set_index([<span class="st">"id"</span>, <span class="st">"session"</span>])</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>fe_panel <span class="op">=</span> PanelOLS.from_formula(<span class="st">"lnw ~ "</span> <span class="op">+</span> <span class="st">" + "</span>.join(timevar) <span class="op">+</span> <span class="st">" + EntityEffects"</span>, data<span class="op">=</span>p)<span class="op">\</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>             .fit(cov_type<span class="op">=</span><span class="st">"clustered"</span>, cluster_entity<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"demeaned:"</span>, fe_dm.params[<span class="st">"unsafe"</span>].<span class="bu">round</span>(<span class="dv">3</span>),</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>      <span class="st">" dummies:"</span>, fe_dummy.params[<span class="st">"unsafe"</span>].<span class="bu">round</span>(<span class="dv">3</span>),</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>      <span class="st">" PanelOLS:"</span>, fe_panel.params[<span class="st">"unsafe"</span>].<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">" SE"</span>, fe_panel.std_errors[<span class="st">"unsafe"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>demeaned: 0.05  dummies: 0.05  PanelOLS: 0.05  SE 0.024</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>f_fe <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"lnw ~"</span>, <span class="fu">paste</span>(timevar, <span class="at">collapse =</span> <span class="st">" + "</span>), <span class="st">"| id"</span>))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fe <span class="ot">&lt;-</span> <span class="fu">feols</span>(f_fe, <span class="at">data =</span> sasp, <span class="at">cluster =</span> <span class="sc">~</span>id)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftable</span>(fe)[<span class="st">"unsafe"</span>, ]</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># the same thing by hand</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> sasp <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(id) <span class="sc">%&gt;%</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">"lnw"</span>, timevar)), <span class="sc">~</span> .x <span class="sc">-</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span> <span class="fu">ungroup</span>()</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"lnw ~"</span>, <span class="fu">paste</span>(timevar, <span class="at">collapse =</span> <span class="st">" + "</span>))), <span class="at">data =</span> dm))[<span class="st">"unsafe"</span>]</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">etable</span>(pooled, fe, <span class="at">keep =</span> <span class="st">"unsafe"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>f_fe <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"lnw ~"</span>, <span class="fu">paste</span>(timevar, <span class="at">collapse =</span> <span class="st">" + "</span>), <span class="st">"| id"</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fe <span class="ot">&lt;-</span> <span class="fu">feols</span>(f_fe, <span class="at">data =</span> sasp, <span class="at">cluster =</span> <span class="sc">~</span>id)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coeftable</span>(fe)[<span class="st">"unsafe"</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Estimate Std. Error    t value   Pr(&gt;|t|) 
+0.04975150 0.02449573 2.03102749 0.04287705 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the same thing by hand</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dm <span class="ot">&lt;-</span> sasp <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(id) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">all_of</span>(<span class="fu">c</span>(<span class="st">"lnw"</span>, timevar)), <span class="sc">~</span> .x <span class="sc">-</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span> <span class="fu">ungroup</span>()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">lm</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"lnw ~"</span>, <span class="fu">paste</span>(timevar, <span class="at">collapse =</span> <span class="st">" + "</span>))), <span class="at">data =</span> dm))[<span class="st">"unsafe"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   unsafe 
+0.0497515 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">etable</span>(pooled, fe, <span class="at">keep =</span> <span class="st">"unsafe"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                         pooled               fe
+Dependent Var.:             lnw              lnw
+                                                
+unsafe          0.0020 (0.0342) 0.0498* (0.0245)
+Fixed-Effects:  --------------- ----------------
+id                           No              Yes
+_______________ _______________ ________________
+S.E.: Clustered          by: id           by: id
+Observations              1,499            1,463
+R2                      0.28931          0.84423
+Within R2                    --          0.50028
+---
+Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -550,26 +639,40 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>snow <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"company"</span>: [<span class="st">"SV"</span>, <span class="st">"SV"</span>, <span class="st">"Lambeth"</span>, <span class="st">"Lambeth"</span>],</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"year"</span>:    [<span class="dv">1849</span>, <span class="dv">1854</span>, <span class="dv">1849</span>, <span class="dv">1854</span>],</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"deaths"</span>:  [<span class="dv">135</span>, <span class="dv">147</span>, <span class="dv">85</span>, <span class="dv">19</span>],</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>snow[<span class="st">"treat"</span>] <span class="op">=</span> (snow.company <span class="op">==</span> <span class="st">"Lambeth"</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>snow[<span class="st">"post"</span>]  <span class="op">=</span> (snow.year <span class="op">==</span> <span class="dv">1854</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>by_hand <span class="op">=</span> (<span class="dv">19</span> <span class="op">-</span> <span class="dv">85</span>) <span class="op">-</span> (<span class="dv">147</span> <span class="op">-</span> <span class="dv">135</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> smf.ols(<span class="st">"deaths ~ treat * post"</span>, data<span class="op">=</span>snow).fit()</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"by hand:"</span>, by_hand, <span class="st">"  regression:"</span>, reg.params[<span class="st">"treat:post"</span>].<span class="bu">round</span>(<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>snow <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"company"</span>: [<span class="st">"SV"</span>, <span class="st">"SV"</span>, <span class="st">"Lambeth"</span>, <span class="st">"Lambeth"</span>],</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"year"</span>:    [<span class="dv">1849</span>, <span class="dv">1854</span>, <span class="dv">1849</span>, <span class="dv">1854</span>],</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"deaths"</span>:  [<span class="dv">135</span>, <span class="dv">147</span>, <span class="dv">85</span>, <span class="dv">19</span>],</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>snow[<span class="st">"treat"</span>] <span class="op">=</span> (snow.company <span class="op">==</span> <span class="st">"Lambeth"</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>snow[<span class="st">"post"</span>]  <span class="op">=</span> (snow.year <span class="op">==</span> <span class="dv">1854</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>by_hand <span class="op">=</span> (<span class="dv">19</span> <span class="op">-</span> <span class="dv">85</span>) <span class="op">-</span> (<span class="dv">147</span> <span class="op">-</span> <span class="dv">135</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>reg <span class="op">=</span> smf.ols(<span class="st">"deaths ~ treat * post"</span>, data<span class="op">=</span>snow).fit()</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"by hand:"</span>, by_hand, <span class="st">"  regression:"</span>, reg.params[<span class="st">"treat:post"</span>].<span class="bu">round</span>(<span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>by hand: -78   regression: -78.0</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>snow <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">company =</span> <span class="fu">c</span>(<span class="st">"SV"</span>,<span class="st">"SV"</span>,<span class="st">"Lambeth"</span>,<span class="st">"Lambeth"</span>),</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">year =</span> <span class="fu">c</span>(<span class="dv">1849</span>, <span class="dv">1854</span>, <span class="dv">1849</span>, <span class="dv">1854</span>),</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">deaths =</span> <span class="fu">c</span>(<span class="dv">135</span>, <span class="dv">147</span>, <span class="dv">85</span>, <span class="dv">19</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">treat =</span> <span class="fu">as.integer</span>(company <span class="sc">==</span> <span class="st">"Lambeth"</span>), <span class="at">post =</span> <span class="fu">as.integer</span>(year <span class="sc">==</span> <span class="dv">1854</span>))</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>(<span class="dv">19</span> <span class="sc">-</span> <span class="dv">85</span>) <span class="sc">-</span> (<span class="dv">147</span> <span class="sc">-</span> <span class="dv">135</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">lm</span>(deaths <span class="sc">~</span> treat <span class="sc">*</span> post, <span class="at">data =</span> snow))[<span class="st">"treat:post"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>snow <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">company =</span> <span class="fu">c</span>(<span class="st">"SV"</span>,<span class="st">"SV"</span>,<span class="st">"Lambeth"</span>,<span class="st">"Lambeth"</span>),</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>               <span class="at">year =</span> <span class="fu">c</span>(<span class="dv">1849</span>, <span class="dv">1854</span>, <span class="dv">1849</span>, <span class="dv">1854</span>),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">deaths =</span> <span class="fu">c</span>(<span class="dv">135</span>, <span class="dv">147</span>, <span class="dv">85</span>, <span class="dv">19</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">treat =</span> <span class="fu">as.integer</span>(company <span class="sc">==</span> <span class="st">"Lambeth"</span>), <span class="at">post =</span> <span class="fu">as.integer</span>(year <span class="sc">==</span> <span class="dv">1854</span>))</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>(<span class="dv">19</span> <span class="sc">-</span> <span class="dv">85</span>) <span class="sc">-</span> (<span class="dv">147</span> <span class="sc">-</span> <span class="dv">135</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -78</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">lm</span>(deaths <span class="sc">~</span> treat <span class="sc">*</span> post, <span class="at">data =</span> snow))[<span class="st">"treat:post"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>treat:post 
+       -78 </code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -593,7 +696,7 @@ window.Quarto = {
 <section id="solutions" class="level2">
 <h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -602,16 +705,16 @@ Solutions (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>1.</strong> With <span class="math inline">\(T = 2\)</span>, demeaning and differencing use the same single within-unit contrast, so the estimates coincide exactly (≈ −0.06 in this small subsample — note it has the opposite sign from the full-panel FE estimate, a reminder that 68 providers is not much data). Adding a constant to the FD regression is the same as adding a period fixed effect to the FE model. For <span class="math inline">\(T &gt; 2\)</span> FE uses all pairwise contrasts weighted by the within-unit variance, while FD uses only adjacent-period contrasts; they differ, and FD is more robust when <span class="math inline">\(\varepsilon_{it}\)</span> is a random walk.</p>
 <p><strong>2.</strong> FE is biased because strict exogeneity fails: <span class="math inline">\(D_{it}\)</span> depends on <span class="math inline">\(\varepsilon_{i,t-1}\)</span>, and demeaning puts every period’s <span class="math inline">\(\varepsilon\)</span> into every period’s transformed error. The bias shrinks as <span class="math inline">\(T\)</span> grows (it is of order <span class="math inline">\(1/T\)</span>). First differencing <em>also</em> fails here, because <span class="math inline">\(\Delta D_{it}\)</span> depends on <span class="math inline">\(\varepsilon_{i,t-1}\)</span> which is in <span class="math inline">\(\Delta \varepsilon_{it}\)</span>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)<span class="op">;</span> N, T <span class="op">=</span> <span class="dv">500</span>, <span class="dv">5</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>e <span class="op">=</span> rng.normal(size<span class="op">=</span>(N, T))<span class="op">;</span> D <span class="op">=</span> np.zeros((N, T), <span class="bu">int</span>)<span class="op">;</span> D[:, <span class="dv">1</span>:] <span class="op">=</span> (e[:, :<span class="op">-</span><span class="dv">1</span>] <span class="op">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> rng.normal(size<span class="op">=</span>(N, <span class="dv">1</span>))<span class="op">;</span> Y <span class="op">=</span> <span class="dv">1</span> <span class="op">*</span> D <span class="op">+</span> u <span class="op">+</span> e</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">"y"</span>: Y.ravel(), <span class="st">"d"</span>: D.ravel(), <span class="st">"i"</span>: np.repeat(np.arange(N), T), <span class="st">"t"</span>: np.tile(np.arange(T), N)})</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>dm <span class="op">=</span> df.assign(y<span class="op">=</span>df.y <span class="op">-</span> df.groupby(<span class="st">"i"</span>).y.transform(<span class="st">"mean"</span>), d<span class="op">=</span>df.d <span class="op">-</span> df.groupby(<span class="st">"i"</span>).d.transform(<span class="st">"mean"</span>))</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(smf.ols(<span class="st">"y ~ d"</span>, dm).fit().params[<span class="st">"d"</span>])    <span class="co"># noticeably below 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)<span class="op">;</span> N, T <span class="op">=</span> <span class="dv">500</span>, <span class="dv">5</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>e <span class="op">=</span> rng.normal(size<span class="op">=</span>(N, T))<span class="op">;</span> D <span class="op">=</span> np.zeros((N, T), <span class="bu">int</span>)<span class="op">;</span> D[:, <span class="dv">1</span>:] <span class="op">=</span> (e[:, :<span class="op">-</span><span class="dv">1</span>] <span class="op">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> rng.normal(size<span class="op">=</span>(N, <span class="dv">1</span>))<span class="op">;</span> Y <span class="op">=</span> <span class="dv">1</span> <span class="op">*</span> D <span class="op">+</span> u <span class="op">+</span> e</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame({<span class="st">"y"</span>: Y.ravel(), <span class="st">"d"</span>: D.ravel(), <span class="st">"i"</span>: np.repeat(np.arange(N), T), <span class="st">"t"</span>: np.tile(np.arange(T), N)})</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>dm <span class="op">=</span> df.assign(y<span class="op">=</span>df.y <span class="op">-</span> df.groupby(<span class="st">"i"</span>).y.transform(<span class="st">"mean"</span>), d<span class="op">=</span>df.d <span class="op">-</span> df.groupby(<span class="st">"i"</span>).d.transform(<span class="st">"mean"</span>))</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(smf.ols(<span class="st">"y ~ d"</span>, dm).fit().params[<span class="st">"d"</span>])    <span class="co"># noticeably below 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>3.</strong> Chelsea vs S&amp;V: <span class="math inline">\((125 - 110) - (147 - 135) = 3\)</span>: two untreated companies moved in parallel. That is <em>evidence consistent with</em> parallel trends for the untreated, which makes the assumption more plausible for Lambeth. It does not test Lambeth’s own counterfactual trend, which is unobservable by construction.</p>
 </div>
 </div>
@@ -620,7 +723,7 @@ Solutions (click to expand)
 <section id="facilitator-notes" class="level2">
 <h2 class="anchored" data-anchor-id="facilitator-notes">Facilitator notes</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Facilitator notes (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -629,7 +732,7 @@ Facilitator notes (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Step 2 is the demo.</strong> Three implementations agreeing to three decimals is what makes “fixed effects” stop being a black box. Have one person run the demeaned version and another the panel routine, and compare live.</p>
 <p><strong>Misconception: FE controls for everything about the unit.</strong> Everything <em>fixed</em> about the unit. Say “time-invariant” every time you say “fixed effect” for the first ten minutes.</p>

@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b6ebfe76373a65f90f03e4eef39a9400.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-88736fcce7d974bfecfee082ef4a0c3c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -165,6 +165,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link" href="../facilitating.html"> 
 <span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../glossary.html"> 
+<span class="menu-text">Glossary</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -258,6 +262,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../facilitating.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Facilitating</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -384,7 +394,7 @@ window.Quarto = {
 </div>
 <section id="learning-goals" class="level2">
 <h2 class="anchored" data-anchor-id="learning-goals">Learning goals</h2>
-<p>Participants should be able to write the simple difference in outcomes as ATE + selection bias + heterogeneous-treatment-effect bias, explain why physical randomization zeroes out the last two terms, and run a Fisher randomization-inference test by hand: state the sharp null, enumerate (or sample) the assignments, and compute an exact <span class="math inline">\(p\)</span>-value.</p>
+<p>Participants should be able to write the simple difference in outcomes (SDO) as the average treatment effect (ATE) plus selection bias plus heterogeneous-treatment-effect bias, explain why physical randomization zeroes out the last two terms, and run a Fisher randomization-inference test by hand: state the sharp null, enumerate (or sample) the assignments, and compute an exact <span class="math inline">\(p\)</span>-value.</p>
 <div class="agenda">
 <table class="caption-top table">
 <colgroup>
@@ -404,7 +414,7 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td>0:05</td>
-<td>Concepts: potential outcomes, the switching equation, SDO decomposition, randomization inference</td>
+<td>Concepts: potential outcomes, the switching equation, the SDO decomposition, randomization inference (RI)</td>
 </tr>
 <tr class="odd">
 <td>0:20</td>
@@ -425,9 +435,61 @@ window.Quarto = {
 <section id="key-ideas" class="level2">
 <h2 class="anchored" data-anchor-id="key-ideas">Key ideas</h2>
 <p><strong>Potential outcomes.</strong> Each unit <span class="math inline">\(i\)</span> has <span class="math inline">\(Y_i^1\)</span> (outcome if treated) and <span class="math inline">\(Y_i^0\)</span> (if not). The individual treatment effect is <span class="math inline">\(\delta_i = Y_i^1 - Y_i^0\)</span>. We observe only <span class="math inline">\(Y_i = D_i Y_i^1 + (1 - D_i) Y_i^0\)</span> — the <em>switching equation</em>. The missing potential outcome is the <em>fundamental problem of causal inference</em>; every design in this book is a strategy for filling it in credibly.</p>
-<p><strong>Estimands.</strong> <span class="math inline">\(ATE = E[\delta]\)</span>; <span class="math inline">\(ATT = E[\delta \mid D = 1]\)</span>; <span class="math inline">\(ATU = E[\delta \mid D = 0]\)</span>. They differ whenever effects are heterogeneous and treatment is selected on them.</p>
-<p><strong>The decomposition.</strong> The simple difference in outcomes (SDO) is <span class="math display">\[E[Y \mid D=1] - E[Y \mid D=0] = ATE + \underbrace{E[Y^0 \mid D=1] - E[Y^0 \mid D=0]}_{\text{selection bias}} + \underbrace{(1-\pi)(ATT - ATU)}_{\text{HTE bias}}.\]</span> Selection bias: treated units would have done differently even untreated. HTE bias: treated units gain differently from treatment. Randomization makes <span class="math inline">\(D\)</span> independent of <span class="math inline">\((Y^0, Y^1)\)</span>, so both bias terms are zero and the SDO is the ATE.</p>
-<p><strong>Randomization inference.</strong> Fisher’s sharp null, <span class="math inline">\(H_0: \delta_i = 0\)</span> for every <span class="math inline">\(i\)</span>, fills in <em>every</em> missing potential outcome (they equal the observed ones). Under it, you can recompute the test statistic for every possible assignment and get an exact <span class="math inline">\(p\)</span>-value with no distributional assumptions and no appeal to large samples. It is the right tool for small experiments and a useful stress test for any design.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For any one person there are two possible futures — with the treatment and without — and you only get to watch one. The effect on that person is the gap between the two futures, which you can never see directly. Every method in this book is a trick for estimating the future you didn’t get to watch, using other people who did.</p>
+</div>
+</div>
+<p><strong>Estimands.</strong> The average treatment effect, <span class="math inline">\(ATE = E[\delta]\)</span>, averages over everyone. The average treatment effect on the treated, <span class="math inline">\(ATT = E[\delta \mid D = 1]\)</span>, averages over the units that actually got treated. The average treatment effect on the untreated, <span class="math inline">\(ATU = E[\delta \mid D = 0]\)</span>, averages over those that did not. They differ whenever effects are heterogeneous and treatment is selected on them.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>ATE: “How much would it help on average if we gave it to everyone?” ATT: “How much did it help the people who actually got it?” ATU: “How much would it have helped the people who didn’t?” These can be very different numbers — a job-training program might help the people who sign up (ATT) a lot more than it would help a random person (ATE).</p>
+</div>
+</div>
+<p><strong>The decomposition.</strong> The simple difference in outcomes (SDO) — the treated group’s average minus the untreated group’s — is <span class="math display">\[E[Y \mid D=1] - E[Y \mid D=0] = ATE + \underbrace{E[Y^0 \mid D=1] - E[Y^0 \mid D=0]}_{\text{selection bias}} + \underbrace{(1-\pi)(ATT - ATU)}_{\text{heterogeneous-effect (HTE) bias}}.\]</span> Selection bias: treated units would have done differently even untreated. HTE bias: treated units gain differently from treatment. Randomization makes <span class="math inline">\(D\)</span> independent of <span class="math inline">\((Y^0, Y^1)\)</span>, so both bias terms are zero and the SDO is the ATE.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Comparing treated and untreated averages gives you the true effect plus two kinds of junk. Junk #1 (selection bias): the treated group would have done differently <em>anyway</em> — healthier people take the gym membership. Junk #2 (heterogeneous-effect bias): the treatment helps the treated group by a different amount than it would help everyone else. A coin flip deciding who gets treated makes both junk terms average out to zero.</p>
+</div>
+</div>
+<p><strong>Randomization inference (RI).</strong> Fisher’s sharp null, <span class="math inline">\(H_0: \delta_i = 0\)</span> for every <span class="math inline">\(i\)</span>, fills in <em>every</em> missing potential outcome (they equal the observed ones). Under it, you can recompute the test statistic for every possible assignment and get an exact <span class="math inline">\(p\)</span>-value with no distributional assumptions and no appeal to large samples. It is the right tool for small experiments and a useful stress test for any design.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ask: “If the treatment did absolutely nothing to anyone, how often would a random reshuffle of who got treated produce a gap as big as the one I found?” You answer by actually doing the reshuffles — hundreds or thousands of them — and counting. If big gaps show up in 40% of reshuffles, your result is unremarkable; if they show up in 0.1%, it is not.</p>
+</div>
+</div>
 </section>
 <section id="walkthrough" class="level2">
 <h2 class="anchored" data-anchor-id="walkthrough">Walkthrough</h2>
@@ -438,23 +500,59 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>yule <span class="op">=</span> pd.read_stata(<span class="st">"data/yule.dta"</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(smf.ols(<span class="st">"paup ~ outrelief + old + pop"</span>, data<span class="op">=</span>yule).fit().summary().tables[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept     63.1877     27.144      2.328      0.027       7.586     118.789
+outrelief      0.7521      0.135      5.572      0.000       0.476       1.029
+old            0.0556      0.223      0.249      0.805      -0.402       0.513
+pop           -0.3107      0.067     -4.648      0.000      -0.448      -0.174
+==============================================================================</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(estimatr)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>yule <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/yule.dta"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(paup <span class="sc">~</span> outrelief <span class="sc">+</span> old <span class="sc">+</span> pop, <span class="at">data =</span> yule) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(estimatr)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>yule <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/yule.dta"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(paup <span class="sc">~</span> outrelief <span class="sc">+</span> old <span class="sc">+</span> pop, <span class="at">data =</span> yule) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = paup ~ outrelief + old + pop, data = yule)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-17.475  -5.311  -1.829   3.132  25.335 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 63.18774   27.14388   2.328   0.0274 *  
+outrelief    0.75209    0.13499   5.572 5.83e-06 ***
+old          0.05560    0.22336   0.249   0.8052    
+pop         -0.31074    0.06685  -4.648 7.25e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 9.547 on 28 degrees of freedom
+Multiple R-squared:  0.6972,    Adjusted R-squared:  0.6647 
+F-statistic: 21.49 on 3 and 28 DF,  p-value: 2.001e-07</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="expect">
-<p><code>outrelief</code> ≈ <strong>0.75</strong>: a 10% rise in out-relief is associated with a 7.5% rise in pauperism. Ask: what is the obvious reverse-causation story, and what would a DAG for this look like? (Hint: local poverty shocks drive both.)</p>
+<p><code>outrelief</code> ≈ <strong>0.75</strong>: a 10% rise in out-relief is associated with a 7.5% rise in pauperism. Ask: what is the obvious reverse-causation story, and what would a directed acyclic graph (DAG) for this look like? (Hint: local poverty shocks drive both.)</p>
 </div>
 </section>
 <section id="step-2-thornton-2008-a-real-experiment" class="level3">
@@ -464,23 +562,54 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>hiv <span class="op">=</span> pd.read_stata(<span class="st">"data/thornton_hiv.dta"</span>).dropna(subset<span class="op">=</span>[<span class="st">"got"</span>, <span class="st">"any"</span>])</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(hiv.groupby(<span class="st">"any"</span>)[<span class="st">"got"</span>].mean().<span class="bu">round</span>(<span class="dv">3</span>))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> smf.ols(<span class="st">"got ~ any"</span>, data<span class="op">=</span>hiv).fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>,</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                                        cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: hiv[<span class="st">"villnum"</span>]})</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m.summary().tables[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>hiv <span class="op">=</span> pd.read_stata(<span class="st">"data/thornton_hiv.dta"</span>).dropna(subset<span class="op">=</span>[<span class="st">"got"</span>, <span class="st">"any"</span>])</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(hiv.groupby(<span class="st">"any"</span>)[<span class="st">"got"</span>].mean().<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>any
+0.0    0.339
+1.0    0.789
+Name: got, dtype: float64</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> smf.ols(<span class="st">"got ~ any"</span>, data<span class="op">=</span>hiv).fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>                                        cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: hiv[<span class="st">"villnum"</span>]})</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m.summary().tables[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>==============================================================================
+                 coef    std err          z      P&gt;|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      0.3387      0.024     14.300      0.000       0.292       0.385
+any            0.4506      0.023     19.796      0.000       0.406       0.495
+==============================================================================</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>hiv <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/thornton_hiv.dta"</span>) <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(got, any)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>hiv <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(any) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">got =</span> <span class="fu">mean</span>(got), <span class="at">n =</span> <span class="fu">n</span>())</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lm_robust</span>(got <span class="sc">~</span> any, <span class="at">data =</span> hiv, <span class="at">clusters =</span> villnum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>hiv <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/thornton_hiv.dta"</span>) <span class="sc">%&gt;%</span> <span class="fu">drop_na</span>(got, any)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>hiv <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(any) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">got =</span> <span class="fu">mean</span>(got), <span class="at">n =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 x 3
+    any   got     n
+  &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+1     0 0.339   623
+2     1 0.789  2211</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm_robust</span>(got <span class="sc">~</span> any, <span class="at">data =</span> hiv, <span class="at">clusters =</span> villnum)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             Estimate Std. Error  t value     Pr(&gt;|t|)  CI Lower  CI Upper
+(Intercept) 0.3386838 0.02377738 14.24395 2.428459e-20 0.2910603 0.3863073
+any         0.4519823 0.02279032 19.83220 9.432351e-29 0.4064377 0.4975269
+                  DF
+(Intercept) 56.44608
+any         62.87586</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="expect">
-<p>34% of the no-incentive group learned their status; <strong>79%</strong> of the incentive group did. The difference, <strong>0.45</strong> (SE ≈ 0.02 clustered by village), is the ATE because <code>any</code> was randomized. Note how little work the regression is doing; the design did it.</p>
+<p>34% of the no-incentive group learned their status; <strong>79%</strong> of the incentive group did. The difference, <strong>0.45</strong> (standard error, SE, ≈ 0.02 clustered by village), is the ATE because <code>any</code> was randomized. Note how little work the regression is doing; the design did it.</p>
 </div>
 </section>
 <section id="step-3-fishers-exact-p-value-on-the-8-unit-toy-data" class="level3">
@@ -490,31 +619,42 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> itertools</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ri <span class="op">=</span> pd.read_stata(<span class="st">"data/ri.dta"</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> ri[<span class="st">"y"</span>].to_numpy()</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> ri[<span class="st">"d"</span>].to_numpy()</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>obs <span class="op">=</span> y[d <span class="op">==</span> <span class="dv">1</span>].mean() <span class="op">-</span> y[d <span class="op">==</span> <span class="dv">0</span>].mean()</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> []</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> treated <span class="kw">in</span> itertools.combinations(<span class="bu">range</span>(<span class="dv">8</span>), <span class="dv">4</span>):</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    mask <span class="op">=</span> np.zeros(<span class="dv">8</span>, dtype<span class="op">=</span><span class="bu">bool</span>)<span class="op">;</span> mask[<span class="bu">list</span>(treated)] <span class="op">=</span> <span class="va">True</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    stats.append(y[mask].mean() <span class="op">-</span> y[<span class="op">~</span>mask].mean())</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> np.array(stats)</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> (np.<span class="bu">abs</span>(stats) <span class="op">&gt;=</span> <span class="bu">abs</span>(obs)).mean()</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"observed diff = </span><span class="sc">{</span>obs<span class="sc">:.2f}</span><span class="ss">, exact two-sided p = </span><span class="sc">{</span>p<span class="sc">:.3f}</span><span class="ss"> over </span><span class="sc">{</span><span class="bu">len</span>(stats)<span class="sc">}</span><span class="ss"> assignments"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> itertools</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>ri <span class="op">=</span> pd.read_stata(<span class="st">"data/ri.dta"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> ri[<span class="st">"y"</span>].to_numpy()</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> ri[<span class="st">"d"</span>].to_numpy()</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>obs <span class="op">=</span> y[d <span class="op">==</span> <span class="dv">1</span>].mean() <span class="op">-</span> y[d <span class="op">==</span> <span class="dv">0</span>].mean()</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> []</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> treated <span class="kw">in</span> itertools.combinations(<span class="bu">range</span>(<span class="dv">8</span>), <span class="dv">4</span>):</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    mask <span class="op">=</span> np.zeros(<span class="dv">8</span>, dtype<span class="op">=</span><span class="bu">bool</span>)<span class="op">;</span> mask[<span class="bu">list</span>(treated)] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    stats.append(y[mask].mean() <span class="op">-</span> y[<span class="op">~</span>mask].mean())</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>stats <span class="op">=</span> np.array(stats)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> (np.<span class="bu">abs</span>(stats) <span class="op">&gt;=</span> <span class="bu">abs</span>(obs)).mean()</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"observed diff = </span><span class="sc">{</span>obs<span class="sc">:.2f}</span><span class="ss">, exact two-sided p = </span><span class="sc">{</span>p<span class="sc">:.3f}</span><span class="ss"> over </span><span class="sc">{</span><span class="bu">len</span>(stats)<span class="sc">}</span><span class="ss"> assignments"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>observed diff = 1.00, exact two-sided p = 0.857 over 70 assignments</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ri <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/ri.dta"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> ri<span class="sc">$</span>y; d <span class="ot">&lt;-</span> ri<span class="sc">$</span>d</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>obs <span class="ot">&lt;-</span> <span class="fu">mean</span>(y[d <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(y[d <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>combos <span class="ot">&lt;-</span> <span class="fu">combn</span>(<span class="dv">8</span>, <span class="dv">4</span>)</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">apply</span>(combos, <span class="dv">2</span>, <span class="cf">function</span>(idx) <span class="fu">mean</span>(y[idx]) <span class="sc">-</span> <span class="fu">mean</span>(y[<span class="sc">-</span>idx]))</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(stats) <span class="sc">&gt;=</span> <span class="fu">abs</span>(obs))</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">observed =</span> obs, <span class="at">p_value =</span> p, <span class="at">n_assignments =</span> <span class="fu">ncol</span>(combos))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>ri <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/ri.dta"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> ri<span class="sc">$</span>y; d <span class="ot">&lt;-</span> ri<span class="sc">$</span>d</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>obs <span class="ot">&lt;-</span> <span class="fu">mean</span>(y[d <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(y[d <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>combos <span class="ot">&lt;-</span> <span class="fu">combn</span>(<span class="dv">8</span>, <span class="dv">4</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>stats <span class="ot">&lt;-</span> <span class="fu">apply</span>(combos, <span class="dv">2</span>, <span class="cf">function</span>(idx) <span class="fu">mean</span>(y[idx]) <span class="sc">-</span> <span class="fu">mean</span>(y[<span class="sc">-</span>idx]))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(stats) <span class="sc">&gt;=</span> <span class="fu">abs</span>(obs))</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">observed =</span> obs, <span class="at">p_value =</span> p, <span class="at">n_assignments =</span> <span class="fu">ncol</span>(combos))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     observed       p_value n_assignments 
+    1.0000000     0.8571429    70.0000000 </code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -529,30 +669,53 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">1</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>got <span class="op">=</span> hiv[<span class="st">"got"</span>].to_numpy()<span class="op">;</span> anyv <span class="op">=</span> hiv[<span class="st">"any"</span>].to_numpy()</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>obs <span class="op">=</span> got[anyv <span class="op">==</span> <span class="dv">1</span>].mean() <span class="op">-</span> got[anyv <span class="op">==</span> <span class="dv">0</span>].mean()</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>perm <span class="op">=</span> np.empty(<span class="dv">1000</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> rng.permutation(anyv)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    perm[i] <span class="op">=</span> got[a <span class="op">==</span> <span class="dv">1</span>].mean() <span class="op">-</span> got[a <span class="op">==</span> <span class="dv">0</span>].mean()</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"observed:"</span>, <span class="bu">round</span>(obs, <span class="dv">3</span>))</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"largest |placebo| diff:"</span>, np.<span class="bu">abs</span>(perm).<span class="bu">max</span>().<span class="bu">round</span>(<span class="dv">3</span>))</span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"p-value:"</span>, (np.<span class="bu">abs</span>(perm) <span class="op">&gt;=</span> <span class="bu">abs</span>(obs)).mean())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">1</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>got <span class="op">=</span> hiv[<span class="st">"got"</span>].to_numpy()<span class="op">;</span> anyv <span class="op">=</span> hiv[<span class="st">"any"</span>].to_numpy()</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>obs <span class="op">=</span> got[anyv <span class="op">==</span> <span class="dv">1</span>].mean() <span class="op">-</span> got[anyv <span class="op">==</span> <span class="dv">0</span>].mean()</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>perm <span class="op">=</span> np.empty(<span class="dv">1000</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> rng.permutation(anyv)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    perm[i] <span class="op">=</span> got[a <span class="op">==</span> <span class="dv">1</span>].mean() <span class="op">-</span> got[a <span class="op">==</span> <span class="dv">0</span>].mean()</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"observed:"</span>, <span class="bu">round</span>(obs, <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>observed: 0.451</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"largest |placebo| diff:"</span>, np.<span class="bu">abs</span>(perm).<span class="bu">max</span>().<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>largest |placebo| diff: 0.068</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"p-value:"</span>, (np.<span class="bu">abs</span>(perm) <span class="op">&gt;=</span> <span class="bu">abs</span>(obs)).mean())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>p-value: 0.0</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>obs <span class="ot">&lt;-</span> <span class="fu">with</span>(hiv, <span class="fu">mean</span>(got[any <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(got[any <span class="sc">==</span> <span class="dv">0</span>]))</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>perm <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="fu">sample</span>(hiv<span class="sc">$</span>any)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(hiv<span class="sc">$</span>got[a <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(hiv<span class="sc">$</span>got[a <span class="sc">==</span> <span class="dv">0</span>])</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">observed =</span> obs, <span class="at">max_placebo =</span> <span class="fu">max</span>(<span class="fu">abs</span>(perm)), <span class="at">p =</span> <span class="fu">mean</span>(<span class="fu">abs</span>(perm) <span class="sc">&gt;=</span> <span class="fu">abs</span>(obs)))</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">tibble</span>(perm), <span class="fu">aes</span>(perm)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>) <span class="sc">+</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> obs, <span class="at">colour =</span> <span class="st">"red"</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>obs <span class="ot">&lt;-</span> <span class="fu">with</span>(hiv, <span class="fu">mean</span>(got[any <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(got[any <span class="sc">==</span> <span class="dv">0</span>]))</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>perm <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, {</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="fu">sample</span>(hiv<span class="sc">$</span>any)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(hiv<span class="sc">$</span>got[a <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(hiv<span class="sc">$</span>got[a <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">observed =</span> obs, <span class="at">max_placebo =</span> <span class="fu">max</span>(<span class="fu">abs</span>(perm)), <span class="at">p =</span> <span class="fu">mean</span>(<span class="fu">abs</span>(perm) <span class="sc">&gt;=</span> <span class="fu">abs</span>(obs)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   observed max_placebo           p 
+ 0.45055185  0.06791811  0.00000000 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">tibble</span>(perm), <span class="fu">aes</span>(perm)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">40</span>) <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> obs, <span class="at">colour =</span> <span class="st">"red"</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03-potential-outcomes_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -572,7 +735,7 @@ window.Quarto = {
 <section id="solutions" class="level2">
 <h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -581,17 +744,17 @@ Solutions (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>1.</strong></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)<span class="op">;</span> N <span class="op">=</span> <span class="dv">10_000</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> rng.normal(<span class="dv">10</span>, <span class="dv">2</span>, N)<span class="op">;</span> delta <span class="op">=</span> rng.normal(<span class="dv">2</span>, <span class="dv">1</span>, N)<span class="op">;</span> y1 <span class="op">=</span> y0 <span class="op">+</span> delta</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> (delta <span class="op">&gt;</span> <span class="fl">2.3</span>).astype(<span class="bu">int</span>)<span class="op">;</span> Y <span class="op">=</span> np.where(D <span class="op">==</span> <span class="dv">1</span>, y1, y0)</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>ATE <span class="op">=</span> delta.mean()<span class="op">;</span> ATT <span class="op">=</span> delta[D<span class="op">==</span><span class="dv">1</span>].mean()<span class="op">;</span> ATU <span class="op">=</span> delta[D<span class="op">==</span><span class="dv">0</span>].mean()</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>SDO <span class="op">=</span> Y[D<span class="op">==</span><span class="dv">1</span>].mean() <span class="op">-</span> Y[D<span class="op">==</span><span class="dv">0</span>].mean()</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>sel <span class="op">=</span> y0[D<span class="op">==</span><span class="dv">1</span>].mean() <span class="op">-</span> y0[D<span class="op">==</span><span class="dv">0</span>].mean()</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>pi <span class="op">=</span> D.mean()</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(SDO, ATE <span class="op">+</span> sel <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>pi)<span class="op">*</span>(ATT<span class="op">-</span>ATU))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)<span class="op">;</span> N <span class="op">=</span> <span class="dv">10_000</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> rng.normal(<span class="dv">10</span>, <span class="dv">2</span>, N)<span class="op">;</span> delta <span class="op">=</span> rng.normal(<span class="dv">2</span>, <span class="dv">1</span>, N)<span class="op">;</span> y1 <span class="op">=</span> y0 <span class="op">+</span> delta</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> (delta <span class="op">&gt;</span> <span class="fl">2.3</span>).astype(<span class="bu">int</span>)<span class="op">;</span> Y <span class="op">=</span> np.where(D <span class="op">==</span> <span class="dv">1</span>, y1, y0)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>ATE <span class="op">=</span> delta.mean()<span class="op">;</span> ATT <span class="op">=</span> delta[D<span class="op">==</span><span class="dv">1</span>].mean()<span class="op">;</span> ATU <span class="op">=</span> delta[D<span class="op">==</span><span class="dv">0</span>].mean()</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>SDO <span class="op">=</span> Y[D<span class="op">==</span><span class="dv">1</span>].mean() <span class="op">-</span> Y[D<span class="op">==</span><span class="dv">0</span>].mean()</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>sel <span class="op">=</span> y0[D<span class="op">==</span><span class="dv">1</span>].mean() <span class="op">-</span> y0[D<span class="op">==</span><span class="dv">0</span>].mean()</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>pi <span class="op">=</span> D.mean()</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(SDO, ATE <span class="op">+</span> sel <span class="op">+</span> (<span class="dv">1</span><span class="op">-</span>pi)<span class="op">*</span>(ATT<span class="op">-</span>ATU))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Selection bias is ≈ 0 here (selection is on <span class="math inline">\(\delta\)</span>, not on <span class="math inline">\(Y^0\)</span>), but HTE bias is large: ATT ≈ 3.0 vs ATU ≈ 1.4, so the SDO (≈ 3.0) overstates the ATE (= 2.0) by about 1.</p>
 <p><strong>2.</strong> The median-difference <span class="math inline">\(p\)</span>-value on 8 units is similar (≈ 0.9). KS is more sensitive to distributional differences beyond location; use it when treatment might change spread or shape rather than the mean.</p>
 <p><strong>3.</strong> Collection rates jump from 34% at zero incentive to about 67% for the smallest positive amounts (under half a dollar), then rise to about 85% for amounts over a dollar. Most of the 0.45 ATE is the extensive margin; individual <span class="math inline">\(\delta_i\)</span> clearly differ (for people who would have collected anyway, <span class="math inline">\(\delta_i = 0\)</span>).</p>
@@ -602,7 +765,7 @@ Solutions (click to expand)
 <section id="facilitator-notes" class="level2">
 <h2 class="anchored" data-anchor-id="facilitator-notes">Facilitator notes</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Facilitator notes (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -611,7 +774,7 @@ Facilitator notes (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Spend the time on the decomposition.</strong> Write it on the board with the three terms labeled and keep pointing at it for the rest of the series; every later design is a story about which term it kills.</p>
 <p><strong>Misconception: “randomization makes individuals comparable.”</strong> It makes <em>groups</em> comparable in expectation. Use Step 3 to show that in a tiny sample randomization has done very little.</p>

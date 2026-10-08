@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b6ebfe76373a65f90f03e4eef39a9400.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-88736fcce7d974bfecfee082ef4a0c3c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -165,6 +165,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link" href="../facilitating.html"> 
 <span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../glossary.html"> 
+<span class="menu-text">Glossary</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -258,6 +262,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../facilitating.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Facilitating</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -385,7 +395,7 @@ window.Quarto = {
 </div>
 <section id="learning-goals" class="level2">
 <h2 class="anchored" data-anchor-id="learning-goals">Learning goals</h2>
-<p>Participants should be able to explain what continuity of the potential-outcome CEFs at the cutoff buys, estimate a sharp RD with global and local polynomials and see how much the answer depends on those choices, run the two standard validity checks (covariate smoothness and the McCrary density test), and say what the estimand is — a <em>local</em> effect at the threshold — and why that is sometimes exactly what you want.</p>
+<p>Participants should be able to explain what continuity of the potential outcomes at the cutoff buys, estimate a sharp regression discontinuity (RD) with global and local polynomials and see how much the answer depends on those choices, run the two standard validity checks (covariate smoothness and the McCrary density test), and say what the estimand is — a <em>local</em> effect at the threshold — and why that is sometimes exactly what you want.</p>
 <div class="agenda">
 <table class="caption-top table">
 <colgroup>
@@ -401,7 +411,7 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td>0:00</td>
-<td>Recap: CIA and common support</td>
+<td>Recap: conditional independence and common support</td>
 </tr>
 <tr class="even">
 <td>0:05</td>
@@ -417,7 +427,7 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td>0:55</td>
-<td>Assign exercises; preview IV</td>
+<td>Assign exercises; preview instrumental variables (IV)</td>
 </tr>
 </tbody>
 </table>
@@ -425,11 +435,63 @@ window.Quarto = {
 </section>
 <section id="key-ideas" class="level2">
 <h2 class="anchored" data-anchor-id="key-ideas">Key ideas</h2>
-<p><strong>The design.</strong> Treatment <span class="math inline">\(D\)</span> is a deterministic function of a running variable <span class="math inline">\(X\)</span> relative to a cutoff <span class="math inline">\(c_0\)</span>: <span class="math inline">\(D = 1[X \geq c_0]\)</span> (sharp) or jumps in <em>probability</em> there (fuzzy). Units just above and just below the cutoff differ in treatment but, if nothing <em>else</em> jumps at <span class="math inline">\(c_0\)</span>, in nothing else.</p>
+<p><strong>The design.</strong> Treatment <span class="math inline">\(D\)</span> is a deterministic function of a running variable <span class="math inline">\(X\)</span> relative to a cutoff <span class="math inline">\(c_0\)</span>: <span class="math inline">\(D = 1[X \geq c_0]\)</span> (sharp regression discontinuity) or jumps in <em>probability</em> there (fuzzy). Units just above and just below the cutoff differ in treatment but, if nothing <em>else</em> jumps at <span class="math inline">\(c_0\)</span>, in nothing else.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Some rule says: score 50 or above and you get the treatment, 49 and you don’t. A person at 49 and a person at 50 are practically identical — a little luck on the test is all that separates them — yet one got treated and one didn’t. Compare those two groups and you have something close to an experiment, at least near the line.</p>
+</div>
+</div>
 <p><strong>Identification by continuity.</strong> <span class="math inline">\(E[Y^0 \mid X]\)</span> and <span class="math inline">\(E[Y^1 \mid X]\)</span> must be continuous at <span class="math inline">\(c_0\)</span>. Then <span class="math display">\[\delta_{SRD} = \lim_{x \downarrow c_0} E[Y \mid X = x] - \lim_{x \uparrow c_0} E[Y \mid X = x].\]</span> No conditional-independence assumption, no need to observe confounders: everything that matters is a smooth function of <span class="math inline">\(X\)</span> except the treatment.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The only assumption is that nothing <em>else</em> changes abruptly at the cutoff. People’s background characteristics, motivation, whatever — all of it should drift smoothly across the line. If the outcome jumps at the line anyway, the treatment did it.</p>
+</div>
+</div>
 <p><strong>Estimation is a bias–variance problem.</strong> You need the two limits. Global polynomials use all the data but let far-away observations drive the fit at the cutoff (Gelman and Imbens’s warning against high-order polynomials). Local linear regression within a bandwidth <span class="math inline">\(h\)</span> is the modern default, with <code>rdrobust</code> choosing <span class="math inline">\(h\)</span> and correcting for bias. The honest report shows several.</p>
-<p><strong>Threats and checks.</strong> If units can precisely manipulate <span class="math inline">\(X\)</span> (sorting just above a test-score cutoff), continuity fails. Check that the <em>density</em> of <span class="math inline">\(X\)</span> is smooth at <span class="math inline">\(c_0\)</span> (McCrary) and that pre-determined covariates do not jump there. Fuzzy RD is IV with the cutoff as instrument, which is next session’s topic.</p>
-<p><strong>The LMB question.</strong> Do close elections reveal whether politicians <em>converge</em> to the median voter (Downs) or <em>diverge</em> to their party’s preferences? In a 50–50 district the party barely won is as-good-as random; if the winner’s voting score jumps at the 50% line, parties do not converge.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You want to know the height of the two curves exactly at the cutoff. Use lots of data far from the cutoff and you get a precise but possibly wrong answer, because far-away points bend the curve. Use only data close to the cutoff and you get the right shape but a noisier estimate. The bandwidth is that dial; show more than one setting.</p>
+</div>
+</div>
+<p><strong>Threats and checks.</strong> If units can precisely manipulate <span class="math inline">\(X\)</span> (sorting just above a test-score cutoff), continuity fails. Check that the <em>density</em> of <span class="math inline">\(X\)</span> is smooth at <span class="math inline">\(c_0\)</span> (McCrary) and that pre-determined covariates do not jump there. Fuzzy RD is instrumental variables with the cutoff as instrument, which is next session’s topic.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The design breaks if people can nudge themselves across the line — retaking a test until they pass, say. The tell-tale sign is a pile-up of observations just on the favorable side of the cutoff. Also check that things decided <em>before</em> treatment (age, prior income) don’t jump at the line; if they do, something other than the rule is going on.</p>
+</div>
+</div>
+<p><strong>The Lee–Moretti–Butler (LMB) question.</strong> Do close elections reveal whether politicians <em>converge</em> to the median voter (Downs) or <em>diverge</em> to their party’s preferences? In a 50–50 district the party that barely won is as-good-as random; if the winner’s voting score jumps at the 50% line, parties do not converge.</p>
 </section>
 <section id="walkthrough" class="level2">
 <h2 class="anchored" data-anchor-id="walkthrough">Walkthrough</h2>
@@ -439,7 +501,8 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -454,9 +517,18 @@ window.Quarto = {
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"Democratic vote share, previous election (binned)"</span>)</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"ADA score of the representative"</span>)</span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05-rdd_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(estimatr)</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(estimatr)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>lmb <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/close_elections_lmb.dta"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(score, lagdemvoteshare, lagdemocrat) <span class="sc">%&gt;%</span></span>
@@ -466,6 +538,14 @@ window.Quarto = {
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bin =</span> <span class="fu">cut</span>(lagdemvoteshare, <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.02</span>))) <span class="sc">%&gt;%</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(bin) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">score =</span> <span class="fu">mean</span>(score), <span class="at">x =</span> <span class="fu">mean</span>(lagdemvoteshare)) <span class="sc">%&gt;%</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(x, score)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05-rdd_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -479,25 +559,48 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit(df, formula):</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit(df, formula):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> smf.ols(formula, data<span class="op">=</span>df).fit(cov_type<span class="op">=</span><span class="st">"cluster"</span>, cov_kwds<span class="op">=</span>{<span class="st">"groups"</span>: df[<span class="st">"id"</span>]})</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>all_ <span class="op">=</span> fit(lmb, <span class="st">"score ~ lagdemocrat"</span>)</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>close <span class="op">=</span> fit(lmb[(lmb.lagdemvoteshare <span class="op">&gt;</span> <span class="fl">0.48</span>) <span class="op">&amp;</span> (lmb.lagdemvoteshare <span class="op">&lt;</span> <span class="fl">0.52</span>)], <span class="st">"score ~ lagdemocrat"</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"all elections:  "</span>, all_.params[<span class="st">"lagdemocrat"</span>].<span class="bu">round</span>(<span class="dv">2</span>), all_.bse[<span class="st">"lagdemocrat"</span>].<span class="bu">round</span>(<span class="dv">2</span>))</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"within ±2 points:"</span>, close.params[<span class="st">"lagdemocrat"</span>].<span class="bu">round</span>(<span class="dv">2</span>), close.bse[<span class="st">"lagdemocrat"</span>].<span class="bu">round</span>(<span class="dv">2</span>),</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>      <span class="st">" n ="</span>, <span class="bu">int</span>(close.nobs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"all elections:  "</span>, all_.params[<span class="st">"lagdemocrat"</span>].<span class="bu">round</span>(<span class="dv">2</span>), all_.bse[<span class="st">"lagdemocrat"</span>].<span class="bu">round</span>(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>all elections:   31.56 0.48</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"within ±2 points:"</span>, close.params[<span class="st">"lagdemocrat"</span>].<span class="bu">round</span>(<span class="dv">2</span>), close.bse[<span class="st">"lagdemocrat"</span>].<span class="bu">round</span>(<span class="dv">2</span>),</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>      <span class="st">" n ="</span>, <span class="bu">int</span>(close.nobs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>within ±2 points: 21.28 1.95  n = 915</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm_robust</span>(score <span class="sc">~</span> lagdemocrat, <span class="at">data =</span> lmb, <span class="at">clusters =</span> id)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lm_robust</span>(score <span class="sc">~</span> lagdemocrat,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> <span class="fu">filter</span>(lmb, lagdemvoteshare <span class="sc">&gt;</span> <span class="fl">0.48</span>, lagdemvoteshare <span class="sc">&lt;</span> <span class="fl">0.52</span>),</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">clusters =</span> id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm_robust</span>(score <span class="sc">~</span> lagdemocrat, <span class="at">data =</span> lmb, <span class="at">clusters =</span> id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Estimate Std. Error  t value Pr(&gt;|t|) CI Lower CI Upper       DF
+(Intercept) 23.53946  0.3374618 69.75443        0 22.87790 24.20101  5669.00
+lagdemocrat 31.56451  0.4836642 65.26122        0 30.61646 32.51257 12211.73</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm_robust</span>(score <span class="sc">~</span> lagdemocrat,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data =</span> <span class="fu">filter</span>(lmb, lagdemvoteshare <span class="sc">&gt;</span> <span class="fl">0.48</span>, lagdemvoteshare <span class="sc">&lt;</span> <span class="fl">0.52</span>),</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">clusters =</span> id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Estimate Std. Error  t value     Pr(&gt;|t|) CI Lower CI Upper
+(Intercept) 31.19576   1.333991 23.38529 5.880428e-80 28.57420 33.81732
+lagdemocrat 21.28387   1.951233 10.90791 3.988266e-26 17.45445 25.11330
+                  DF
+(Intercept) 454.0000
+lagdemocrat 912.8907</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="expect">
-<p>All elections: ≈ <strong>31.5</strong>. Within ±2 points of the cutoff: ≈ <strong>21.3</strong> (SE ≈ 2, n = 915). The simple comparison is contaminated by district ideology; the close-election estimate is the book’s headline number.</p>
+<p>All elections: ≈ <strong>31.5</strong>. Within ±2 points of the cutoff: ≈ <strong>21.3</strong> (standard error, SE, ≈ 2; n = 915). The simple comparison is contaminated by district ideology; the close-election estimate is the book’s headline number.</p>
 </div>
 </section>
 <section id="step-3-polynomial-specifications-global-and-local" class="level3">
@@ -507,28 +610,44 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lmb[<span class="st">"dem_c2"</span>] <span class="op">=</span> lmb.dem_c<span class="op">**</span><span class="dv">2</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>local <span class="op">=</span> lmb[(lmb.lagdemvoteshare <span class="op">&gt;</span> <span class="fl">0.45</span>) <span class="op">&amp;</span> (lmb.lagdemvoteshare <span class="op">&lt;</span> <span class="fl">0.55</span>)]</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>specs <span class="op">=</span> {</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"linear, all data"</span>:     fit(lmb,   <span class="st">"score ~ lagdemocrat * dem_c"</span>),</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"linear, ±5 points"</span>:    fit(local, <span class="st">"score ~ lagdemocrat * dem_c"</span>),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"quadratic, all data"</span>:  fit(lmb,   <span class="st">"score ~ lagdemocrat * (dem_c + dem_c2)"</span>),</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"quadratic, ±5 points"</span>: fit(local, <span class="st">"score ~ lagdemocrat * (dem_c + dem_c2)"</span>),</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, m <span class="kw">in</span> specs.items():</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>k<span class="sc">:22s}</span><span class="ss"> </span><span class="sc">{</span>m<span class="sc">.</span>params[<span class="st">'lagdemocrat'</span>]<span class="sc">:6.2f}</span><span class="ss">  (SE </span><span class="sc">{</span>m<span class="sc">.</span>bse[<span class="st">'lagdemocrat'</span>]<span class="sc">:.2f}</span><span class="ss">)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>lmb[<span class="st">"dem_c2"</span>] <span class="op">=</span> lmb.dem_c<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>local <span class="op">=</span> lmb[(lmb.lagdemvoteshare <span class="op">&gt;</span> <span class="fl">0.45</span>) <span class="op">&amp;</span> (lmb.lagdemvoteshare <span class="op">&lt;</span> <span class="fl">0.55</span>)]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>specs <span class="op">=</span> {</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"linear, all data"</span>:     fit(lmb,   <span class="st">"score ~ lagdemocrat * dem_c"</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"linear, ±5 points"</span>:    fit(local, <span class="st">"score ~ lagdemocrat * dem_c"</span>),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"quadratic, all data"</span>:  fit(lmb,   <span class="st">"score ~ lagdemocrat * (dem_c + dem_c2)"</span>),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"quadratic, ±5 points"</span>: fit(local, <span class="st">"score ~ lagdemocrat * (dem_c + dem_c2)"</span>),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k, m <span class="kw">in</span> specs.items():</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>k<span class="sc">:22s}</span><span class="ss"> </span><span class="sc">{</span>m<span class="sc">.</span>params[<span class="st">'lagdemocrat'</span>]<span class="sc">:6.2f}</span><span class="ss">  (SE </span><span class="sc">{</span>m<span class="sc">.</span>bse[<span class="st">'lagdemocrat'</span>]<span class="sc">:.2f}</span><span class="ss">)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>linear, all data        37.69  (SE 0.80)
+linear, ±5 points       19.82  (SE 2.43)
+quadratic, all data     18.07  (SE 1.17)
+quadratic, ±5 points    25.58  (SE 3.67)</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>local <span class="ot">&lt;-</span> <span class="fu">filter</span>(lmb, lagdemvoteshare <span class="sc">&gt;</span> <span class="fl">0.45</span>, lagdemvoteshare <span class="sc">&lt;</span> <span class="fl">0.55</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>lmb   <span class="ot">&lt;-</span> <span class="fu">mutate</span>(lmb, <span class="at">dem_c2 =</span> dem_c<span class="sc">^</span><span class="dv">2</span>); local <span class="ot">&lt;-</span> <span class="fu">mutate</span>(local, <span class="at">dem_c2 =</span> dem_c<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"linear, all"</span>     <span class="ot">=</span> <span class="fu">lm_robust</span>(score <span class="sc">~</span> lagdemocrat <span class="sc">*</span> dem_c, <span class="at">data =</span> lmb,   <span class="at">clusters =</span> id),</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"linear, ±5"</span>      <span class="ot">=</span> <span class="fu">lm_robust</span>(score <span class="sc">~</span> lagdemocrat <span class="sc">*</span> dem_c, <span class="at">data =</span> local, <span class="at">clusters =</span> id),</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"quadratic, all"</span>  <span class="ot">=</span> <span class="fu">lm_robust</span>(score <span class="sc">~</span> lagdemocrat <span class="sc">*</span> (dem_c <span class="sc">+</span> dem_c2), <span class="at">data =</span> lmb,   <span class="at">clusters =</span> id),</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"quadratic, ±5"</span>   <span class="ot">=</span> <span class="fu">lm_robust</span>(score <span class="sc">~</span> lagdemocrat <span class="sc">*</span> (dem_c <span class="sc">+</span> dem_c2), <span class="at">data =</span> local, <span class="at">clusters =</span> id)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">map_dbl</span>(<span class="sc">~</span> <span class="fu">coef</span>(.x)[<span class="st">"lagdemocrat"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>local <span class="ot">&lt;-</span> <span class="fu">filter</span>(lmb, lagdemvoteshare <span class="sc">&gt;</span> <span class="fl">0.45</span>, lagdemvoteshare <span class="sc">&lt;</span> <span class="fl">0.55</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>lmb   <span class="ot">&lt;-</span> <span class="fu">mutate</span>(lmb, <span class="at">dem_c2 =</span> dem_c<span class="sc">^</span><span class="dv">2</span>); local <span class="ot">&lt;-</span> <span class="fu">mutate</span>(local, <span class="at">dem_c2 =</span> dem_c<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">list</span>(</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"linear, all"</span>     <span class="ot">=</span> <span class="fu">lm_robust</span>(score <span class="sc">~</span> lagdemocrat <span class="sc">*</span> dem_c, <span class="at">data =</span> lmb,   <span class="at">clusters =</span> id),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"linear, ±5"</span>      <span class="ot">=</span> <span class="fu">lm_robust</span>(score <span class="sc">~</span> lagdemocrat <span class="sc">*</span> dem_c, <span class="at">data =</span> local, <span class="at">clusters =</span> id),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"quadratic, all"</span>  <span class="ot">=</span> <span class="fu">lm_robust</span>(score <span class="sc">~</span> lagdemocrat <span class="sc">*</span> (dem_c <span class="sc">+</span> dem_c2), <span class="at">data =</span> lmb,   <span class="at">clusters =</span> id),</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"quadratic, ±5"</span>   <span class="ot">=</span> <span class="fu">lm_robust</span>(score <span class="sc">~</span> lagdemocrat <span class="sc">*</span> (dem_c <span class="sc">+</span> dem_c2), <span class="at">data =</span> local, <span class="at">clusters =</span> id)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">map_dbl</span>(<span class="sc">~</span> <span class="fu">coef</span>(.x)[<span class="st">"lagdemocrat"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         linear, all    linear, &lt;U+00B1&gt;5       quadratic, all 
+            37.69478             19.82333             18.07216 
+quadratic, &lt;U+00B1&gt;5 
+            25.57964 </code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -542,17 +661,110 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
-<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install rdrobust</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rdrobust <span class="im">import</span> rdrobust, rdplot</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> rdrobust(y<span class="op">=</span>lmb[<span class="st">"score"</span>], x<span class="op">=</span>lmb[<span class="st">"lagdemvoteshare"</span>], c<span class="op">=</span><span class="fl">0.5</span>, cluster<span class="op">=</span>lmb[<span class="st">"id"</span>])</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(r)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>rdplot(y<span class="op">=</span>lmb[<span class="st">"score"</span>], x<span class="op">=</span>lmb[<span class="st">"lagdemvoteshare"</span>], c<span class="op">=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install rdrobust</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rdrobust <span class="im">import</span> rdrobust, rdplot</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> rdrobust(y<span class="op">=</span>lmb[<span class="st">"score"</span>], x<span class="op">=</span>lmb[<span class="st">"lagdemvoteshare"</span>], c<span class="op">=</span><span class="fl">0.5</span>, cluster<span class="op">=</span>lmb[<span class="st">"id"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mass points detected in the running variable.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (6486 clusters).
+
+Number of Observations:                 13577
+Polynomial Order Est. (p):                  1
+Polynomial Order Bias (q):                  2
+Kernel:                            Triangular
+Bandwidth Selection:                    mserd
+Var-Cov Estimator:                        CR1
+
+                                Left      Right
+------------------------------------------------
+Number of Observations          5670       7907
+Number of Unique Obs.           2878       3279
+Number of Effective Obs.        2244       1982
+Bandwidth Estimation           0.088      0.088
+Bandwidth Bias                 0.139      0.139
+rho (h/b)                      0.637      0.637
+Number of Clusters              3440       3046
+
+Method             Coef.     S.E.   z-stat    P&gt;|z|       95% CI      
+-------------------------------------------------------------------------
+Conventional      18.575    2.001    9.285   1.616e-20   [14.654, 22.496]
+Robust                 -        -    7.599   2.993e-14   [13.497, 22.881]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>rdplot(y<span class="op">=</span>lmb[<span class="st">"score"</span>], x<span class="op">=</span>lmb[<span class="st">"lagdemvoteshare"</span>], c<span class="op">=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mass points detected in the running variable.
+Call: rdplot
+Number of Observations:                 13577
+Kernel:                               Uniform
+Polynomial Order Est. (p):                  4
+
+                                Left      Right
+------------------------------------------------
+Number of Observations          5670       7907
+Number of Effective Obs         5670       7907
+Bandwidth poly. fit (h)          0.5        0.5
+Number of bins scale               1          1
+Bins Selected                    184        158
+Average Bin Length             0.003      0.003
+Median Bin Length              0.003      0.003
+IMSE-optimal bins               17.0       29.0
+Mimicking Variance bins        184.0      158.0
+
+Relative to IMSE-optimal:
+Implied scale                 10.824      5.448
+WIMSE variance weight          0.001      0.006
+WIMSE bias weight              0.999      0.994</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rdrobust)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">rdrobust</span>(<span class="at">y =</span> lmb<span class="sc">$</span>score, <span class="at">x =</span> lmb<span class="sc">$</span>lagdemvoteshare, <span class="at">c =</span> <span class="fl">0.5</span>, <span class="at">cluster =</span> lmb<span class="sc">$</span>id)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(r)</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rdplot</span>(<span class="at">y =</span> lmb<span class="sc">$</span>score, <span class="at">x =</span> lmb<span class="sc">$</span>lagdemvoteshare, <span class="at">c =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rdrobust)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">rdrobust</span>(<span class="at">y =</span> lmb<span class="sc">$</span>score, <span class="at">x =</span> lmb<span class="sc">$</span>lagdemvoteshare, <span class="at">c =</span> <span class="fl">0.5</span>, <span class="at">cluster =</span> lmb<span class="sc">$</span>id)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(r)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Call: rdrobust
+
+Sharp RD estimates using local polynomial regression. Std. errors are clustered (13577 clusters).
+
+Number of Obs.                13577
+BW type                       mserd
+Kernel                   Triangular
+VCE method                      CR1
+
+                               Left        Right
+Number of Obs.                 5670         7907
+Eff. Number of Obs.            2244         1982
+Order est. (p)                    1            1
+Order bias (q)                    2            2
+BW est. (h)                   0.088        0.088
+BW bias (b)                   0.139        0.139
+rho (h/b)                     0.637        0.637
+Clusters (g)                   5670         7907
+Unique Obs.                    2878         3279
+
+=====================================================================
+                   Point    Robust Inference
+                Estimate         z     P&gt;|z|      [ 95% C.I. ]       
+---------------------------------------------------------------------
+     RD Effect    18.575     7.599     0.000    [13.497 , 22.881]    
+=====================================================================</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rdplot</span>(<span class="at">y =</span> lmb<span class="sc">$</span>score, <span class="at">x =</span> lmb<span class="sc">$</span>lagdemvoteshare, <span class="at">c =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05-rdd_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -567,19 +779,131 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
-<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>counts, edges <span class="op">=</span> np.histogram(lmb.lagdemvoteshare.dropna(), bins<span class="op">=</span>np.arange(<span class="fl">0.40</span>, <span class="fl">0.61</span>, <span class="fl">0.01</span>))</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.Series(counts, index<span class="op">=</span>edges[:<span class="op">-</span><span class="dv">1</span>].<span class="bu">round</span>(<span class="dv">2</span>)))</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install rddensity</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rddensity <span class="im">import</span> rddensity</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>dens <span class="op">=</span> rddensity(X<span class="op">=</span>lmb[<span class="st">"lagdemvoteshare"</span>], c<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dens.test)           <span class="co"># t_jk is the jackknife test statistic, p_jk its p-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>counts, edges <span class="op">=</span> np.histogram(lmb.lagdemvoteshare.dropna(), bins<span class="op">=</span>np.arange(<span class="fl">0.40</span>, <span class="fl">0.61</span>, <span class="fl">0.01</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.Series(counts, index<span class="op">=</span>edges[:<span class="op">-</span><span class="dv">1</span>].<span class="bu">round</span>(<span class="dv">2</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.40    247
+0.41    241
+0.42    257
+0.43    269
+0.44    303
+0.45    259
+0.46    250
+0.47    251
+0.48    250
+0.49    205
+0.50    225
+0.51    235
+0.52    293
+0.53    248
+0.54    225
+0.55    210
+0.56    219
+0.57    184
+0.58    182
+0.59    234
+dtype: int64</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pip install rddensity</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rddensity <span class="im">import</span> rddensity</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>dens <span class="op">=</span> rddensity(X<span class="op">=</span>lmb[<span class="st">"lagdemvoteshare"</span>], c<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(dens.test)           <span class="co"># t_jk is the jackknife test statistic, p_jk its p-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>t_asy         NaN
+t_jk     0.683352
+p_asy         NaN
+p_jk     0.494385
+dtype: float64</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
-<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rddensity)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dens <span class="ot">&lt;-</span> <span class="fu">rddensity</span>(<span class="at">X =</span> lmb<span class="sc">$</span>lagdemvoteshare, <span class="at">c =</span> <span class="fl">0.5</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(dens)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rdplotdensity</span>(dens, lmb<span class="sc">$</span>lagdemvoteshare)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rddensity)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>dens <span class="ot">&lt;-</span> <span class="fu">rddensity</span>(<span class="at">X =</span> lmb<span class="sc">$</span>lagdemvoteshare, <span class="at">c =</span> <span class="fl">0.5</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(dens)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Manipulation testing using local polynomial density estimation.
+
+Number of obs =       13577
+Model =               unrestricted
+Kernel =              triangular
+BW method =           estimated
+VCE method =          jackknife
+
+c = 0.5               Left of c           Right of c          
+Number of obs         5670                7907                
+Eff. Number of obs    1856                2161                
+Order est. (p)        2                   2                   
+Order bias (q)        3                   3                   
+BW est. (h)           0.073               0.096               
+
+Method                T                   P &gt; |T|             
+Robust                0.6834              0.4944              </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+P-values of binomial tests (H0: p=0.5).
+
+Window Length / 2          &lt;c     &gt;=c    P&gt;|T|
+0.001                      21      23    0.8804
+0.002                      55      49    0.6241
+0.004                      72      80    0.5703
+0.005                      89     100    0.4671
+0.006                     112     124    0.4740
+0.007                     141     156    0.4166
+0.008                     166     195    0.1405
+0.009                     192     223    0.1408
+0.011                     228     231    0.9256
+0.012                     276     255    0.3855</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rdplotdensity</span>(dens, lmb<span class="sc">$</span>lagdemvoteshare)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05-rdd_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$Estl
+Call: lpdensity
+
+Sample size                                      5670
+Polynomial order for point estimation    (p=)    2
+Order of derivative estimated            (v=)    1
+Polynomial order for confidence interval (q=)    3
+Kernel function                                  triangular
+Scaling factor                                   0.417648791985857
+Bandwidth method                                 user provided
+
+Use summary(...) to show estimates.
+
+$Estr
+Call: lpdensity
+
+Sample size                                      7907
+Polynomial order for point estimation    (p=)    2
+Order of derivative estimated            (v=)    1
+Polynomial order for confidence interval (q=)    3
+Kernel function                                  triangular
+Scaling factor                                   0.582424867413082
+Bandwidth method                                 user provided
+
+Use summary(...) to show estimates.
+
+$Estplot</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="05-rdd_files/figure-html/unnamed-chunk-10-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -599,7 +923,7 @@ window.Quarto = {
 <section id="solutions" class="level2">
 <h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -608,13 +932,13 @@ Solutions (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>1.</strong> Placebo estimates at 0.40, 0.45, 0.55 and 0.60 are ≈ −2.6, 1.7, 3.1 and −4.8 with SEs around 2 — small, mixed in sign, and nowhere near the 20-point jump at 0.50. A large placebo jump would suggest the relationship between vote share and ideology is non-linear in ways the specification does not capture, or that something else happens at that value.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> [<span class="fl">0.40</span>, <span class="fl">0.45</span>, <span class="fl">0.55</span>, <span class="fl">0.60</span>]:</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    sub <span class="op">=</span> lmb[(lmb.lagdemvoteshare <span class="op">&gt;</span> c <span class="op">-</span> <span class="fl">0.05</span>) <span class="op">&amp;</span> (lmb.lagdemvoteshare <span class="op">&lt;</span> c <span class="op">+</span> <span class="fl">0.05</span>)].copy()</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    sub[<span class="st">"above"</span>] <span class="op">=</span> (sub.lagdemvoteshare <span class="op">&gt;=</span> c).astype(<span class="bu">int</span>)<span class="op">;</span> sub[<span class="st">"xc"</span>] <span class="op">=</span> sub.lagdemvoteshare <span class="op">-</span> c</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(c, fit(sub, <span class="st">"score ~ above * xc"</span>).params[<span class="st">"above"</span>].<span class="bu">round</span>(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> [<span class="fl">0.40</span>, <span class="fl">0.45</span>, <span class="fl">0.55</span>, <span class="fl">0.60</span>]:</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    sub <span class="op">=</span> lmb[(lmb.lagdemvoteshare <span class="op">&gt;</span> c <span class="op">-</span> <span class="fl">0.05</span>) <span class="op">&amp;</span> (lmb.lagdemvoteshare <span class="op">&lt;</span> c <span class="op">+</span> <span class="fl">0.05</span>)].copy()</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    sub[<span class="st">"above"</span>] <span class="op">=</span> (sub.lagdemvoteshare <span class="op">&gt;=</span> c).astype(<span class="bu">int</span>)<span class="op">;</span> sub[<span class="st">"xc"</span>] <span class="op">=</span> sub.lagdemvoteshare <span class="op">-</span> c</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(c, fit(sub, <span class="st">"score ~ above * xc"</span>).params[<span class="st">"above"</span>].<span class="bu">round</span>(<span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><strong>2.</strong> At ±1 point the estimate is ≈ 32 with SE 5.6; it drops to ≈ 22 at ±3, ≈ 20 at ±5, ≈ 18 at ±10, then drifts back up to ≈ 21, 23 and 24 at ±15, ±20 and ±25 as far-away districts bend the linear fit. The SE shrinks monotonically. The <code>rdrobust</code> bandwidth (≈ ±9 points) lands in the stable region.</p>
 <p><strong>3.</strong> <code>lagdemocrat</code> predicts <code>democrat</code> with a jump of ≈ <strong>0.42</strong> at the cutoff — winning narrowly last time makes you much more likely to hold the seat (incumbency). The <code>score</code> question is sharp because treatment is <em>defined</em> as who won last time. It would be fuzzy if the treatment of interest were “a Democrat holds the seat now,” since that only jumps partially at the cutoff; then $= $ (jump in score) / (jump in Democrat), which is an IV estimate.</p>
 </div>
@@ -624,7 +948,7 @@ Solutions (click to expand)
 <section id="facilitator-notes" class="level2">
 <h2 class="anchored" data-anchor-id="facilitator-notes">Facilitator notes</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Facilitator notes (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -633,7 +957,7 @@ Facilitator notes (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Start with the picture.</strong> RDD is the one design where the plot is the argument. Spend five minutes on Step 1 and make people say what they see before any regression.</p>
 <p><strong>Misconception: RDD needs the running variable to be random.</strong> It needs <em>potential outcomes</em> to be continuous at the cutoff. Vote share is not random; what matters is that barely winning is not systematically different from barely losing.</p>

@@ -9,12 +9,21 @@ subtitle: "Session 6 · Mixtape chapter 7"
 - Effect = jump in $Y$ / jump in $D$
 - That is an IV. Today: any variable can play the cutoff's role
 
-## The problem
+## The problem, and the trick
 
-- $Y = \alpha + \delta D + u$ with $\mathrm{Cov}(D, u) \neq 0$
-- If $Z$ moves $D$ and is otherwise unrelated to $Y$:
+```{dot}
+//| fig-width: 10
+//| fig-height: 3
+digraph {
+graph [rankdir=LR, bgcolor="transparent", fontname="Helvetica"]; node [shape=box, style="rounded,filled", fillcolor="#eef4f9", color="#1f5f8b", fontname="Helvetica", fontsize=16]; edge [color="#52514e", penwidth=1.6];
+  Z [label="instrument Z\n(near a college)", fillcolor="#e3f4e9", color="#1f5f3a"]; D [label="treatment D\n(schooling)"]; Y [label="outcome Y\n(wages)"];
+  u [label="unobserved u\n(ability)", fillcolor="#fff8e6", color="#8a6d1d"];
+  Z -> D [label=" first stage", color="#1f5f3a", penwidth=2.5, fontcolor="#1f5f3a"]; D -> Y [label=" δ  (what we want)", color="#2a78d6", penwidth=2.5, fontcolor="#2a78d6"];
+  u -> D; u -> Y; Z -> u [style=invis]; Z -> Y [style=dashed, color="#e34948", label=" must NOT exist\n (exclusion)", fontcolor="#e34948"];
+}
+```
 
-$$\delta_{IV} = \frac{\mathrm{Cov}(Z, Y)}{\mathrm{Cov}(Z, D)} = \frac{\text{reduced form}}{\text{first stage}}$$
+$$\delta_{IV} = \frac{\text{effect of } Z \text{ on } Y}{\text{effect of } Z \text{ on } D} = \frac{\text{reduced form}}{\text{first stage}}$$
 
 ## Three conditions (plus one)
 
@@ -33,9 +42,11 @@ $$\delta_{IV} = \frac{\mathrm{Cov}(Z, Y)}{\mathrm{Cov}(Z, D)} = \frac{\text{redu
 
 ## Weak instruments
 
-- Weak first stage → 2SLS biased toward OLS, badly behaved
-- Rule of thumb: F > 10; be nervous below 20
-- Prefer just-identified models; always report the F
+![](img/s6_weak.svg){width=100%}
+
+::: {.small}
+Truth is 1 (orange); naive OLS gives 1.8 (grey). With a weak first stage, 2SLS is spread everywhere *and* pulled toward the OLS answer. Rule of thumb: first-stage F above 10; nervous below 20.
+:::
 
 ## LATE
 

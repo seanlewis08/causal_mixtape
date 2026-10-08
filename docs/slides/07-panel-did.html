@@ -149,14 +149,12 @@
 <li>FE compares each unit <strong>to itself</strong></li>
 </ul>
 </section>
-<section id="three-implementations-one-estimate" class="slide level2">
-<h2>Three implementations, one estimate</h2>
-<ul>
-<li>Unit dummies</li>
-<li>Demean every variable within unit</li>
-<li>First-difference (identical to FE when <span class="math inline">\(T = 2\)</span>)</li>
-<li>Today we run all three and watch them agree</li>
-</ul>
+<section id="within-vs-between" class="slide level2">
+<h2>Within vs between</h2>
+
+<img data-src="img/s7_within.svg" style="width:80.0%" class="r-stretch"><div class="small">
+<p>Four units, each observed eight times. Across units the relationship looks positive; within every unit it is negative. Fixed effects keep only the within slopes — by unit dummies, by demeaning, or by differencing, all equivalent.</p>
+</div>
 </section>
 <section id="what-fe-needs" class="slide level2">
 <h2>What FE needs</h2>
@@ -185,30 +183,10 @@
 </section>
 <section id="john-snow-1854" class="slide level2">
 <h2>John Snow, 1854</h2>
-<table class="caption-top">
-<thead>
-<tr class="header">
-<th></th>
-<th>1849</th>
-<th>1854</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Southwark &amp; Vauxhall</td>
-<td>135</td>
-<td>147</td>
-</tr>
-<tr class="even">
-<td>Lambeth (moved intake upstream)</td>
-<td>85</td>
-<td>19</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><span class="math inline">\((19 - 85) - (147 - 135) = -78\)</span> deaths per 10,000 households</li>
-</ul>
+
+<img data-src="img/s7_did.svg" style="width:80.0%" class="r-stretch"><div class="small">
+<p>The dashed line is the assumption: without the move upstream, Lambeth would have risen by the same +12 as Southwark &amp; Vauxhall. The effect is the gap between that line and what happened.</p>
+</div>
 </section>
 <section id="walkthrough" class="slide level2">
 <h2>Walkthrough</h2>

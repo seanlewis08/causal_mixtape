@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-b6ebfe76373a65f90f03e4eef39a9400.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-88736fcce7d974bfecfee082ef4a0c3c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -165,6 +165,10 @@ window.Quarto = {
   <li class="nav-item">
     <a class="nav-link" href="../facilitating.html"> 
 <span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../glossary.html"> 
+<span class="menu-text">Glossary</span></a>
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -258,6 +262,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="../facilitating.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Facilitating</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -424,11 +434,63 @@ window.Quarto = {
 </section>
 <section id="key-ideas" class="level2">
 <h2 class="anchored" data-anchor-id="key-ideas">Key ideas</h2>
-<p><strong>The comparative case study.</strong> One treated aggregate unit (a state, a country), a handful of candidate controls, and a long pre-period. DiD with one treated unit has no credible standard error and picks the control arbitrarily. Synthetic control replaces the choice with an algorithm: find weights <span class="math inline">\(w_j \geq 0\)</span>, <span class="math inline">\(\sum w_j = 1\)</span>, over donor units <span class="math inline">\(j\)</span> that make the weighted average of donors match the treated unit’s pre-treatment outcomes and predictors as closely as possible. The post-period gap between the treated unit and its synthetic version is the estimated effect.</p>
-<p><strong>Why the constraints matter.</strong> Non-negativity and summing to one keep the synthetic unit inside the convex hull of the donors: no extrapolation, and the weights are interpretable (“Texas is 45% California, 32% Ohio…”). A poor pre-period fit means the method has nothing to say; report the pre-period RMSPE.</p>
+<p><strong>The comparative case study.</strong> One treated aggregate unit (a state, a country), a handful of candidate controls, and a long pre-period. Difference-in-differences (DiD) with one treated unit has no credible standard error and picks the control arbitrarily. Synthetic control replaces the choice with an algorithm: find weights <span class="math inline">\(w_j \geq 0\)</span>, <span class="math inline">\(\sum w_j = 1\)</span>, over donor units <span class="math inline">\(j\)</span> that make the weighted average of donors match the treated unit’s pre-treatment outcomes and predictors as closely as possible. The post-period gap between the treated unit and its synthetic version is the estimated effect.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Texas did something; no other single state is a fair comparison. So build a “fake Texas” by blending other states — 56% Florida, 27% New York, 17% Illinois — with the blend chosen so that fake Texas tracked real Texas closely for the nine years <em>before</em> the policy. If the two then split apart after the policy, the gap is your estimate.</p>
+</div>
+</div>
+<p><strong>Why the constraints matter.</strong> Non-negativity and summing to one keep the synthetic unit inside the convex hull of the donors: no extrapolation, and the weights are interpretable (“Texas is 56% Florida, 27% New York…”). A poor pre-period fit means the method has nothing to say; report the pre-period root mean squared prediction error (RMSPE).</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The weights have to be positive and add up to 100%, which means fake Texas is a genuine blend — not “three Californias minus two Floridas,” which would be numerically fine and meaningless. And if the blend never tracked real Texas well before the policy, the comparison afterwards is worthless; the pre-period fit number is the first thing to report.</p>
+</div>
+</div>
 <p><strong>Inference by placebo.</strong> Reassign treatment to each donor in turn, fit its synthetic control, and compute its post/pre RMSPE ratio. If the treated unit’s ratio is extreme relative to the placebo distribution, the effect is unlikely to be luck. The “p-value” is the treated unit’s rank divided by the number of units.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pretend Florida was the treated state and build a fake Florida; see how big a post-period gap you get by chance. Do that for all fifty states. If real Texas’s gap (relative to how well its fake tracked it beforehand) is the biggest of the fifty-one, the odds of that happening by luck are about one in fifty-one.</p>
+</div>
+</div>
 <p><strong>The Texas question.</strong> Texas massively expanded prison capacity in 1993–1994. Black male incarceration roughly doubled over the following years. Did the building cause the filling, relative to a synthetic Texas built from other states?</p>
 <p><strong>What the book wants you to leave with.</strong> Every chapter answered the same question: where does the exogenous variation come from? Randomization (Ch. 4), observable selection you can model (Ch. 5), a threshold (Ch. 6), an instrument (Ch. 7), within-unit change (Ch. 8), a policy difference across groups and time (Ch. 9), a weighted comparison unit (Ch. 10). The method follows the source of variation, never the reverse.</p>
+<div class="plain-english callout callout-style-default callout-tip callout-titled" title="In plain English">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In plain English
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Every design in this book is an answer to one question: <em>what decided who got the treatment, and was it anything like a coin flip?</em> An actual coin flip, a cutoff rule, a quirk of geography, a change over time, a policy that hit some places and not others. Find that first; the method follows from it. If you can’t find it, no method will manufacture it.</p>
+</div>
+</div>
 </section>
 <section id="walkthrough" class="level2">
 <h2 class="anchored" data-anchor-id="walkthrough">Walkthrough</h2>
@@ -439,7 +501,8 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pysyncon <span class="im">import</span> Dataprep, Synth        <span class="co"># pip install pysyncon</span></span>
@@ -465,31 +528,49 @@ window.Quarto = {
 <span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>synth.fit(dataprep<span class="op">=</span>dp, optim_method<span class="op">=</span><span class="st">"BFGS"</span>, optim_initial<span class="op">=</span><span class="st">"ols"</span>)   <span class="co"># ~20 s; the default Nelder-Mead can take many minutes</span></span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> synth.weights()<span class="op">;</span> w.index <span class="op">=</span> [names[i] <span class="cf">for</span> i <span class="kw">in</span> w.index]</span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(w[w <span class="op">&gt;</span> <span class="fl">0.01</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Florida     0.560
+Illinois    0.166
+New York    0.274
+Name: weights, dtype: float64</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(tidysynth)   <span class="co"># or library(Synth)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>tx <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/texas.dta"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> tx <span class="sc">%&gt;%</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">synthetic_control</span>(<span class="at">outcome =</span> bmprison, <span class="at">unit =</span> state, <span class="at">time =</span> year,</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">i_unit =</span> <span class="st">"Texas"</span>, <span class="at">i_time =</span> <span class="dv">1993</span>, <span class="at">generate_placebos =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_predictor</span>(<span class="at">time_window =</span> <span class="dv">1985</span><span class="sc">:</span><span class="dv">1993</span>, <span class="at">poverty =</span> <span class="fu">mean</span>(poverty), <span class="at">income =</span> <span class="fu">mean</span>(income)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_predictor</span>(<span class="at">time_window =</span> <span class="dv">1988</span>, <span class="at">bmprison_1988 =</span> <span class="fu">mean</span>(bmprison)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_predictor</span>(<span class="at">time_window =</span> <span class="dv">1990</span>, <span class="at">bmprison_1990 =</span> <span class="fu">mean</span>(bmprison), <span class="at">alcohol =</span> <span class="fu">mean</span>(alcohol),</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">perc1519 =</span> <span class="fu">mean</span>(perc1519)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_predictor</span>(<span class="at">time_window =</span> <span class="dv">1991</span>, <span class="at">bmprison_1991 =</span> <span class="fu">mean</span>(bmprison)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_predictor</span>(<span class="at">time_window =</span> <span class="dv">1992</span>, <span class="at">bmprison_1992 =</span> <span class="fu">mean</span>(bmprison)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_predictor</span>(<span class="at">time_window =</span> <span class="dv">1990</span><span class="sc">:</span><span class="dv">1991</span>, <span class="at">aidscapita =</span> <span class="fu">mean</span>(aidscapita), <span class="at">black =</span> <span class="fu">mean</span>(black)) <span class="sc">%&gt;%</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_weights</span>(<span class="at">optimization_window =</span> <span class="dv">1985</span><span class="sc">:</span><span class="dv">1993</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_control</span>()</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>out <span class="sc">%&gt;%</span> <span class="fu">grab_unit_weights</span>() <span class="sc">%&gt;%</span> <span class="fu">filter</span>(weight <span class="sc">&gt;</span> <span class="fl">0.01</span>) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(weight))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(tidysynth)   <span class="co"># or library(Synth)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>tx <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/texas.dta"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> tx <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">synthetic_control</span>(<span class="at">outcome =</span> bmprison, <span class="at">unit =</span> state, <span class="at">time =</span> year,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                    <span class="at">i_unit =</span> <span class="st">"Texas"</span>, <span class="at">i_time =</span> <span class="dv">1993</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">generate_placebos =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span>   <span class="co"># TRUE also fits 50 placebo states (slow)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_predictor</span>(<span class="at">time_window =</span> <span class="dv">1985</span><span class="sc">:</span><span class="dv">1993</span>, <span class="at">poverty =</span> <span class="fu">mean</span>(poverty), <span class="at">income =</span> <span class="fu">mean</span>(income)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_predictor</span>(<span class="at">time_window =</span> <span class="dv">1988</span>, <span class="at">bmprison_1988 =</span> <span class="fu">mean</span>(bmprison)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_predictor</span>(<span class="at">time_window =</span> <span class="dv">1990</span>, <span class="at">bmprison_1990 =</span> <span class="fu">mean</span>(bmprison), <span class="at">alcohol =</span> <span class="fu">mean</span>(alcohol),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">perc1519 =</span> <span class="fu">mean</span>(perc1519)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_predictor</span>(<span class="at">time_window =</span> <span class="dv">1991</span>, <span class="at">bmprison_1991 =</span> <span class="fu">mean</span>(bmprison)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_predictor</span>(<span class="at">time_window =</span> <span class="dv">1992</span>, <span class="at">bmprison_1992 =</span> <span class="fu">mean</span>(bmprison)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_predictor</span>(<span class="at">time_window =</span> <span class="dv">1990</span><span class="sc">:</span><span class="dv">1991</span>, <span class="at">aidscapita =</span> <span class="fu">mean</span>(aidscapita), <span class="at">black =</span> <span class="fu">mean</span>(black)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_weights</span>(<span class="at">optimization_window =</span> <span class="dv">1985</span><span class="sc">:</span><span class="dv">1993</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_control</span>()</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>out <span class="sc">%&gt;%</span> <span class="fu">grab_unit_weights</span>() <span class="sc">%&gt;%</span> <span class="fu">filter</span>(weight <span class="sc">&gt;</span> <span class="fl">0.01</span>) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(weight))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 x 2
+  unit     weight
+  &lt;chr&gt;     &lt;dbl&gt;
+1 Florida   0.375
+2 New York  0.364
+3 Illinois  0.261</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div class="expect">
-<p>A handful of donors with positive weight — in the Python fit, Florida ≈ <strong>0.56</strong>, New York ≈ 0.27, Illinois ≈ 0.17, everyone else zero (the book’s Stata fit lands on California, Florida, Illinois and Louisiana; solver and predictor details move the weights, not the picture). That sparsity is what the constraints produce.</p>
+<p>A handful of donors with positive weight — in the Python fit, Florida ≈ <strong>0.56</strong>, New York ≈ 0.27, Illinois ≈ 0.17, everyone else zero; <code>tidysynth</code> lands on the same three states with weights 0.38 / 0.36 / 0.26 (the book’s Stata fit lands on California, Florida, Illinois and Louisiana; solver and predictor details move the weights, not the picture). That sparsity is what the constraints produce.</p>
 </div>
 </section>
 <section id="step-2-plot-texas-against-synthetic-texas-and-the-gap" class="level3">
@@ -498,19 +579,64 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>Z0, Z1 <span class="op">=</span> dp.make_outcome_mats(time_period<span class="op">=</span><span class="bu">range</span>(<span class="dv">1985</span>, <span class="dv">2001</span>))</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> pd.DataFrame({<span class="st">"Texas"</span>: Z1, <span class="st">"Synthetic Texas"</span>: Z0 <span class="op">@</span> synth.W})</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>path[<span class="st">"gap"</span>] <span class="op">=</span> path[<span class="st">"Texas"</span>] <span class="op">-</span> path[<span class="st">"Synthetic Texas"</span>]</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(path.<span class="bu">round</span>(<span class="dv">0</span>))</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>path[[<span class="st">"Texas"</span>, <span class="st">"Synthetic Texas"</span>]].plot(ax<span class="op">=</span>ax[<span class="dv">0</span>])<span class="op">;</span> ax[<span class="dv">0</span>].axvline(<span class="dv">1993</span>, color<span class="op">=</span><span class="st">"grey"</span>, ls<span class="op">=</span><span class="st">"--"</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>path[<span class="st">"gap"</span>].plot(ax<span class="op">=</span>ax[<span class="dv">1</span>])<span class="op">;</span> ax[<span class="dv">1</span>].axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"grey"</span>)<span class="op">;</span> ax[<span class="dv">1</span>].axvline(<span class="dv">1993</span>, color<span class="op">=</span><span class="st">"grey"</span>, ls<span class="op">=</span><span class="st">"--"</span>)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">"Black male prisoners"</span>)<span class="op">;</span> ax[<span class="dv">1</span>].set_ylabel(<span class="st">"Texas − synthetic"</span>)<span class="op">;</span> plt.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Z0, Z1 <span class="op">=</span> dp.make_outcome_mats(time_period<span class="op">=</span><span class="bu">range</span>(<span class="dv">1985</span>, <span class="dv">2001</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> pd.DataFrame({<span class="st">"Texas"</span>: Z1, <span class="st">"Synthetic Texas"</span>: Z0 <span class="op">@</span> synth.W})</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>path[<span class="st">"gap"</span>] <span class="op">=</span> path[<span class="st">"Texas"</span>] <span class="op">-</span> path[<span class="st">"Synthetic Texas"</span>]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(path.<span class="bu">round</span>(<span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        Texas  Synthetic Texas      gap
+year                                   
+1985  14828.0          13943.0    885.0
+1986  15207.0          15676.0   -469.0
+1987  15780.0          16259.0   -479.0
+1988  16956.0          17680.0   -724.0
+1989  19366.0          20593.0  -1227.0
+1990  22634.0          23162.0   -528.0
+1991  23249.0          24760.0  -1511.0
+1992  27568.0          26277.0   1291.0
+1993  29260.0          29111.0    149.0
+1994  40451.0          30703.0   9748.0
+1995  55602.0          32632.0  22970.0
+1996  55810.0          32506.0  23304.0
+1997  58393.0          32834.0  25559.0
+1998  59709.0          34009.0  25700.0
+1999  60785.0          34790.0  25995.0
+2000  61861.0          34075.0  27786.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">4</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>path[[<span class="st">"Texas"</span>, <span class="st">"Synthetic Texas"</span>]].plot(ax<span class="op">=</span>ax[<span class="dv">0</span>])<span class="op">;</span> ax[<span class="dv">0</span>].axvline(<span class="dv">1993</span>, color<span class="op">=</span><span class="st">"grey"</span>, ls<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>path[<span class="st">"gap"</span>].plot(ax<span class="op">=</span>ax[<span class="dv">1</span>])<span class="op">;</span> ax[<span class="dv">1</span>].axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"grey"</span>)<span class="op">;</span> ax[<span class="dv">1</span>].axvline(<span class="dv">1993</span>, color<span class="op">=</span><span class="st">"grey"</span>, ls<span class="op">=</span><span class="st">"--"</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">"Black male prisoners"</span>)<span class="op">;</span> ax[<span class="dv">1</span>].set_ylabel(<span class="st">"Texas − synthetic"</span>)<span class="op">;</span> plt.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="09-synth-wrapup_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>out <span class="sc">%&gt;%</span> <span class="fu">plot_trends</span>()</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>out <span class="sc">%&gt;%</span> <span class="fu">plot_differences</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>out <span class="sc">%&gt;%</span> <span class="fu">plot_trends</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="09-synth-wrapup_files/figure-html/unnamed-chunk-4-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>out <span class="sc">%&gt;%</span> <span class="fu">plot_differences</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="09-synth-wrapup_files/figure-html/unnamed-chunk-4-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -524,28 +650,78 @@ window.Quarto = {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit_state(st):</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> Dataprep(foo<span class="op">=</span>tx, dependent<span class="op">=</span><span class="st">"bmprison"</span>, unit_variable<span class="op">=</span><span class="st">"statefip"</span>, time_variable<span class="op">=</span><span class="st">"year"</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                 treatment_identifier<span class="op">=</span>st, controls_identifier<span class="op">=</span>[s <span class="cf">for</span> s <span class="kw">in</span> tx.statefip.unique() <span class="cf">if</span> s <span class="op">!=</span> st],</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                 predictors<span class="op">=</span>[<span class="st">"poverty"</span>, <span class="st">"income"</span>], predictors_op<span class="op">=</span><span class="st">"mean"</span>, time_predictors_prior<span class="op">=</span><span class="bu">range</span>(<span class="dv">1985</span>, <span class="dv">1994</span>),</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                 special_predictors<span class="op">=</span>dp.special_predictors, time_optimize_ssr<span class="op">=</span><span class="bu">range</span>(<span class="dv">1985</span>, <span class="dv">1994</span>))</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> Synth()<span class="op">;</span> s.fit(dataprep<span class="op">=</span>d, optim_method<span class="op">=</span><span class="st">"BFGS"</span>, optim_initial<span class="op">=</span><span class="st">"ols"</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    Z0, Z1 <span class="op">=</span> d.make_outcome_mats(time_period<span class="op">=</span><span class="bu">range</span>(<span class="dv">1985</span>, <span class="dv">2001</span>))<span class="op">;</span> g <span class="op">=</span> Z1 <span class="op">-</span> Z0 <span class="op">@</span> s.W</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    pre  <span class="op">=</span> np.sqrt((g.loc[<span class="dv">1985</span>:<span class="dv">1993</span>] <span class="op">**</span> <span class="dv">2</span>).mean())</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    post <span class="op">=</span> np.sqrt((g.loc[<span class="dv">1994</span>:<span class="dv">2000</span>] <span class="op">**</span> <span class="dv">2</span>).mean())</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.Series({<span class="st">"pre_rmspe"</span>: pre, <span class="st">"post_rmspe"</span>: post, <span class="st">"ratio"</span>: post <span class="op">/</span> pre})</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># This loop fits 51 synthetic controls and takes several minutes.</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>placebo <span class="op">=</span> pd.DataFrame({names[st]: fit_state(st) <span class="cf">for</span> st <span class="kw">in</span> tx.statefip.unique()}).T</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>placebo <span class="op">=</span> placebo.sort_values(<span class="st">"ratio"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(placebo.head(<span class="dv">10</span>).<span class="bu">round</span>(<span class="dv">1</span>))</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>rank <span class="op">=</span> <span class="bu">int</span>((placebo.index <span class="op">==</span> <span class="st">"Texas"</span>).argmax()) <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Texas rank: </span><span class="sc">{</span>rank<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(placebo)<span class="sc">}</span><span class="ss">  -&gt;  p = </span><span class="sc">{</span>rank<span class="op">/</span><span class="bu">len</span>(placebo)<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit_state(st):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> Dataprep(foo<span class="op">=</span>tx, dependent<span class="op">=</span><span class="st">"bmprison"</span>, unit_variable<span class="op">=</span><span class="st">"statefip"</span>, time_variable<span class="op">=</span><span class="st">"year"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                 treatment_identifier<span class="op">=</span>st, controls_identifier<span class="op">=</span>[s <span class="cf">for</span> s <span class="kw">in</span> tx.statefip.unique() <span class="cf">if</span> s <span class="op">!=</span> st],</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                 predictors<span class="op">=</span>[<span class="st">"poverty"</span>, <span class="st">"income"</span>], predictors_op<span class="op">=</span><span class="st">"mean"</span>, time_predictors_prior<span class="op">=</span><span class="bu">range</span>(<span class="dv">1985</span>, <span class="dv">1994</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                 special_predictors<span class="op">=</span>dp.special_predictors, time_optimize_ssr<span class="op">=</span><span class="bu">range</span>(<span class="dv">1985</span>, <span class="dv">1994</span>))</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> Synth()<span class="op">;</span> s.fit(dataprep<span class="op">=</span>d, optim_method<span class="op">=</span><span class="st">"BFGS"</span>, optim_initial<span class="op">=</span><span class="st">"ols"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    Z0, Z1 <span class="op">=</span> d.make_outcome_mats(time_period<span class="op">=</span><span class="bu">range</span>(<span class="dv">1985</span>, <span class="dv">2001</span>))<span class="op">;</span> g <span class="op">=</span> Z1 <span class="op">-</span> Z0 <span class="op">@</span> s.W</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    pre  <span class="op">=</span> np.sqrt((g.loc[<span class="dv">1985</span>:<span class="dv">1993</span>] <span class="op">**</span> <span class="dv">2</span>).mean())</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    post <span class="op">=</span> np.sqrt((g.loc[<span class="dv">1994</span>:<span class="dv">2000</span>] <span class="op">**</span> <span class="dv">2</span>).mean())</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.Series({<span class="st">"pre_rmspe"</span>: pre, <span class="st">"post_rmspe"</span>: post, <span class="st">"ratio"</span>: post <span class="op">/</span> pre})</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># This loop fits 51 synthetic controls and takes several minutes.</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>placebo <span class="op">=</span> pd.DataFrame({names[st]: fit_state(st) <span class="cf">for</span> st <span class="kw">in</span> tx.statefip.unique()}).T</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>placebo <span class="op">=</span> placebo.sort_values(<span class="st">"ratio"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(placebo.head(<span class="dv">10</span>).<span class="bu">round</span>(<span class="dv">1</span>))</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>rank <span class="op">=</span> <span class="bu">int</span>((placebo.index <span class="op">==</span> <span class="st">"Texas"</span>).argmax()) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Texas rank: </span><span class="sc">{</span>rank<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(placebo)<span class="sc">}</span><span class="ss">  -&gt;  p = </span><span class="sc">{</span>rank<span class="op">/</span><span class="bu">len</span>(placebo)<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The loop above is not re-run on every build of this site; its saved output is in <code>data/texas_placebo_ratios.csv</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>placebo <span class="op">=</span> pd.read_csv(<span class="st">"data/texas_placebo_ratios.csv"</span>, index_col<span class="op">=</span><span class="st">"state"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(placebo.head(<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                      pre_rmspe  post_rmspe  ratio
+state                                             
+Texas                     913.5     23686.2   25.9
+Illinois                  339.3      6916.7   20.4
+Georgia                   212.5      3269.8   15.4
+Virginia                  124.4      1799.9   14.5
+Ohio                      470.6      6331.6   13.5
+Oklahoma                  116.7      1536.1   13.2
+Florida                   561.9      6729.7   12.0
+District of Columbia      440.9      4991.3   11.3
+Kentucky                   74.5       822.7   11.0
+Tennessee                 231.4      2552.0   11.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rank <span class="op">=</span> <span class="bu">int</span>((placebo.index <span class="op">==</span> <span class="st">"Texas"</span>).argmax()) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Texas rank: </span><span class="sc">{</span>rank<span class="sc">}</span><span class="ss"> of </span><span class="sc">{</span><span class="bu">len</span>(placebo)<span class="sc">}</span><span class="ss">  -&gt;  p = </span><span class="sc">{</span>rank<span class="op">/</span><span class="bu">len</span>(placebo)<span class="sc">:.3f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Texas rank: 1 of 51  -&gt;  p = 0.020</code></pre>
+</div>
+</div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>out <span class="sc">%&gt;%</span> <span class="fu">plot_placebos</span>()</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>out <span class="sc">%&gt;%</span> <span class="fu">plot_mspe_ratio</span>()</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>out <span class="sc">%&gt;%</span> <span class="fu">grab_signficance</span>()      <span class="co"># (sic) returns the rank-based p-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># needs generate_placebos = TRUE in Step 1, which also fits the 50 placebo states (slow)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>out <span class="sc">%&gt;%</span> <span class="fu">plot_placebos</span>()</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>out <span class="sc">%&gt;%</span> <span class="fu">plot_mspe_ratio</span>()</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>out <span class="sc">%&gt;%</span> <span class="fu">grab_signficance</span>()      <span class="co"># (sic) returns the rank-based p-value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>placebo <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/texas_placebo_ratios.csv"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(placebo, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  state pre_rmspe post_rmspe ratio
+1                 Texas     913.5    23686.2  25.9
+2              Illinois     339.3     6916.7  20.4
+3               Georgia     212.5     3269.8  15.4
+4              Virginia     124.4     1799.9  14.5
+5                  Ohio     470.6     6331.6  13.5
+6              Oklahoma     116.7     1536.1  13.2
+7               Florida     561.9     6729.7  12.0
+8  District of Columbia     440.9     4991.3  11.3
+9              Kentucky      74.5      822.7  11.0
+10            Tennessee     231.4     2552.0  11.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(placebo<span class="sc">$</span>state <span class="sc">==</span> <span class="st">"Texas"</span>) <span class="sc">/</span> <span class="fu">nrow</span>(placebo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.01960784</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -557,9 +733,9 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="step-4-wrap-up-which-design-when">Step 4 — Wrap-up: which design, when</h3>
 <p>Put three fresh questions to the room and make the group pick a design and name its key assumption and its first diagnostic. Suggested questions:</p>
 <ol type="1">
-<li><em>Did a city’s new minimum-wage ordinance reduce restaurant employment?</em> — DiD or synthetic control against comparable cities; parallel trends / pre-period fit; event-study leads or placebo-in-space.</li>
-<li><em>Does an extra year of schooling raise earnings for students who barely pass a school-entry test?</em> — RDD on the test score; continuity at the cutoff; density test and covariate smoothness.</li>
-<li><em>Do defendants assigned public defenders get longer sentences than those with private counsel?</em> — Selection on unobservables is severe; an instrument such as random assignment of public-defender availability (judge-leniency style); relevance and exclusion; first-stage F and a complier description.</li>
+<li><em>Did a city’s new minimum-wage ordinance reduce restaurant employment?</em> — difference-in-differences or synthetic control against comparable cities; parallel trends / pre-period fit; event-study leads or placebo-in-space.</li>
+<li><em>Does an extra year of schooling raise earnings for students who barely pass a school-entry test?</em> — regression discontinuity (RDD) on the test score; continuity at the cutoff; density test and covariate smoothness.</li>
+<li><em>Do defendants assigned public defenders get longer sentences than those with private counsel?</em> — Selection on unobservables is severe; an instrumental variable (IV) such as random assignment of public-defender availability (judge-leniency style); relevance and exclusion; first-stage F and a complier description.</li>
 </ol>
 <p>Then the decision tree, in words. If treatment was randomized, compare means and use randomization inference. If selection is on observables you can defend with a DAG, match or weight, and check overlap. If treatment switches at a threshold, RD. If something exogenous shifts treatment but not the outcome, IV, and say whose effect you are estimating. If you observe units before and after a change, fixed effects or DiD, with an event study to show the pre-period. If you have one treated aggregate and a long pre-period, synthetic control with placebo inference. If none of those apply, the honest answer is that the data cannot answer the causal question, and that is a finding.</p>
 </section>
@@ -569,13 +745,13 @@ window.Quarto = {
 <ol type="1">
 <li><strong>Leave-one-out.</strong> Drop Florida (the largest-weight donor) from the donor pool and refit the synthetic Texas. How much do the weights and the post-period gap change? Then also drop the state with the next-largest weight. What does sensitivity to a single donor tell you?</li>
 <li><strong>Placebo-in-time.</strong> Pretend treatment happened in 1989 and fit the synthetic control using only 1985–1988 to choose weights. Is there a spurious “effect” after 1989? Why is this a useful check in addition to placebo-in-space?</li>
-<li><strong>Design memo.</strong> Pick a causal question from your own work. In one page: state the estimand (ATE, ATT, LATE, local effect at a cutoff…), the design you would use, its identifying assumption written as a counterfactual statement, two diagnostics you would show, and the one thing that would make you abandon the design.</li>
+<li><strong>Design memo.</strong> Pick a causal question from your own work. In one page: state the estimand (average effect for everyone, for the treated, for compliers, or local to a cutoff — ATE, ATT, LATE, or RD…), the design you would use, its identifying assumption written as a counterfactual statement, two diagnostics you would show, and the one thing that would make you abandon the design.</li>
 </ol>
 </section>
 <section id="solutions" class="level2">
 <h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -584,7 +760,7 @@ Solutions (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>1.</strong> Without Florida the weight shifts to Illinois (0.44), New York (0.35) and California (0.21); the post-period gap is ≈ 23,600 and the pre-RMSPE rises only slightly (≈ 1,050). Dropping New York as well leaves Illinois 0.56 / California 0.44, a gap of ≈ 23,000 and pre-RMSPE ≈ 1,250. The result is not an artifact of any one donor. Large sensitivity to one donor would mean the synthetic unit was really a single comparison state, and you would be back to a one-control DiD.</p>
 <p><strong>2.</strong> With a 1989 pseudo-treatment, the synthetic and actual series continue to track through 1993, with no gap that resembles the post-1993 one. Placebo-in-time guards against the pre-period fit being achieved by overfitting a short window; placebo-in-space guards against the post-period gap being within the range of ordinary noise.</p>
@@ -596,7 +772,7 @@ Solutions (click to expand)
 <section id="facilitator-notes" class="level2">
 <h2 class="anchored" data-anchor-id="facilitator-notes">Facilitator notes</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Facilitator notes (click to expand)">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -605,7 +781,7 @@ Facilitator notes (click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Run Step 3 before the meeting.</strong> The 51-fit placebo loop takes several minutes in Python; have the results table ready and only re-run the Texas fit live. <code>tidysynth</code> with <code>generate_placebos = TRUE</code> does the loop inside <code>generate_weights()</code>.</p>
 <p><strong>Misconception: the weights are “the” comparison states.</strong> They are the solution to an optimization with the predictors you chose. Change the predictors and the weights move (Step 1’s expect box shows this between implementations). What should <em>not</em> move much is the post-period gap.</p>
