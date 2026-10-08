@@ -1,0 +1,61 @@
+---
+title: "Difference-in-differences, deep dive"
+subtitle: "Session 8 · Mixtape §9.4–9.7"
+---
+
+## Last time
+
+- The 2×2: no standard errors, no test of parallel trends
+- Today: many periods, many groups — and a new problem
+
+## Event studies
+
+- Replace $\text{Treat} \times \text{Post}$ with $\text{Treat} \times \text{Year}_t$ for every $t$ (omit one)
+- **Leads** (pre-treatment) should be ≈ 0
+- **Lags** trace the dynamic effect
+- Flat leads make parallel trends plausible; they do not prove it
+
+## Placebos and triple differences
+
+- If theory says the effect exists only for a group / cohort / window, estimate it where it *should not* and demand zero
+- DDD: subtract the placebo group's DD from the treated group's DD
+- Absorbs group-specific shocks a plain DD would call "treatment"
+
+## Abortion legalization (Cunningham & Cornwell 2013)
+
+- Five states repealed bans in 1970; *Roe* in 1973
+- Treated cohorts: born 1971–73 in repeal states
+- Prediction: lower gonorrhea among 15–19 year olds in 1986–92, tracing a **parabola** as the cohort ages through the bracket
+- Placebo: 25–29 year olds
+
+## Staggered adoption
+
+- Units treated at different times; TWFE: $Y_{it} = \alpha_i + \lambda_t + \delta D_{it} + e_{it}$
+- Goodman-Bacon: $\hat{\delta}$ is a weighted average of **every** 2×2 in the data
+- Including late-treated vs **already-treated** as "control"
+- If effects grow over time, those 2×2s are biased — sometimes to the wrong sign
+
+## Modern estimators
+
+- **Callaway–Sant'Anna**: ATT for each cohort × period, using only never- or not-yet-treated controls; aggregate with chosen weights
+- **Sun–Abraham**: the same idea inside an interaction-weighted event-study regression
+- Both need a clean control group; neither is magic
+
+## Castle doctrine (Cheng & Hoekstra 2013)
+
+- "Stand your ground" laws, 2005–2010, 21 states
+- TWFE: log homicide up ≈ 8%
+- 29 never-treated states → the decomposition puts 90% of weight on clean comparisons
+
+## Walkthrough
+
+1. Abortion event study: the parabola
+2. Placebo cohort and DDD
+3. Castle TWFE
+4. Bacon decomposition by hand; a modern estimator
+
+## Takeaway
+
+::: {.takeaway}
+The event-study plot is the deliverable. TWFE is a weighted average with weights you did not choose; decompose it, and if the forbidden comparisons carry weight, use an estimator that refuses to make them.
+:::

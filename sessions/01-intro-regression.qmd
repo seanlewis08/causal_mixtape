@@ -1,0 +1,263 @@
+---
+title: "Session 1 · Why causal inference, and regression as a tool"
+subtitle: "Book chapters 1 and 2"
+---
+
+::: {.session-meta}
+**Read before the meeting:** [Chapter 1 — Introduction](https://mixtape-1ed.netlify.app/01-Introduction.html) and [Chapter 2 — Probability and Regression Review](https://mixtape-1ed.netlify.app/02-Probability_and_Regression.html) (skim 2.1–2.12 if you are comfortable with expectations and variance; read 2.13–2.27 carefully).
+**Data:** `data/auto.dta` plus simulated data.
+**Code files:** [`code/session01.py`](../code/session01.py) · [`code/session01.R`](../code/session01.R) · [Slides](../slides/01-intro-regression.qmd){target="_blank"}
+:::
+
+## Learning goals
+
+By the end of the hour everyone should be able to explain why optimizing agents make correlation uninformative about causation, state what a regression coefficient *is* (a conditional-expectation approximation, not a causal effect), reproduce a multiple-regression coefficient with the regression-anatomy formula, and say when to use heteroskedasticity-robust versus cluster-robust standard errors.
+
+::: {.agenda}
+| Time | Block |
+|------|-------|
+| 0:00 | Introductions, how the series works, why this book |
+| 0:05 | Concepts: price elasticity and endogenous supply; the CEF; regression anatomy; standard errors |
+| 0:20 | Walkthrough: `auto` regressions, regression anatomy by hand, robust and clustered SEs on simulated data |
+| 0:45 | Exercise 1 kickoff |
+| 0:55 | Assign exercises 2–3; preview DAGs |
+:::
+
+## Key ideas
+
+**Optimization makes everything endogenous.** The book's opening example is price elasticity of demand. Observed prices and quantities are equilibrium outcomes: both supply and demand shifted to produce every point you see, so a regression of quantity on price identifies nothing unless something moved only one curve. Wright's instrumental-variables solution (Session 6) is the first sighting of the whole book's agenda: find variation in the cause that is unrelated to everything else that matters.
+
+**Regression estimates a conditional expectation function, not a causal effect.** Chapter 2 builds up to three theorems. The *linear CEF theorem* says if the CEF is linear, regression recovers it. The *best linear predictor theorem* says regression is always the best linear approximation to the CEF, whether or not it is linear. The *regression CEF theorem* says regression also gives the best linear approximation to the CEF itself. None of these say anything about causation; they say what the numbers mean descriptively. Causal content enters only through assumptions about the error term (mean independence, $E[u \mid x] = 0$), and those assumptions are what the rest of the book is about.
+
+**Regression anatomy.** The coefficient on $x_1$ in a multiple regression equals the bivariate regression of $y$ on the *residual* from regressing $x_1$ on the other covariates:
+$$\beta_1 = \frac{\mathrm{Cov}(y, \tilde{x}_1)}{\mathrm{Var}(\tilde{x}_1)}, \qquad \tilde{x}_1 = x_1 - \hat{E}[x_1 \mid x_2, \dots, x_k].$$
+This is the Frisch–Waugh–Lovell theorem, and it is the single most useful mechanical fact about regression: "controlling for" means "using only the part of $x_1$ that the controls cannot predict."
+
+**Standard errors.** Conventional OLS standard errors assume homoskedasticity. Heteroskedasticity-robust (HC1, Stata's `robust`) standard errors do not. When observations share a shock (students in the same classroom, firms in the same state), errors are correlated within groups and you need cluster-robust standard errors; the robust-versus-conventional gap on a single regression is a diagnostic, not a decision rule.
+
+## Walkthrough
+
+### Step 1 — Load `auto` and run a bivariate regression
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as smf
+
+auto = pd.read_stata("data/auto.dta")
+auto.head()
+
+m1 = smf.ols("price ~ length", data=auto).fit()
+print(m1.summary().tables[1])
+```
+
+#### R
+
+```r
+library(tidyverse)
+library(haven)
+library(estimatr)
+
+auto <- read_dta("data/auto.dta")
+glimpse(auto)
+
+m1 <- lm(price ~ length, data = auto)
+summary(m1)
+```
+
+:::
+
+::: {.expect}
+Intercept ≈ −4585, slope on `length` ≈ **57.2** dollars per inch. Ask the room: is a longer car *caused* to be more expensive? What else do longer cars have more of?
+:::
+
+### Step 2 — Add controls and watch the sign flip
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+m2 = smf.ols("price ~ length + weight + headroom + mpg", data=auto).fit()
+print(m2.params.round(2))
+```
+
+#### R
+
+```r
+m2 <- lm(price ~ length + weight + headroom + mpg, data = auto)
+coef(m2)
+```
+
+:::
+
+::: {.expect}
+`length` ≈ **−94.5**, `weight` ≈ 4.34, `headroom` ≈ −491, `mpg` ≈ −88. Conditional on weight, headroom and fuel economy, a longer car is *cheaper*. Neither coefficient is "the" effect of length; they answer different descriptive questions.
+:::
+
+### Step 3 — Reproduce the `length` coefficient with regression anatomy
+
+Regress `length` on the other covariates, keep the residual, and regress `price` on that residual alone.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+aux = smf.ols("length ~ weight + headroom + mpg", data=auto).fit()
+auto["length_resid"] = aux.resid
+
+m3 = smf.ols("price ~ length_resid", data=auto).fit()
+print(m3.params.round(2))
+
+# the formula directly
+cov = np.cov(auto["price"], auto["length_resid"], ddof=1)[0, 1]
+var = auto["length_resid"].var(ddof=1)
+print(cov / var)
+```
+
+#### R
+
+```r
+auto <- auto %>%
+  mutate(length_resid = resid(lm(length ~ weight + headroom + mpg, data = auto)))
+
+m3 <- lm(price ~ length_resid, data = auto)
+coef(m3)
+
+cov(auto$price, auto$length_resid) / var(auto$length_resid)
+```
+
+:::
+
+::: {.expect}
+The slope on `length_resid` is **−94.5**, identical to the multiple-regression coefficient. The intercept differs (it is just the mean of `price`, ≈ 6165) because the residual has mean zero.
+:::
+
+### Step 4 — Robust versus conventional standard errors
+
+Simulate data whose error variance grows with $|x|$, so homoskedasticity fails.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+rng = np.random.default_rng(1)
+n = 10_000
+x = rng.normal(size=n)
+u = rng.normal(size=n) * (1 + np.abs(x))      # heteroskedastic
+y = 5.5 * x + 12 * u
+sim = pd.DataFrame({"x": x, "y": y})
+
+conv = smf.ols("y ~ x", data=sim).fit()
+rob  = smf.ols("y ~ x", data=sim).fit(cov_type="HC1")
+print("conventional SE:", round(conv.bse["x"], 3))
+print("HC1 robust SE:  ", round(rob.bse["x"], 3))
+```
+
+#### R
+
+```r
+set.seed(1)
+n <- 10000
+x <- rnorm(n)
+u <- rnorm(n) * (1 + abs(x))
+y <- 5.5 * x + 12 * u
+sim <- tibble(x, y)
+
+conv <- lm(y ~ x, data = sim)
+rob  <- lm_robust(y ~ x, data = sim, se_type = "HC1")
+sqrt(diag(vcov(conv)))["x"]
+rob$std.error["x"]
+```
+
+:::
+
+::: {.expect}
+Conventional SE ≈ **0.22**, robust SE ≈ **0.31** (your exact numbers depend on the seed). The point estimate is unchanged; only the uncertainty was wrong. Discuss: in which direction does heteroskedasticity bias the conventional SE here, and why?
+:::
+
+### Step 5 — Clustered standard errors
+
+Now give the data a group structure with a shared group-level shock.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+g = rng.integers(0, 50, size=n)                   # 50 clusters
+group_shock = rng.normal(size=50)[g]
+x = rng.normal(size=n) + group_shock
+y = 2 * x + 5 * group_shock + rng.normal(size=n)
+cl = pd.DataFrame({"x": x, "y": y, "g": g})
+
+plain   = smf.ols("y ~ x", data=cl).fit(cov_type="HC1")
+cluster = smf.ols("y ~ x", data=cl).fit(cov_type="cluster", cov_kwds={"groups": cl["g"]})
+print(plain.bse["x"].round(3), cluster.bse["x"].round(3))
+```
+
+#### R
+
+```r
+g <- sample(0:49, n, replace = TRUE)
+group_shock <- rnorm(50)[g + 1]
+x <- rnorm(n) + group_shock
+y <- 2 * x + 5 * group_shock + rnorm(n)
+cl <- tibble(x, y, g)
+
+lm_robust(y ~ x, data = cl, se_type = "HC1")$std.error["x"]
+lm_robust(y ~ x, data = cl, clusters = g)$std.error["x"]
+```
+
+:::
+
+::: {.expect}
+The clustered SE is several times the robust SE. The group shock is in both $x$ and the error, so the point estimate is also biased upward from 2 — a preview of the omitted-variable problem the rest of the book attacks. Clustering fixes inference, never identification.
+:::
+
+## Exercises
+
+1. **Anatomy, again.** Using `auto`, reproduce the coefficient on `mpg` from `price ~ length + weight + headroom + mpg` via regression anatomy. Then reproduce the coefficient on `weight`. Which residual has the smallest variance, and what does that imply about which coefficient is most precisely estimated?
+2. **Monty Hall by simulation.** Write a simulation of the Monty Hall problem (book §2.6) with 100,000 games. Report the win rate under "stay" and "switch." Then modify the host so he opens a door *at random* (and the game is void if he reveals the car) and show that the switching advantage disappears. Explain in two sentences what conditioning on the host's *informed* choice does.
+3. **When does robust matter?** Rerun Step 4 with `u = rng.normal(size=n)` (homoskedastic). How close are the conventional and robust standard errors now? Then set `n = 50` and repeat both versions 500 times, recording the two SEs each time. In small samples, which SE is more *variable*, and why might a researcher still prefer it?
+
+## Solutions
+
+::: {.callout-tip collapse="true" title="Solutions (click to expand)"}
+
+**1.** For `mpg`: residualize `mpg` on `length + weight + headroom`, regress `price` on the residual; slope is −87.96. For `weight`: residualize on `length + headroom + mpg`; slope is 4.34. Compare each residual's variance to the variable's raw variance: `mpg` keeps about 34% of its variation after partialling out the others, while `length` and `weight` each keep only about 10% (they are nearly collinear with one another). Precision is $\sigma^2 / (n \cdot \mathrm{Var}(\tilde{x}_k))$ scaled by the variable's units, so the coefficient whose regressor retains the *most* of its own variation — `mpg` — is the one estimated most precisely relative to its scale; `length` and `weight` are fighting over the same variation.
+
+**2.** Stay wins ≈ 1/3, switch wins ≈ 2/3. With a random host (void if the car is revealed), both strategies win 1/2 of the non-void games. The informed host's choice is a function of where the car is, so conditioning on it moves probability; the random host's choice is independent of the car's location, so it carries no information.
+
+```python
+rng = np.random.default_rng(0); N = 100_000
+car = rng.integers(0, 3, N); pick = rng.integers(0, 3, N)
+# informed host opens a goat door that is not the pick
+host = np.array([next(d for d in rng.permutation(3) if d != c and d != p) for c, p in zip(car, pick)])
+switch = 3 - pick - host
+print((pick == car).mean(), (switch == car).mean())
+```
+
+**3.** Homoskedastic case: the two SEs agree to two decimals. At `n = 50` the robust SE has a noticeably larger spread across replications (it estimates more parameters from the same data). Researchers accept the variability because the robust estimator is consistent under a wider set of DGPs, but with tiny samples HC2/HC3 corrections are advisable.
+:::
+
+## Facilitator notes
+
+::: {.callout-note collapse="true" title="Facilitator notes (click to expand)"}
+
+**What usually goes wrong.** Participants read the sign flip in Step 2 as "the first regression was wrong." Steer them to: both are correct descriptions of different conditional expectations, and neither is causal without an argument about the error term. This is the thesis of the whole book.
+
+**Misconception: "robust SEs fix everything."** Clustered and robust SEs change inference, not the estimand. Use Step 5's biased point estimate to make the point concretely.
+
+**If running short.** Skip Step 5 and assign it as reading; it recurs in Sessions 7–8 where clustering is unavoidable.
+
+**Discussion prompts for the close.** (a) In the price-elasticity example, what would count as something that shifts supply but not demand? (b) The book says regression is "a tool, not a design." What would make the auto regressions a design?
+
+**Bridge to next session.** "Controlling for" is mechanical (Step 3). Next session asks the question regression cannot answer: *which* variables should you control for? That is what DAGs are for.
+:::

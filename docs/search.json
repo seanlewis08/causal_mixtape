@@ -1,0 +1,1462 @@
+[
+  {
+    "objectID": "slides/09-synth-wrapup.html#last-time",
+    "href": "slides/09-synth-wrapup.html#last-time",
+    "title": "Synthetic control, and which design when",
+    "section": "Last time",
+    "text": "Last time\n\nDiD needs a control group whose trend you trust\nWith one treated unit and a few candidates, you are picking a control by hand\nToday: let an algorithm build the control"
+  },
+  {
+    "objectID": "slides/09-synth-wrapup.html#the-synthetic-control-estimator",
+    "href": "slides/09-synth-wrapup.html#the-synthetic-control-estimator",
+    "title": "Synthetic control, and which design when",
+    "section": "The synthetic-control estimator",
+    "text": "The synthetic-control estimator\n\nDonors \\(j = 1, \\dots, J\\); weights \\(w_j \\geq 0\\), \\(\\sum_j w_j = 1\\)\nChoose \\(w\\) so the weighted donors match the treated unit’s pre-period outcomes and predictors\nEffect = post-period gap between treated and synthetic"
+  },
+  {
+    "objectID": "slides/09-synth-wrapup.html#why-the-constraints-matter",
+    "href": "slides/09-synth-wrapup.html#why-the-constraints-matter",
+    "title": "Synthetic control, and which design when",
+    "section": "Why the constraints matter",
+    "text": "Why the constraints matter\n\nNon-negative, sum to one → stay inside the convex hull of donors\nNo extrapolation\nSparse, interpretable weights: “Texas is 45% California, 32% Ohio…”\nBad pre-period fit = nothing to say. Report the pre-RMSPE."
+  },
+  {
+    "objectID": "slides/09-synth-wrapup.html#inference-by-placebo",
+    "href": "slides/09-synth-wrapup.html#inference-by-placebo",
+    "title": "Synthetic control, and which design when",
+    "section": "Inference by placebo",
+    "text": "Inference by placebo\n\nReassign treatment to each donor; fit its synthetic control\nPost/pre RMSPE ratio for every unit\nTreated unit’s rank ÷ number of units = the \\(p\\)-value\nAlso: placebo-in-time, leave-one-out donors"
+  },
+  {
+    "objectID": "slides/09-synth-wrapup.html#texas-cunningham-kang-2019",
+    "href": "slides/09-synth-wrapup.html#texas-cunningham-kang-2019",
+    "title": "Synthetic control, and which design when",
+    "section": "Texas (Cunningham & Kang 2019)",
+    "text": "Texas (Cunningham & Kang 2019)\n\nMassive prison construction, 1993–94\nBlack male incarceration roughly doubles\nSynthetic Texas: ≈ 25,000 fewer Black men in prison per year after 1995\nTexas’s RMSPE ratio is the largest of 51 → \\(p ≈ 0.02\\)"
+  },
+  {
+    "objectID": "slides/09-synth-wrapup.html#walkthrough",
+    "href": "slides/09-synth-wrapup.html#walkthrough",
+    "title": "Synthetic control, and which design when",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nFit the synthetic Texas; read the weights\nPlot actual vs synthetic; the gap\nPlacebo-in-space; Texas’s rank\nThen: the design decision tree"
+  },
+  {
+    "objectID": "slides/09-synth-wrapup.html#which-design-when",
+    "href": "slides/09-synth-wrapup.html#which-design-when",
+    "title": "Synthetic control, and which design when",
+    "section": "Which design, when",
+    "text": "Which design, when\n\n\n\nSource of variation\nDesign\nKey assumption\n\n\n\n\nRandomization\nCompare means; RI\n—\n\n\nObservable selection\nMatching / IPW\nCIA + overlap\n\n\nA threshold\nRDD\nContinuity at cutoff\n\n\nAn instrument\nIV / 2SLS\nExclusion; LATE\n\n\nWithin-unit change\nFE / DiD\nStrict exogeneity / parallel trends\n\n\nOne treated aggregate\nSynthetic control\nPre-period fit"
+  },
+  {
+    "objectID": "slides/09-synth-wrapup.html#three-new-questions",
+    "href": "slides/09-synth-wrapup.html#three-new-questions",
+    "title": "Synthetic control, and which design when",
+    "section": "Three new questions",
+    "text": "Three new questions\n\nDid a city minimum-wage ordinance reduce restaurant employment?\nDoes an extra year of schooling raise earnings for students who barely pass an entry test?\nDo public defenders get longer sentences than private counsel?\n\nFor each: estimand, design, assumption as a counterfactual sentence, first diagnostic."
+  },
+  {
+    "objectID": "slides/09-synth-wrapup.html#takeaway",
+    "href": "slides/09-synth-wrapup.html#takeaway",
+    "title": "Synthetic control, and which design when",
+    "section": "Takeaway",
+    "text": "Takeaway\n\nThe method follows the source of exogenous variation, never the reverse. If you cannot name where the variation comes from, the data cannot answer the causal question — and saying so is a result."
+  },
+  {
+    "objectID": "slides/09-synth-wrapup.html#where-next",
+    "href": "slides/09-synth-wrapup.html#where-next",
+    "title": "Synthetic control, and which design when",
+    "section": "Where next",
+    "text": "Where next\n\nThe book’s Mixtape Sessions\nCausal Inference for the Brave and True (Python, free)\nHuntington-Klein, The Effect (free; R + Python)\nThe staggered-DiD literature: Goodman-Bacon; Callaway & Sant’Anna; Sun & Abraham; Roth et al."
+  },
+  {
+    "objectID": "slides/07-panel-did.html#last-time",
+    "href": "slides/07-panel-did.html#last-time",
+    "title": "Panel data and the 2×2 difference-in-differences",
+    "section": "Last time",
+    "text": "Last time\n\nIV: exogenous variation from an instrument, in a cross-section\nToday: exogenous variation from within-unit change over time"
+  },
+  {
+    "objectID": "slides/07-panel-did.html#the-fixed-effects-model",
+    "href": "slides/07-panel-did.html#the-fixed-effects-model",
+    "title": "Panel data and the 2×2 difference-in-differences",
+    "section": "The fixed-effects model",
+    "text": "The fixed-effects model\n\\[Y_{it} = \\delta D_{it} + \\mathbf{X}_{it}\\beta + u_i + \\varepsilon_{it}\\]\n\n\\(u_i\\): everything about unit \\(i\\) that does not change\nIt can be correlated with \\(D_{it}\\) however it likes\nFE compares each unit to itself"
+  },
+  {
+    "objectID": "slides/07-panel-did.html#three-implementations-one-estimate",
+    "href": "slides/07-panel-did.html#three-implementations-one-estimate",
+    "title": "Panel data and the 2×2 difference-in-differences",
+    "section": "Three implementations, one estimate",
+    "text": "Three implementations, one estimate\n\nUnit dummies\nDemean every variable within unit\nFirst-difference (identical to FE when \\(T = 2\\))\nToday we run all three and watch them agree"
+  },
+  {
+    "objectID": "slides/07-panel-did.html#what-fe-needs",
+    "href": "slides/07-panel-did.html#what-fe-needs",
+    "title": "Panel data and the 2×2 difference-in-differences",
+    "section": "What FE needs",
+    "text": "What FE needs\n\nStrict exogeneity: \\(E[\\varepsilon_{it} \\mid D_{i1}, \\dots, D_{iT}, u_i] = 0\\)\nTime-varying unobservables that move with \\(D\\): still a problem\nFeedback (today’s shock → tomorrow’s treatment): a problem\nRegressors that never change within unit: absorbed, gone"
+  },
+  {
+    "objectID": "slides/07-panel-did.html#the-sasp-question",
+    "href": "slides/07-panel-did.html#the-sasp-question",
+    "title": "Panel data and the 2×2 difference-in-differences",
+    "section": "The SASP question",
+    "text": "The SASP question\n\nSex workers charge more for unprotected sex. Compensating differential, or selection?\nPanel: same provider, many clients\nPooled OLS: premium ≈ 0. Within provider: ≈ 5%."
+  },
+  {
+    "objectID": "slides/07-panel-did.html#the-22-did",
+    "href": "slides/07-panel-did.html#the-22-did",
+    "title": "Panel data and the 2×2 difference-in-differences",
+    "section": "The 2×2 DiD",
+    "text": "The 2×2 DiD\n\\[\\hat{\\delta} = (\\bar{Y}_{T,post} - \\bar{Y}_{T,pre}) - (\\bar{Y}_{C,post} - \\bar{Y}_{C,pre})\\]\n\nAs a regression: \\(Y = \\alpha + \\beta\\,\\text{Treat} + \\gamma\\,\\text{Post} + \\delta\\,(\\text{Treat} \\times \\text{Post}) + e\\)\nAssumption: parallel trends — a counterfactual claim, untestable in the 2×2"
+  },
+  {
+    "objectID": "slides/07-panel-did.html#john-snow-1854",
+    "href": "slides/07-panel-did.html#john-snow-1854",
+    "title": "Panel data and the 2×2 difference-in-differences",
+    "section": "John Snow, 1854",
+    "text": "John Snow, 1854\n\n\n\n\n1849\n1854\n\n\n\n\nSouthwark & Vauxhall\n135\n147\n\n\nLambeth (moved intake upstream)\n85\n19\n\n\n\n\n\\((19 - 85) - (147 - 135) = -78\\) deaths per 10,000 households"
+  },
+  {
+    "objectID": "slides/07-panel-did.html#walkthrough",
+    "href": "slides/07-panel-did.html#walkthrough",
+    "title": "Panel data and the 2×2 difference-in-differences",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nSASP pooled OLS\nFE three ways\nWhy they differ: within vs between\nSnow by hand and by regression; draw the counterfactual"
+  },
+  {
+    "objectID": "slides/07-panel-did.html#takeaway",
+    "href": "slides/07-panel-did.html#takeaway",
+    "title": "Panel data and the 2×2 difference-in-differences",
+    "section": "Takeaway",
+    "text": "Takeaway\n\nFixed effects remove what is fixed. The 2×2 DiD is a two-unit, two-period fixed-effects model whose identifying assumption — parallel trends — you cannot test until you have more than two of something."
+  },
+  {
+    "objectID": "slides/05-rdd.html#last-time",
+    "href": "slides/05-rdd.html#last-time",
+    "title": "Regression discontinuity",
+    "section": "Last time",
+    "text": "Last time\n\nMatching needs CIA: observe everything that drives selection\nToday: give up on that, and find a place where treatment flips for a reason that is locally arbitrary"
+  },
+  {
+    "objectID": "slides/05-rdd.html#the-design",
+    "href": "slides/05-rdd.html#the-design",
+    "title": "Regression discontinuity",
+    "section": "The design",
+    "text": "The design\n\nRunning variable \\(X\\), cutoff \\(c_0\\)\nSharp: \\(D = 1[X \\geq c_0]\\)\nFuzzy: \\(P(D = 1 \\mid X)\\) jumps at \\(c_0\\)\nUnits just above and just below differ in \\(D\\) and, if nothing else jumps, in nothing else"
+  },
+  {
+    "objectID": "slides/05-rdd.html#identification-by-continuity",
+    "href": "slides/05-rdd.html#identification-by-continuity",
+    "title": "Regression discontinuity",
+    "section": "Identification by continuity",
+    "text": "Identification by continuity\n\\[\\delta_{SRD} = \\lim_{x \\downarrow c_0} E[Y \\mid X = x] - \\lim_{x \\uparrow c_0} E[Y \\mid X = x]\\]\n\nAssumption: \\(E[Y^0 \\mid X]\\) and \\(E[Y^1 \\mid X]\\) are continuous at \\(c_0\\)\nNo CIA, no need to observe confounders\nEstimand is local to the cutoff"
+  },
+  {
+    "objectID": "slides/05-rdd.html#estimation-is-bias-vs-variance",
+    "href": "slides/05-rdd.html#estimation-is-bias-vs-variance",
+    "title": "Regression discontinuity",
+    "section": "Estimation is bias vs variance",
+    "text": "Estimation is bias vs variance\n\nGlobal polynomials: all the data, but far-away points steer the fit at the cutoff\nLocal linear within bandwidth \\(h\\): the modern default\nrdrobust picks \\(h\\) and bias-corrects the CI\nReport several; show the bandwidth curve"
+  },
+  {
+    "objectID": "slides/05-rdd.html#threats",
+    "href": "slides/05-rdd.html#threats",
+    "title": "Regression discontinuity",
+    "section": "Threats",
+    "text": "Threats\n\nManipulation: units sort just past the cutoff → density jumps (McCrary / rddensity)\nSomething else at the cutoff: covariates should be smooth there\nWrong functional form: placebo cutoffs should show nothing"
+  },
+  {
+    "objectID": "slides/05-rdd.html#lee-moretti-butler-2004",
+    "href": "slides/05-rdd.html#lee-moretti-butler-2004",
+    "title": "Regression discontinuity",
+    "section": "Lee, Moretti & Butler (2004)",
+    "text": "Lee, Moretti & Butler (2004)\n\nDo politicians converge to the median voter, or vote their party?\nClose House elections: the party that barely won is as-good-as random\nIf the winner’s ADA score jumps at 50% — no convergence"
+  },
+  {
+    "objectID": "slides/05-rdd.html#walkthrough",
+    "href": "slides/05-rdd.html#walkthrough",
+    "title": "Regression discontinuity",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nPlot binned ADA scores against lagged vote share\nNaive comparison (31) vs ±2-point window (21)\nFour polynomial specs: 18 to 38\nrdrobust; density test"
+  },
+  {
+    "objectID": "slides/05-rdd.html#takeaway",
+    "href": "slides/05-rdd.html#takeaway",
+    "title": "Regression discontinuity",
+    "section": "Takeaway",
+    "text": "Takeaway\n\nRDD trades a strong assumption everywhere (CIA) for a weak one in one place (continuity). The price is that the estimate is only about units near the cutoff — and the plot is the argument."
+  },
+  {
+    "objectID": "slides/03-potential-outcomes.html#last-time",
+    "href": "slides/03-potential-outcomes.html#last-time",
+    "title": "Potential outcomes",
+    "section": "Last time",
+    "text": "Last time\n\nDAGs say which variables to condition on\nToday: the language for what we are estimating, and what randomization buys"
+  },
+  {
+    "objectID": "slides/03-potential-outcomes.html#potential-outcomes",
+    "href": "slides/03-potential-outcomes.html#potential-outcomes",
+    "title": "Potential outcomes",
+    "section": "Potential outcomes",
+    "text": "Potential outcomes\n\nEach unit has \\(Y_i^1\\) and \\(Y_i^0\\); the treatment effect is \\(\\delta_i = Y_i^1 - Y_i^0\\)\nWe see one: \\(Y_i = D_i Y_i^1 + (1 - D_i) Y_i^0\\) (the switching equation)\nThe other is missing. That is the fundamental problem of causal inference."
+  },
+  {
+    "objectID": "slides/03-potential-outcomes.html#estimands",
+    "href": "slides/03-potential-outcomes.html#estimands",
+    "title": "Potential outcomes",
+    "section": "Estimands",
+    "text": "Estimands\n\n\\(ATE = E[\\delta]\\)\n\\(ATT = E[\\delta \\mid D = 1]\\)\n\\(ATU = E[\\delta \\mid D = 0]\\)\nThey differ when effects are heterogeneous and treatment is selected on them"
+  },
+  {
+    "objectID": "slides/03-potential-outcomes.html#the-decomposition",
+    "href": "slides/03-potential-outcomes.html#the-decomposition",
+    "title": "Potential outcomes",
+    "section": "The decomposition",
+    "text": "The decomposition\n\\[\\underbrace{E[Y \\mid D=1] - E[Y \\mid D=0]}_{\\text{SDO}} = ATE + \\underbrace{E[Y^0 \\mid D=1] - E[Y^0 \\mid D=0]}_{\\text{selection bias}} + \\underbrace{(1-\\pi)(ATT - ATU)}_{\\text{HTE bias}}\\]\n\nSelection bias: the treated would have done differently anyway\nHTE bias: the treated gain differently from treatment\nEvery design in this book is a story about killing these two terms"
+  },
+  {
+    "objectID": "slides/03-potential-outcomes.html#randomization",
+    "href": "slides/03-potential-outcomes.html#randomization",
+    "title": "Potential outcomes",
+    "section": "Randomization",
+    "text": "Randomization\n\n\\(D \\perp (Y^0, Y^1)\\)\nBoth bias terms are zero in expectation\nSDO = ATE\nThe regression is doing no work; the design did it"
+  },
+  {
+    "objectID": "slides/03-potential-outcomes.html#randomization-inference",
+    "href": "slides/03-potential-outcomes.html#randomization-inference",
+    "title": "Potential outcomes",
+    "section": "Randomization inference",
+    "text": "Randomization inference\n\nFisher’s sharp null: \\(\\delta_i = 0\\) for every \\(i\\)\nUnder it, every missing potential outcome is known\nRecompute the statistic for every possible assignment\nExact \\(p\\)-value, no distributional assumptions, no large-sample appeal"
+  },
+  {
+    "objectID": "slides/03-potential-outcomes.html#walkthrough",
+    "href": "slides/03-potential-outcomes.html#walkthrough",
+    "title": "Potential outcomes",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nYule (1899): pauperism on out-relief — regression without a design\nThornton (2008): randomized HIV-test incentives in Malawi\nFisher’s exact \\(p\\) on 8 units (70 assignments)\nRI on Thornton with 1,000 permutations"
+  },
+  {
+    "objectID": "slides/03-potential-outcomes.html#takeaway",
+    "href": "slides/03-potential-outcomes.html#takeaway",
+    "title": "Potential outcomes",
+    "section": "Takeaway",
+    "text": "Takeaway\n\nWrite the SDO decomposition on the wall and keep it there for the rest of the series. Randomization zeroes both bias terms; everything else is an argument about why they might be zero anyway."
+  },
+  {
+    "objectID": "slides/01-intro-regression.html#the-series",
+    "href": "slides/01-intro-regression.html#the-series",
+    "title": "Why causal inference, and regression as a tool",
+    "section": "The series",
+    "text": "The series\n\nNine one-hour sessions, one research design each\nRead the chapter first; we replicate and discuss\nEvery walkthrough in Python and R\nPredict before you run\n\n\nSet expectations: this is a study group, not a lecture. The value is in the replication and the argument about assumptions."
+  },
+  {
+    "objectID": "slides/01-intro-regression.html#correlation-is-not-causation-but-why-not",
+    "href": "slides/01-intro-regression.html#correlation-is-not-causation-but-why-not",
+    "title": "Why causal inference, and regression as a tool",
+    "section": "Correlation is not causation — but why not?",
+    "text": "Correlation is not causation — but why not?\n\nPeople, firms and governments optimize\nObserved outcomes are the result of choices made with information we do not see\nSo the treatment is correlated with everything that drove the choice\n“Optimization makes everything endogenous”"
+  },
+  {
+    "objectID": "slides/01-intro-regression.html#price-elasticity-of-demand",
+    "href": "slides/01-intro-regression.html#price-elasticity-of-demand",
+    "title": "Why causal inference, and regression as a tool",
+    "section": "Price elasticity of demand",
+    "text": "Price elasticity of demand\n\nEvery observed (price, quantity) is an equilibrium: supply and demand moved\nRegress \\(Q\\) on \\(P\\) and you get… a mix of both curves\nPhilip Wright (1928): find something that shifts supply only (weather)\nThat is the agenda for the whole book: where does the exogenous variation come from?"
+  },
+  {
+    "objectID": "slides/01-intro-regression.html#what-a-regression-coefficient-is",
+    "href": "slides/01-intro-regression.html#what-a-regression-coefficient-is",
+    "title": "Why causal inference, and regression as a tool",
+    "section": "What a regression coefficient is",
+    "text": "What a regression coefficient is\n\n\\(E[Y \\mid X]\\) is the conditional expectation function (CEF)\nRegression gives the best linear approximation to the CEF, always\nThat is a descriptive fact. Nothing causal yet.\nCausal content enters only through assumptions about \\(u\\): \\(E[u \\mid X] = 0\\)"
+  },
+  {
+    "objectID": "slides/01-intro-regression.html#regression-anatomy-frischwaughlovell",
+    "href": "slides/01-intro-regression.html#regression-anatomy-frischwaughlovell",
+    "title": "Why causal inference, and regression as a tool",
+    "section": "Regression anatomy (Frisch–Waugh–Lovell)",
+    "text": "Regression anatomy (Frisch–Waugh–Lovell)\n\\[\\beta_1 = \\frac{\\mathrm{Cov}(y, \\tilde{x}_1)}{\\mathrm{Var}(\\tilde{x}_1)}, \\quad \\tilde{x}_1 = x_1 - \\hat{E}[x_1 \\mid x_2, \\dots, x_k]\\]\n\n“Controlling for \\(x_2\\)” = using only the part of \\(x_1\\) that \\(x_2\\) cannot predict\nToday we reproduce a multiple-regression coefficient this way, by hand"
+  },
+  {
+    "objectID": "slides/01-intro-regression.html#standard-errors",
+    "href": "slides/01-intro-regression.html#standard-errors",
+    "title": "Why causal inference, and regression as a tool",
+    "section": "Standard errors",
+    "text": "Standard errors\n\n\n\nSituation\nUse\n\n\n\n\nErrors have constant variance\nConventional\n\n\nVariance depends on \\(X\\)\nHeteroskedasticity-robust (HC1)\n\n\nUnits share shocks (classrooms, states)\nCluster-robust\n\n\n\n\nChanges inference, never the estimate\nClustering is not a fix for omitted variables"
+  },
+  {
+    "objectID": "slides/01-intro-regression.html#walkthrough",
+    "href": "slides/01-intro-regression.html#walkthrough",
+    "title": "Why causal inference, and regression as a tool",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nauto: price on length, then add controls — watch the sign flip\nReproduce the length coefficient via regression anatomy\nSimulated heteroskedasticity: conventional vs robust SE\nSimulated clusters: robust vs clustered SE (and a biased estimate)"
+  },
+  {
+    "objectID": "slides/01-intro-regression.html#takeaway",
+    "href": "slides/01-intro-regression.html#takeaway",
+    "title": "Why causal inference, and regression as a tool",
+    "section": "Takeaway",
+    "text": "Takeaway\n\nRegression tells you what the conditional expectation looks like. Whether that is a causal effect depends entirely on an argument about the error term — and that argument is the rest of this book."
+  },
+  {
+    "objectID": "setup.html",
+    "href": "setup.html",
+    "title": "Setup",
+    "section": "",
+    "text": "Every session page shows the same analysis in Python and R. You only need one of them to follow along, but the group discussion is richer when both are in the room, so pick the one you are more comfortable with and glance at the other.",
+    "crumbs": [
+      "Home",
+      "Setup"
+    ]
+  },
+  {
+    "objectID": "setup.html#get-the-repository",
+    "href": "setup.html#get-the-repository",
+    "title": "Setup",
+    "section": "Get the repository",
+    "text": "Get the repository\ngit clone https://github.com/seanlewis08/causal_mixtape.git\ncd causal_mixtape\nThe data/ folder holds every dataset the sessions use (about 10 MB), pulled from the book’s GitHub repository and the causaldata package. The one exception is the judge-leniency data for Session 6, which is 58 MB and is downloaded on demand from the book’s repo.\n\n\n\n\n\n\n\n\nFile\nUsed in\nSource\n\n\n\n\nauto.dta\nSession 1\nStata’s classic auto dataset\n\n\nyule.dta, thornton_hiv.dta, ri.dta\nSession 3\nYule (1899); Thornton (2008); Cunningham’s RI toy data\n\n\ntitanic.dta, training_example.dta, training_bias_reduction.dta, nsw_mixtape.dta, cps_mixtape.dta\nSession 4\nTitanic passengers; LaLonde / Dehejia-Wahba NSW and CPS\n\n\nclose_elections_lmb.dta\nSession 5\nLee, Moretti & Butler (2004)\n\n\ncard.dta, close_college.dta\nSession 6\nCard (1995)\n\n\nsasp_panel.dta\nSession 7\nSurvey of Adult Service Providers (Cunningham & Kendall)\n\n\nabortion.dta, castle.dta\nSession 8\nCunningham & Cornwell (2013); Cheng & Hoekstra (2013)\n\n\ntexas.dta\nSession 9\nCunningham & Kang (2019)",
+    "crumbs": [
+      "Home",
+      "Setup"
+    ]
+  },
+  {
+    "objectID": "setup.html#python",
+    "href": "setup.html#python",
+    "title": "Setup",
+    "section": "Python",
+    "text": "Python\nPython 3.10 or newer. Create an environment and install the pinned requirements:\npython -m venv .venv\nsource .venv/bin/activate      # Windows: .venv\\Scripts\\activate\npip install -r requirements.txt\nrequirements.txt contains:\npandas&gt;=2.0\nnumpy\nscipy\nstatsmodels&gt;=0.14\nlinearmodels&gt;=6.0\npyreadstat\nmatplotlib\nscikit-learn\npysyncon\njupyter\nSmoke test:\nimport pandas as pd\nimport statsmodels.formula.api as smf\nauto = pd.read_stata(\"data/auto.dta\")\nprint(smf.ols(\"price ~ length\", auto).fit().params)\n# Intercept   -4584.9\n# length         57.2\n\n\n\n\n\n\nNote\n\n\n\nThe causaldata PyPI package bundles most of these datasets too, but its build is fragile on recent Python versions, so the sessions read the .dta files directly with pd.read_stata(). One wrinkle: pandas converts Stata value labels to categoricals by default. Where that gets in the way (Sessions 7 and 8) the code passes convert_categoricals=False.",
+    "crumbs": [
+      "Home",
+      "Setup"
+    ]
+  },
+  {
+    "objectID": "setup.html#r",
+    "href": "setup.html#r",
+    "title": "Setup",
+    "section": "R",
+    "text": "R\nR 4.2 or newer. Install the packages once:\ninstall.packages(c(\n  \"tidyverse\", \"haven\", \"estimatr\", \"fixest\", \"modelsummary\",\n  \"dagitty\", \"ggdag\", \"MatchIt\", \"rdrobust\", \"rddensity\",\n  \"ivreg\", \"did\", \"bacondecomp\", \"Synth\", \"tidysynth\"\n))\nThe same list lives in install.R so you can run Rscript install.R.\nSmoke test:\nlibrary(haven); library(estimatr)\nauto &lt;- read_dta(\"data/auto.dta\")\nlm_robust(price ~ length, data = auto)",
+    "crumbs": [
+      "Home",
+      "Setup"
+    ]
+  },
+  {
+    "objectID": "setup.html#running-the-code",
+    "href": "setup.html#running-the-code",
+    "title": "Setup",
+    "section": "Running the code",
+    "text": "Running the code\nThe session pages display code without executing it, so the site builds without needing every package installed. To actually run a session, copy the chunks into a Jupyter notebook or an R script (each session page links its Python and R code files under code/ in the header), or open the .qmd file itself in RStudio / VS Code and run chunks interactively.\nIf you would rather render the site with live output, set execute: enabled: true in _quarto.yml and add freeze: auto so results are cached; you will then need both a Jupyter kernel and an R installation with the packages above.",
+    "crumbs": [
+      "Home",
+      "Setup"
+    ]
+  },
+  {
+    "objectID": "setup.html#reading-the-book",
+    "href": "setup.html#reading-the-book",
+    "title": "Setup",
+    "section": "Reading the book",
+    "text": "Reading the book\nThe sessions assume you have read the chapter before the meeting. The free online edition is at mixtape-1ed.netlify.app; each session page links to the exact chapter.",
+    "crumbs": [
+      "Home",
+      "Setup"
+    ]
+  },
+  {
+    "objectID": "sessions/08-did-deep-dive.html",
+    "href": "sessions/08-did-deep-dive.html",
+    "title": "Session 8 · Difference-in-differences, deep dive",
+    "section": "",
+    "text": "Read before the meeting: Chapter 9, sections 9.4–9.7. Data: data/abortion.dta (Cunningham & Cornwell 2013), data/castle.dta (Cheng & Hoekstra 2013). Code files: code/session08.py · code/session08.R · Slides",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 8 · Difference-in-differences, deep dive"
+    ]
+  },
+  {
+    "objectID": "sessions/08-did-deep-dive.html#learning-goals",
+    "href": "sessions/08-did-deep-dive.html#learning-goals",
+    "title": "Session 8 · Difference-in-differences, deep dive",
+    "section": "Learning goals",
+    "text": "Learning goals\nParticipants should be able to estimate and plot an event study and read pre-trends and dynamics off it, build a triple-difference with a placebo cohort, run a two-way fixed-effects DiD with staggered adoption and explain why it is a weighted average of 2×2 comparisons — some of which use already-treated units as controls — and know what the modern estimators (Callaway–Sant’Anna, Sun–Abraham) do differently.\n\n\n\n\n\n\n\n\nTime\nBlock\n\n\n\n\n0:00\nRecap: the 2×2 and parallel trends\n\n\n0:05\nConcepts: event studies and leads; placebos and DDD; staggered TWFE and the Bacon decomposition\n\n\n0:20\nWalkthrough: abortion legalization event study and DDD; castle doctrine TWFE; decompose it\n\n\n0:45\nExercise 1 kickoff\n\n\n0:55\nAssign exercises; preview synthetic control",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 8 · Difference-in-differences, deep dive"
+    ]
+  },
+  {
+    "objectID": "sessions/08-did-deep-dive.html#key-ideas",
+    "href": "sessions/08-did-deep-dive.html#key-ideas",
+    "title": "Session 8 · Difference-in-differences, deep dive",
+    "section": "Key ideas",
+    "text": "Key ideas\nEvent studies. With many periods, replace the single \\(\\text{Treat} \\times \\text{Post}\\) with a full set of \\(\\text{Treat} \\times \\text{Year}\\) interactions (omitting one reference year). The leads (pre-treatment interactions) should be near zero if parallel trends is plausible; the lags trace the dynamic effect. Passing a pre-trends test is not proof of parallel trends — the counterfactual is still unobserved — but failing it is close to disqualifying.\nPlacebos and triple differences. If theory says an effect should show up only for a specific group, cohort, or window, estimate the same model where it should not and demand a null. A DDD nets the placebo group’s DD out of the treated group’s DD, absorbing group-specific shocks that a plain DD would attribute to treatment.\nThe abortion study. Roe v. Wade legalized abortion nationally in 1973; five states had repealed their bans in 1970. Cohorts born 1971–1973 in repeal states were “treated” three years earlier than the rest of the country. If legalization reduced the share of unwanted births, those cohorts should show lower gonorrhea incidence as 15–19 year olds in 1986–1992, with the effect tracing a parabola as the treated cohort moves into and out of the age bracket. The placebo is 25–29 year olds in the same states.\nStaggered adoption and TWFE. With treatment switching on at different times for different units, the TWFE coefficient is a variance-weighted average of every 2×2 DD in the data (Goodman-Bacon 2021): early vs never-treated, late vs never-treated, early vs late (before late is treated), and late vs early (after early is treated). In that last type the “control” is already treated; if effects grow over time, its trend is contaminated and the 2×2 is biased — sometimes to the wrong sign. The decomposition tells you how much weight these comparisons get.\nModern estimators. Callaway and Sant’Anna estimate each cohort-by-time ATT using only never-treated or not-yet-treated controls and aggregate them with transparent weights. Sun and Abraham do the analogous thing within an interaction-weighted event-study regression. Both avoid the forbidden comparisons; both need a clean control group.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 8 · Difference-in-differences, deep dive"
+    ]
+  },
+  {
+    "objectID": "sessions/08-did-deep-dive.html#walkthrough",
+    "href": "sessions/08-did-deep-dive.html#walkthrough",
+    "title": "Session 8 · Difference-in-differences, deep dive",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nStep 1 — Abortion legalization: the DD event study\nBlack women aged 15–19; log gonorrhea rate; repeal marks the five early-repeal states. The reference year is 1985; controls and population weights follow the paper.\n\nPythonR\n\n\nimport pandas as pd\nimport numpy as np\nimport statsmodels.formula.api as smf\nimport matplotlib.pyplot as plt\n\nab = pd.read_stata(\"data/abortion.dta\", convert_categoricals=False)\nyrs = list(range(1986, 2001))\nctrl = \"acc + ir + pi + alcohol + crack + poverty + income + ur\"\nneeded = [\"lnr\", \"totpop\", \"fip\", \"year\", \"repeal\",\n          \"acc\", \"ir\", \"pi\", \"alcohol\", \"crack\", \"poverty\", \"income\", \"ur\"]\n\ndef event_study(df):\n    df = df.dropna(subset=needed).copy()\n    for y in yrs:\n        df[f\"rep_{y}\"] = ((df.year == y) & (df.repeal == 1)).astype(int)\n    f = \"lnr ~ \" + \" + \".join(f\"rep_{y}\" for y in yrs) + \" + C(fip) + C(year) + \" + ctrl\n    m = smf.wls(f, data=df, weights=df.totpop).fit(cov_type=\"cluster\", cov_kwds={\"groups\": df[\"fip\"]})\n    out = pd.DataFrame({\"coef\": m.params[[f\"rep_{y}\" for y in yrs]].to_numpy(),\n                        \"se\":   m.bse[[f\"rep_{y}\" for y in yrs]].to_numpy()}, index=yrs)\n    return out\n\nbf15 = ab[(ab.sex == 2) & (ab.race == 2) & (ab.age == 15)]     # black females 15–19\ndd = event_study(bf15)\nprint(dd.round(3))\n\nax = dd[\"coef\"].plot(marker=\"o\")\nax.fill_between(dd.index, dd.coef - 1.96*dd.se, dd.coef + 1.96*dd.se, alpha=0.2)\nax.axhline(0, color=\"grey\"); ax.axvspan(1986, 1992, alpha=0.1, color=\"orange\")\nax.set_title(\"Repeal × year, black women 15–19 (ref. 1985)\"); plt.show()\n\n\nlibrary(tidyverse); library(haven); library(fixest)\n\nab &lt;- read_dta(\"data/abortion.dta\")\nbf15 &lt;- ab %&gt;% filter(sex == 2, race == 2, age == 15)\n\ndd &lt;- feols(lnr ~ i(year, repeal, ref = 1985) + acc + ir + pi + alcohol + crack +\n              poverty + income + ur | fip + year,\n            data = bf15, weights = ~totpop, cluster = ~fip)\ncoeftable(dd)[grepl(\"year::\", rownames(coeftable(dd))), 1:2]\niplot(dd, main = \"Repeal × year, black women 15–19 (ref. 1985)\")\n\n\n\n\nCoefficients ≈ −0.26, −0.34, −0.61, −0.79, −0.63, −0.55, −0.44 for 1986–1992, then shrinking to ≈ −0.3, −0.1 and hovering near zero (with wide CIs) from 1995 on. The parabola is the signature the theory predicted: effect builds as treated cohorts enter the 15–19 bracket, peaks around 1989, and fades as they age out. (fixest::i() produces the same interactions as the hand-built dummies.)\n\n\n\nStep 2 — The placebo cohort and the DDD\nRun the same event study for black women aged 25–29, who were born before legalization anywhere. Then stack both cohorts and estimate the triple difference: repeal × year × younger.\n\nPythonR\n\n\nbf25 = ab[(ab.sex == 2) & (ab.race == 2) & (ab.age == 25)]\nplacebo = event_study(bf25)\nprint(placebo.round(2))\n\nboth = ab[(ab.sex == 2) & (ab.race == 2) & (ab.age.isin([15, 25]))].dropna(subset=needed).copy()\nboth[\"younger\"] = (both.age == 15).astype(int)\nfor y in yrs:\n    both[f\"rep_{y}\"] = ((both.year == y) & (both.repeal == 1)).astype(int)\n    both[f\"ry_{y}\"]  = both[f\"rep_{y}\"] * both.younger             # the DDD terms\n    both[f\"yy_{y}\"]  = ((both.year == y) & (both.younger == 1)).astype(int)\nboth[\"fip_young\"] = both.fip.astype(str) + \"_\" + both.younger.astype(str)\n\nf = (\"lnr ~ \" + \" + \".join(f\"rep_{y}\" for y in yrs) + \" + \" + \" + \".join(f\"ry_{y}\" for y in yrs)\n     + \" + \" + \" + \".join(f\"yy_{y}\" for y in yrs) + \" + C(fip_young) + C(year) + \" + ctrl)\nddd = smf.wls(f, data=both, weights=both.totpop).fit(cov_type=\"cluster\", cov_kwds={\"groups\": both[\"fip\"]})\nprint(pd.DataFrame({\"coef\": ddd.params[[f\"ry_{y}\" for y in yrs]].to_numpy(),\n                    \"se\":   ddd.bse[[f\"ry_{y}\" for y in yrs]].to_numpy()}, index=yrs).round(3))\n\n\nbf25 &lt;- ab %&gt;% filter(sex == 2, race == 2, age == 25)\nplacebo &lt;- feols(lnr ~ i(year, repeal, ref = 1985) + acc + ir + pi + alcohol + crack +\n                   poverty + income + ur | fip + year,\n                 data = bf25, weights = ~totpop, cluster = ~fip)\niplot(placebo, main = \"Placebo: black women 25–29\")\n\nboth &lt;- ab %&gt;% filter(sex == 2, race == 2, age %in% c(15, 25)) %&gt;%\n  mutate(younger = as.integer(age == 15), fip_young = paste(fip, younger))\nddd &lt;- feols(lnr ~ i(year, repeal, ref = 1985) + i(year, repeal * younger, ref = 1985) +\n               i(year, younger, ref = 1985) + acc + ir + pi + alcohol + crack +\n               poverty + income + ur | fip_young + year,\n             data = both, weights = ~totpop, cluster = ~fip)\niplot(ddd, i.select = 2, main = \"DDD: repeal × year × younger\")\n\n\n\n\nThe 25–29 placebo shows no parabola in 1986–1989 (coefficients of about +0.2, +0.2, 0, −0.2 with SEs around 0.2–0.3). The DDD coefficients are ≈ −0.36, −0.41, −0.44, −0.33 for 1986–1989, then ≈ −0.09 in 1990 and statistically zero thereafter. The treated-cohort effect survives netting out whatever happened to older women in the same states.\n\n\n\nStep 3 — Castle doctrine: TWFE with staggered adoption\nStates adopted “stand your ground” laws between 2005 and 2010. The book’s regression: log homicide rate on post, state and year fixed effects, population weights, clustered by state.\n\nPythonR\n\n\ncastle = pd.read_stata(\"data/castle.dta\", convert_categoricals=False)\ncs = castle.dropna(subset=[\"l_homicide\", \"post\", \"popwt\", \"sid\", \"year\"])\ntwfe = smf.wls(\"l_homicide ~ post + C(sid) + C(year)\", data=cs, weights=cs.popwt)\\\n          .fit(cov_type=\"cluster\", cov_kwds={\"groups\": cs[\"sid\"]})\nprint(\"TWFE post:\", twfe.params[\"post\"].round(4), \" SE\", twfe.bse[\"post\"].round(4))\n\n# adoption timing\ncastle[\"D\"] = (castle.post &gt; 0).astype(int)\nfirst = castle[castle.D == 1].groupby(\"sid\").year.min()\ncastle[\"g\"] = castle.sid.map(first).fillna(0).astype(int)\nprint(castle.groupby(\"g\").sid.nunique())\n\n\ncastle &lt;- read_dta(\"data/castle.dta\")\ntwfe &lt;- feols(l_homicide ~ post | sid + year, data = castle, weights = ~popwt, cluster = ~sid)\ncoeftable(twfe)\n\ncastle &lt;- castle %&gt;% group_by(sid) %&gt;%\n  mutate(g = if (any(post &gt; 0)) min(year[post &gt; 0]) else 0) %&gt;% ungroup()\ncount(distinct(castle, sid, g), g)\n\n\n\n\npost ≈ 0.076 (SE 0.035): castle-doctrine laws are associated with about 8% more homicides. Adoption timing: 29 never-treated states, 1 in 2006, 13 in 2007, 4 in 2008, 2 in 2009, 1 in 2010. (post is fractional in adoption years; D is its binary version for the decomposition.)\n\n\n\nStep 4 — Decompose the TWFE estimate into its 2×2s\nThe exact Goodman-Bacon decomposition needs a balanced panel, a binary treatment and no weights, so this step uses the unweighted binary version. In R, bacondecomp does it in one line; in Python we compute the 2×2 estimates and their weights by hand from the paper’s formulas.\n\nPythonR\n\n\nyears = sorted(castle.year.unique())\nbase = smf.ols(\"l_homicide ~ D + C(sid) + C(year)\", data=castle).fit()\nprint(\"unweighted binary TWFE:\", base.params[\"D\"].round(4))\n\nn    = castle.groupby(\"g\").sid.nunique() / castle.sid.nunique()        # group shares\nDbar = {g: (np.array(years) &gt;= g).mean() if g &gt; 0 else 0 for g in n.index}  # share of periods treated\n\ndef dd_2x2(sub):\n    \"\"\"TWFE on a two-group subsample = the 2x2 DD for that comparison.\"\"\"\n    s = sub.copy()\n    for v in [\"D\", \"l_homicide\"]:\n        s[v + \"_t\"] = s[v] - s.groupby(\"sid\")[v].transform(\"mean\") - s.groupby(\"year\")[v].transform(\"mean\") + s[v].mean()\n    return (s.D_t * s.l_homicide_t).sum() / (s.D_t ** 2).sum()\n\nrows = []\nG = [g for g in n.index if g &gt; 0]\nfor k in G:\n    rows.append((k, \"never-treated\", dd_2x2(castle[castle.g.isin([k, 0])]),\n                 n[k] * n[0] * Dbar[k] * (1 - Dbar[k])))\n    for l in G:\n        if l &lt;= k: continue\n        nkl = n[k] / (n[k] + n[l])\n        # k treated earlier; l (not yet treated) is the control in years before l adopts\n        s_kl = ((n[k] + n[l]) * (1 - Dbar[l]))**2 * nkl * (1 - nkl) * (Dbar[k] - Dbar[l]) / (1 - Dbar[l]) * (1 - Dbar[k]) / (1 - Dbar[l])\n        rows.append((k, f\"later-treated ({l}) as control\", dd_2x2(castle[castle.g.isin([k, l]) & (castle.year &lt; l)]), s_kl))\n        # l treated later; k (already treated) is the control in years from k's adoption on\n        s_lk = ((n[k] + n[l]) * Dbar[k])**2 * nkl * (1 - nkl) * Dbar[l] / Dbar[k] * (Dbar[k] - Dbar[l]) / Dbar[k]\n        rows.append((l, f\"earlier-treated ({k}) as control\", dd_2x2(castle[castle.g.isin([k, l]) & (castle.year &gt;= k)]), s_lk))\n\nbacon = pd.DataFrame(rows, columns=[\"treated\", \"control\", \"dd\", \"s\"])\nbacon[\"weight\"] = bacon.s / bacon.s.sum()\nbacon[\"type\"] = bacon.control.str.split(\" \").str[0]\nprint(bacon.sort_values(\"weight\", ascending=False).head(8).round(3))\nprint(\"weighted sum of 2x2s:\", (bacon.weight * bacon.dd).sum().round(4))\nprint(bacon.groupby(\"type\").apply(lambda x: pd.Series({\"weight\": x.weight.sum(),\n                                                       \"avg_dd\": (x.weight * x.dd).sum() / x.weight.sum()})).round(3))\n\n\nlibrary(bacondecomp)\ncastle &lt;- mutate(castle, D = as.integer(post &gt; 0))\nbd &lt;- bacon(l_homicide ~ D, data = castle, id_var = \"sid\", time_var = \"year\")\n# prints the weight and average estimate by comparison type\nbd %&gt;% group_by(type) %&gt;% summarise(weight = sum(weight), avg_est = weighted.mean(estimate, weight))\nggplot(bd, aes(weight, estimate, shape = type, colour = type)) + geom_point(size = 3) +\n  geom_hline(yintercept = sum(bd$estimate * bd$weight)) + theme_minimal()\n\n\n\n\nUnweighted binary TWFE ≈ 0.069, and the weighted sum of the 25 two-by-twos reproduces it exactly. About 90% of the weight is on treated-vs-never-treated comparisons (average 2×2 ≈ 0.078); 8% on “later-treated as control” (average ≈ −0.03); and 2% on the forbidden “earlier-treated as control” comparisons (≈ 0.05). With 29 never-treated states the TWFE estimate is safe here. That is a property of this dataset, not of TWFE.\n\n\n\nStep 5 — A modern estimator\n\nPythonR\n\n\n# Option A: an event study in event time, with never-treated states as the pure controls\ncs2 = castle.copy()\ncs2[\"rel\"] = (cs2.year - cs2.g).clip(-5, 4)          # event time, binned at the ends\nfor k in range(-5, 5):\n    if k == -1: continue                              # reference period\n    cs2[f\"ev_{'m' if k &lt; 0 else 'p'}{abs(k)}\"] = ((cs2.g &gt; 0) & (cs2.rel == k)).astype(int)\nev = [c for c in cs2.columns if c.startswith(\"ev_\")]\nes = smf.wls(\"l_homicide ~ \" + \" + \".join(ev) + \" + C(sid) + C(year)\", data=cs2, weights=cs2.popwt)\\\n        .fit(cov_type=\"cluster\", cov_kwds={\"groups\": cs2[\"sid\"]})\nprint(pd.DataFrame({\"coef\": es.params[ev], \"se\": es.bse[ev]}).round(3))\n\n# Option B: Callaway–Sant'Anna via the `csdid` or `differences` packages (pip install differences)\n# from differences import ATTgt\n# att = ATTgt(data=castle.set_index([\"sid\", \"year\"]), cohort_name=\"g\").fit(formula=\"l_homicide\")\n# att.aggregate(\"event\")\n\n\nlibrary(did)\ncastle_cs &lt;- castle %&gt;% mutate(g_cs = ifelse(g == 0, 0, g))\natt &lt;- att_gt(yname = \"l_homicide\", tname = \"year\", idname = \"sid\", gname = \"g_cs\",\n              data = castle_cs, control_group = \"nevertreated\", weightsname = \"popwt\")\nes &lt;- aggte(att, type = \"dynamic\", min_e = -5, max_e = 4)\nsummary(es); ggdid(es)\naggte(att, type = \"simple\")\n\n\n\n\nThe event-study leads are ≈ 0.00, 0.01, −0.01, −0.05 (SEs ≈ 0.04): flat. The lags are ≈ 0.08, 0.07, 0.06, 0.04, 0.10 for event years 0–4, each with SE 0.03–0.07. Callaway–Sant’Anna’s simple aggregate ATT comes out close to the TWFE number, as the Bacon decomposition predicted. The point of running it is not a different answer here; it is that you would have known if TWFE had gone wrong.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 8 · Difference-in-differences, deep dive"
+    ]
+  },
+  {
+    "objectID": "sessions/08-did-deep-dive.html#exercises",
+    "href": "sessions/08-did-deep-dive.html#exercises",
+    "title": "Session 8 · Difference-in-differences, deep dive",
+    "section": "Exercises",
+    "text": "Exercises\n\nReference year. Re-run Step 1 with 1990 as the omitted year instead of 1985. The coefficients change; the figure’s shape does not. Explain precisely what each coefficient now measures and why the pre-period “pre-trends test” is now meaningless.\nBreak TWFE. Simulate 40 units × 10 periods with two cohorts treated at \\(t = 4\\) and \\(t = 7\\), no never-treated units, and an effect that grows by 0.5 per period after adoption. Estimate TWFE and the Bacon decomposition. Then add 20 never-treated units and repeat. Report what happens to the “earlier-treated as control” weight and the sign of the TWFE estimate.\nPlacebo outcome. Castle-doctrine laws should not affect, say, larceny (l_larceny) or motor-vehicle theft (l_motor) through self-defense incentives. Run the Step 3 TWFE on those outcomes. What do you find, and how does it bear on the parallel-trends assumption for homicide?",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 8 · Difference-in-differences, deep dive"
+    ]
+  },
+  {
+    "objectID": "sessions/08-did-deep-dive.html#solutions",
+    "href": "sessions/08-did-deep-dive.html#solutions",
+    "title": "Session 8 · Difference-in-differences, deep dive",
+    "section": "Solutions",
+    "text": "Solutions\n\n\n\n\n\n\nSolutions (click to expand)\n\n\n\n\n\n1. Each coefficient is now the repeal-vs-Roe gap in year \\(t\\) relative to the gap in 1990. Since 1990 is mid-treatment, the “pre-period” coefficients for 1986–1989 are differences between two treated years and no longer test for differential pre-trends; the only clean reference is a year before anyone was treated.\n2. With no never-treated units and growing effects, the late-vs-early comparisons receive substantial weight and have negative 2×2 estimates (the early cohort’s growing effect is differenced out as a “trend”); TWFE badly understates the true average effect (in the simulation below the true average effect among treated observations is 1.5, TWFE gives ≈ 0.35 with no never-treated units) and can flip sign when the dynamic is steep. Adding 20 never-treated units pulls TWFE to ≈ 0.9 — better, still biased, because the forbidden comparisons still get weight; a Callaway–Sant’Anna aggregate would recover 1.5.\nrng = np.random.default_rng(0)\ndef panel(n_never):\n    units = [(i, 4) for i in range(20)] + [(i, 7) for i in range(20, 40)] + [(i, 0) for i in range(40, 40 + n_never)]\n    rows = [(i, g, t, (g &gt; 0 and t &gt;= g) * (t - g + 1) * 0.5 + rng.normal()) for i, g in units for t in range(10)]\n    df = pd.DataFrame(rows, columns=[\"sid\", \"g\", \"year\", \"l_homicide\"])\n    df[\"D\"] = ((df.g &gt; 0) & (df.year &gt;= df.g)).astype(int)\n    return df\nfor n_never in [0, 20]:\n    df = panel(n_never)\n    print(n_never, smf.ols(\"l_homicide ~ D + C(sid) + C(year)\", df).fit().params[\"D\"].round(3))\n# then re-run the Step 4 decomposition on `df`\n3. l_larceny: ≈ 0.00 (SE 0.015); l_motor: ≈ 0.04 (SE 0.05). Both small and insignificant. That supports the claim that adopting states were not simply on a different crime trajectory; it does not prove parallel trends for homicide, but it rules out one broad alternative.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 8 · Difference-in-differences, deep dive"
+    ]
+  },
+  {
+    "objectID": "sessions/08-did-deep-dive.html#facilitator-notes",
+    "href": "sessions/08-did-deep-dive.html#facilitator-notes",
+    "title": "Session 8 · Difference-in-differences, deep dive",
+    "section": "Facilitator notes",
+    "text": "Facilitator notes\n\n\n\n\n\n\nFacilitator notes (click to expand)\n\n\n\n\n\nThe event-study figure is the deliverable. Make sure every participant can produce Step 1’s plot and read it: leads, reference year, dynamics, confidence band. Everything in modern DiD is a conversation about that picture.\nMisconception: flat pre-trends prove parallel trends. They make it more plausible. The counterfactual post-period trend is unobserved, full stop. Use the DDD to show what further evidence looks like.\nMisconception: TWFE is “wrong.” It is a weighted average with weights you did not choose. With a big never-treated group it is fine (Step 4). Without one, it can be badly wrong (Exercise 2). The decomposition is how you tell.\nOn the Python decomposition. It follows Goodman-Bacon (2021) Theorem 1 and reproduces the TWFE coefficient to four decimals; that equality is the check that the code is right. It assumes a balanced panel, binary treatment and no weights, which is why Step 4 switches to the unweighted D.\nIf running short. Do Steps 1, 3 and 4; assign Step 2 as the first exercise.\nDiscussion prompts. (a) In the abortion study, what would a SUTVA violation look like, and why does it argue for 25–29 rather than 20–24 as the placebo? (b) Why can Callaway–Sant’Anna not help you if every unit is eventually treated at nearly the same time?\nBridge to next session. DiD needs a control group whose trend you trust. Synthetic control builds one — a weighted combination of donors chosen to match the treated unit’s pre-period — and makes inference by placebo.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 8 · Difference-in-differences, deep dive"
+    ]
+  },
+  {
+    "objectID": "sessions/06-iv.html",
+    "href": "sessions/06-iv.html",
+    "title": "Session 6 · Instrumental variables",
+    "section": "",
+    "text": "Read before the meeting: Chapter 7 — Instrumental Variables. Data: data/card.dta; judge_fe.dta (58 MB, downloaded from the book’s repo — see Step 4). Code files: code/session06.py · code/session06.R · Slides",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 6 · Instrumental variables"
+    ]
+  },
+  {
+    "objectID": "sessions/06-iv.html#learning-goals",
+    "href": "sessions/06-iv.html#learning-goals",
+    "title": "Session 6 · Instrumental variables",
+    "section": "Learning goals",
+    "text": "Learning goals\nParticipants should be able to state the three IV conditions (relevance, exclusion, independence) and the fourth that makes the estimand interpretable (monotonicity), compute a Wald/2SLS estimate and explain it as reduced form divided by first stage, diagnose weak instruments with the first-stage F, and explain why the IV estimand under heterogeneous effects is a LATE for compliers — and who the compliers are in the judge-leniency design.\n\n\n\n\n\n\n\n\nTime\nBlock\n\n\n\n\n0:00\nRecap: fuzzy RD as an IV\n\n\n0:05\nConcepts: Wright’s problem, the IV conditions, 2SLS, weak instruments, LATE and compliers\n\n\n0:20\nWalkthrough: Card’s college-proximity instrument; the judge-leniency design\n\n\n0:45\nExercise 1 kickoff\n\n\n0:55\nAssign exercises; preview panel data",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 6 · Instrumental variables"
+    ]
+  },
+  {
+    "objectID": "sessions/06-iv.html#key-ideas",
+    "href": "sessions/06-iv.html#key-ideas",
+    "title": "Session 6 · Instrumental variables",
+    "section": "Key ideas",
+    "text": "Key ideas\nThe problem IV solves. \\(Y = \\alpha + \\delta D + u\\) with \\(\\mathrm{Cov}(D, u) \\neq 0\\). Regression cannot recover \\(\\delta\\). But if some instrument \\(Z\\) moves \\(D\\) and is otherwise unrelated to \\(Y\\), then the only reason \\(Y\\) moves with \\(Z\\) is through \\(D\\), so \\[\\delta_{IV} = \\frac{\\mathrm{Cov}(Z, Y)}{\\mathrm{Cov}(Z, D)} = \\frac{\\text{reduced form}}{\\text{first stage}}.\\]\nThe conditions. Relevance: \\(Z\\) predicts \\(D\\) (testable; look at the first-stage F). Exclusion: \\(Z\\) affects \\(Y\\) only through \\(D\\) (untestable; argued from the DAG). Independence: \\(Z\\) is as good as random with respect to \\(u\\) (untestable). Philip Wright’s 1928 appendix is the origin story: identify a demand curve with a supply shifter (weather) that does not enter demand.\n2SLS. Regress \\(D\\) on \\(Z\\) and covariates, take the fitted values \\(\\hat{D}\\), regress \\(Y\\) on \\(\\hat{D}\\) and the same covariates. The second-stage SEs must account for the first stage; use a proper IV routine, not two lm calls.\nWeak instruments. When the first stage is weak, 2SLS is biased toward OLS and its sampling distribution is badly behaved. The rule of thumb is first-stage F above 10 for one endogenous regressor; the modern advice is to report it, prefer just-identified models, and be nervous below 20.\nLATE. With heterogeneous effects, IV identifies the average effect for compliers — units whose treatment is moved by the instrument — under monotonicity (no defiers). Different instruments identify different LATEs for the same treatment. The judge-leniency design makes this vivid: the compliers are defendants who would be detained by a strict judge and released by a lenient one.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 6 · Instrumental variables"
+    ]
+  },
+  {
+    "objectID": "sessions/06-iv.html#walkthrough",
+    "href": "sessions/06-iv.html#walkthrough",
+    "title": "Session 6 · Instrumental variables",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nStep 1 — Card (1995): OLS returns to schooling\n\nPythonR\n\n\nimport pandas as pd\nimport numpy as np\nimport statsmodels.formula.api as smf\nfrom linearmodels.iv import IV2SLS\n\ncard = pd.read_stata(\"data/card.dta\")\nctrl = \"exper + black + south + married + smsa\"\n\nols = smf.ols(f\"lwage ~ educ + {ctrl}\", data=card).fit()\nprint(\"OLS return to a year of schooling:\", ols.params[\"educ\"].round(4))\n\n\nlibrary(tidyverse); library(haven); library(estimatr); library(ivreg)\n\ncard &lt;- read_dta(\"data/card.dta\")\nols &lt;- lm(lwage ~ educ + exper + black + south + married + smsa, data = card)\ncoef(ols)[\"educ\"]\n\n\n\n\n≈ 0.071: a 7.1% wage premium per year of schooling. Ability bias says this is too high; measurement error in schooling says too low. The book’s reason for IV is that we do not know which dominates.\n\n\n\nStep 2 — First stage: growing up near a four-year college\n\nPythonR\n\n\nfs = smf.ols(f\"educ ~ nearc4 + {ctrl}\", data=card).fit()\nprint(\"first stage:\", fs.params[\"nearc4\"].round(3), \" t =\", (fs.params[\"nearc4\"] / fs.bse[\"nearc4\"]).round(2))\n\nrf = smf.ols(f\"lwage ~ nearc4 + {ctrl}\", data=card).fit()\nprint(\"reduced form:\", rf.params[\"nearc4\"].round(4))\nprint(\"Wald ratio:\", (rf.params[\"nearc4\"] / fs.params[\"nearc4\"]).round(4))\n\n\nfs &lt;- lm(educ ~ nearc4 + exper + black + south + married + smsa, data = card)\nrf &lt;- lm(lwage ~ nearc4 + exper + black + south + married + smsa, data = card)\ncoef(fs)[\"nearc4\"]; coef(rf)[\"nearc4\"]\ncoef(rf)[\"nearc4\"] / coef(fs)[\"nearc4\"]\n\n\n\n\nFirst stage ≈ 0.33 more years of schooling for those near a college, \\(t ≈ 4\\) (F ≈ 16: not weak, not strong). Reduced form ≈ 0.04 log points. Their ratio, ≈ 0.12, is the IV estimate before any software. Ask the room: what is the exclusion restriction here, and what violates it? (Proximity correlates with urban labor markets; that is why smsa is in the model.)\n\n\n\nStep 3 — 2SLS with proper standard errors\n\nPythonR\n\n\ncc = card.dropna(subset=[\"lwage\", \"educ\", \"exper\", \"black\", \"south\", \"married\", \"smsa\", \"nearc4\"])\niv = IV2SLS.from_formula(f\"lwage ~ 1 + {ctrl} + [educ ~ nearc4]\", data=cc).fit(cov_type=\"robust\")\nprint(iv.summary.tables[1])\nprint(iv.first_stage.diagnostics[[\"f.stat\", \"partial.rsquared\"]])\n\n\niv &lt;- ivreg(lwage ~ educ + exper + black + south + married + smsa |\n              nearc4 + exper + black + south + married + smsa, data = card)\nsummary(iv, diagnostics = TRUE)\n\n\n\n\n2SLS educ ≈ 0.124 (SE ≈ 0.05), versus OLS 0.071. The IV estimate is larger, which the book reads as evidence that measurement error and the LATE population (people on the margin of attending because a college was nearby) matter more than ability bias. The 95% CI runs roughly 0.03 to 0.22: honest, and wide.\n\n\n\nStep 4 — Judge leniency as an instrument (Stevenson 2018)\nDefendants are quasi-randomly assigned to magistrates who differ in how often they set bail the defendant cannot pay. Judge indicators instrument for pretrial detention (jail3), and the outcome is whether the defendant is found guilty.\n\nPythonR\n\n\n# Large file: download once from the book's repo\nurl = \"https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta\"\njudge = pd.read_stata(url)        # or pd.read_stata(\"data/judge_fe.dta\") if you saved it\n\ncontrols = (\"white + age + male + black + possess + robbery + DUI1st + aggAss + drugSell \"\n            \"+ fel + mis + threePriors + F1 + F2 + F3 + M1 + M2 + M3 \"\n            \"+ day + day2 + day3 + t1 + t2 + t3 + t4 + t5\")\n# `sum` and `t6` are dropped: they are linear combinations of the other controls,\n# and one judge dummy is dropped because the eight sum to one.\njudges = \" + \".join(f\"judge_pre_{i}\" for i in range(1, 8))\n\nols = smf.ols(f\"guilt ~ jail3 + {controls}\", data=judge).fit()\niv  = IV2SLS.from_formula(f\"guilt ~ 1 + {controls} + [jail3 ~ {judges}]\", data=judge).fit(cov_type=\"robust\")\nprint(\"OLS  jail3:\", ols.params[\"jail3\"].round(3), \" SE\", ols.bse[\"jail3\"].round(3))\nprint(\"2SLS jail3:\", iv.params[\"jail3\"].round(3),  \" SE\", iv.std_errors[\"jail3\"].round(3))\nprint(iv.first_stage.diagnostics[[\"f.stat\"]])\n\n\njudge &lt;- read_dta(\"https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta\")\n\nctrl &lt;- ~ white + age + male + black + possess + robbery + DUI1st + aggAss + drugSell +\n  fel + mis + sum + threePriors + F1 + F2 + F3 + M1 + M2 + M3 + day + day2 + day3 +\n  t1 + t2 + t3 + t4 + t5 + t6\njudges &lt;- paste0(\"judge_pre_\", 1:8, collapse = \" + \")\n\nols &lt;- lm(update(ctrl, guilt ~ jail3 + .), data = judge)\niv  &lt;- ivreg(as.formula(paste(\"guilt ~ jail3 +\", as.character(ctrl)[2],\n                              \"|\", judges, \"+\", as.character(ctrl)[2])), data = judge)\ncoef(ols)[\"jail3\"]; coef(iv)[\"jail3\"]\n# R drops collinear terms automatically; Python's linearmodels does not, hence the trimmed list above.\n\n\n\n\nOLS: detention raises the probability of a guilty finding by ≈ 0.035 (3.5 points). 2SLS: ≈ 0.16 (SE ≈ 0.07) — more than four times larger. The first-stage F is in the hundreds. Interpretation: for defendants whose detention depends on which judge they drew, being detained raises conviction by 16 points — the pressure to plead.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 6 · Instrumental variables"
+    ]
+  },
+  {
+    "objectID": "sessions/06-iv.html#exercises",
+    "href": "sessions/06-iv.html#exercises",
+    "title": "Session 6 · Instrumental variables",
+    "section": "Exercises",
+    "text": "Exercises\n\nJust-identified vs over-identified. Re-estimate Card’s model using nearc2 (near a two-year college) as a second instrument alongside nearc4. Report the 2SLS estimate, the first-stage F, and (in R, summary(..., diagnostics = TRUE); in Python, iv.sargan) the Sargan over-identification test. What does a rejection mean and why is it not a test of the exclusion restriction?\nWeak-instrument simulation. Simulate \\(Y = D + u\\), \\(D = \\pi Z + v\\) with \\(\\mathrm{Corr}(u, v) = 0.8\\), \\(n = 500\\). For \\(\\pi \\in \\{0.05, 0.1, 0.2, 0.5\\}\\), run 1,000 replications and record OLS, 2SLS, and the first-stage F. Plot the sampling distribution of 2SLS for each \\(\\pi\\). At what F does 2SLS start to look well-behaved?\nWho are the compliers? Using Card, compute the share of compliers implied by the first stage (it is the first-stage coefficient when \\(D\\) is binary; here educ is continuous, so think of a binary version: educ &gt;= 13). Then compare the mean of black and south among compliers to the full sample using the Abadie (2003) kappa-weighting trick or the simpler ratio-of-first-stages method from the book. Are compliers representative?",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 6 · Instrumental variables"
+    ]
+  },
+  {
+    "objectID": "sessions/06-iv.html#solutions",
+    "href": "sessions/06-iv.html#solutions",
+    "title": "Session 6 · Instrumental variables",
+    "section": "Solutions",
+    "text": "Solutions\n\n\n\n\n\n\nSolutions (click to expand)\n\n\n\n\n\n1. With both instruments the estimate rises to ≈ 0.16 (SE ≈ 0.05) and the first-stage F is ≈ 19; the Sargan statistic is 3.6 on 1 df, \\(p ≈ 0.06\\) — borderline. A rejection would say the two instruments imply different LATEs, which could be heterogeneity rather than invalidity; the test can never validate the exclusion restriction of either instrument on its own.\n2. OLS is ≈ 1.8 regardless of \\(\\pi\\) (the endogeneity bias). At \\(\\pi = 0.05\\) the median first-stage F is ≈ 1 and the 2SLS median is ≈ 1.3 with an interquartile range of about 0.8–1.7, pulled toward OLS; at \\(\\pi = 0.1\\) (F ≈ 5) the median is right but the IQR is still 0.6–1.3; by \\(\\pi = 0.2\\) (F ≈ 20) it is tight around 1 (IQR 0.8–1.1). The F ≈ 10 threshold is where the worst behavior fades, not where it ends.\nrng = np.random.default_rng(0)\ndef sim(pi, n=500):\n    z = rng.normal(size=n); uv = rng.multivariate_normal([0,0], [[1,.8],[.8,1]], n)\n    d = pi*z + uv[:,1]; y = d + uv[:,0]\n    df = pd.DataFrame(dict(y=y, d=d, z=z))\n    fs = smf.ols(\"d ~ z\", df).fit()\n    return smf.ols(\"y ~ d\", df).fit().params[\"d\"], \\\n           IV2SLS.from_formula(\"y ~ 1 + [d ~ z]\", df).fit().params[\"d\"], fs.fvalue\n3. With D = educ &gt;= 13, the first stage on nearc4 is about 0.06, i.e. roughly 6% of the sample are compliers. Using the ratio-of-first-stages method (\\(P(x=1 \\mid \\text{complier}) / P(x=1) = \\text{FS}_{x=1} / \\text{FS}\\)), compliers are far less likely to be Black (ratio ≈ 0.2) and less likely to be Southern (ratio ≈ 0.6) than the full sample. The LATE is for a population that looks quite different from the average respondent — one more reason not to call it “the” return to schooling.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 6 · Instrumental variables"
+    ]
+  },
+  {
+    "objectID": "sessions/06-iv.html#facilitator-notes",
+    "href": "sessions/06-iv.html#facilitator-notes",
+    "title": "Session 6 · Instrumental variables",
+    "section": "Facilitator notes",
+    "text": "Facilitator notes\n\n\n\n\n\n\nFacilitator notes (click to expand)\n\n\n\n\n\nDo Step 2 by hand before Step 3. The Wald ratio is the whole idea; 2SLS is bookkeeping. If people see 0.04 / 0.33 ≈ 0.12 with their own eyes, the software output stops being magic.\nMisconception: a significant first stage proves the instrument is valid. It proves relevance only. Exclusion and independence come from the argument, never from the data.\nMisconception: IV estimates “the” effect. Keep saying LATE. Card’s compliers and Stevenson’s compliers are different people with different effects; neither is the ATE.\nOn the judge data. It is 58 MB; have people download it before the meeting. If the network is bad, skip Step 4 and talk through the design on the slides — the numbers are in the expect box.\nOn collinearity. Stata and R silently drop collinear controls; linearmodels raises an error. The trimmed Python control list is the same model.\nDiscussion prompts. (a) Why might college proximity violate exclusion? (b) In the judge design, what is monotonicity, and is it plausible that every judge is weakly stricter than another for every defendant?\nBridge to next session. IV finds exogenous variation in a cross-section. Panel data gets it from within-unit changes over time, assuming the unobservables that matter are fixed.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 6 · Instrumental variables"
+    ]
+  },
+  {
+    "objectID": "sessions/04-matching.html",
+    "href": "sessions/04-matching.html",
+    "title": "Session 4 · Matching and subclassification",
+    "section": "",
+    "text": "Read before the meeting: Chapter 5 — Matching and Subclassification. Data: data/titanic.dta, data/nsw_mixtape.dta, data/cps_mixtape.dta (also training_example.dta, training_bias_reduction.dta for exercises). Code files: code/session04.py · code/session04.R · Slides",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 4 · Matching and subclassification"
+    ]
+  },
+  {
+    "objectID": "sessions/04-matching.html#learning-goals",
+    "href": "sessions/04-matching.html#learning-goals",
+    "title": "Session 4 · Matching and subclassification",
+    "section": "Learning goals",
+    "text": "Learning goals\nParticipants should be able to state the conditional independence assumption and the common-support condition, compute a subclassification estimate by hand, explain why the propensity score is a sufficient statistic for the covariates, implement inverse-probability weighting and nearest-neighbor matching on the propensity score, and recognize the Dehejia–Wahba result: a good selection-on-observables design can recover an experimental benchmark — and a careless one can be off by $10,000.\n\n\n\n\n\n\n\n\nTime\nBlock\n\n\n\n\n0:00\nRecap: SDO = ATE + selection bias + HTE bias\n\n\n0:05\nConcepts: CIA, common support, curse of dimensionality, the propensity-score theorem\n\n\n0:20\nWalkthrough: Titanic subclassification; NSW vs CPS; estimate the propensity score; IPW and nearest-neighbor ATT\n\n\n0:45\nExercise 1 kickoff\n\n\n0:55\nAssign exercises; preview RDD",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 4 · Matching and subclassification"
+    ]
+  },
+  {
+    "objectID": "sessions/04-matching.html#key-ideas",
+    "href": "sessions/04-matching.html#key-ideas",
+    "title": "Session 4 · Matching and subclassification",
+    "section": "Key ideas",
+    "text": "Key ideas\nConditional independence (CIA). \\((Y^0, Y^1) \\perp D \\mid X\\). Within strata of \\(X\\), treatment is as good as random. This is the backdoor criterion in potential-outcomes clothing. It is an assumption about unobservables, so no test on the data can confirm it; only the DAG argument can.\nCommon support. \\(0 &lt; P(D=1 \\mid X) &lt; 1\\). For each covariate profile there must be both treated and untreated units; otherwise you are extrapolating.\nSubclassification. Stratify on \\(X\\), compute the treated-minus-control difference within each stratum, and average using the treated group’s stratum shares (for the ATT). It works beautifully with a few discrete covariates and dies of the curse of dimensionality quickly.\nPropensity score. Rosenbaum and Rubin: if CIA holds given \\(X\\), it also holds given \\(p(X) = P(D=1 \\mid X)\\). One scalar replaces the whole covariate vector. Estimate it with a logit, then stratify on it, weight by it (IPW), or match on it.\nDehejia–Wahba. LaLonde showed that regressions using a non-experimental control group (CPS) badly missed the NSW experimental estimate. Dehejia and Wahba showed that propensity-score methods with a well-specified score and attention to common support get close. The lesson is double-edged: matching can work, and it can fail silently.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 4 · Matching and subclassification"
+    ]
+  },
+  {
+    "objectID": "sessions/04-matching.html#walkthrough",
+    "href": "sessions/04-matching.html#walkthrough",
+    "title": "Session 4 · Matching and subclassification",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nStep 1 — Titanic: the simple difference and the subclassified difference\nDid first-class passengers survive more because they were first class, or because of who was in first class? Stratify on sex and age.\n\nPythonR\n\n\nimport pandas as pd\nimport numpy as np\nimport statsmodels.formula.api as smf\n\nt = pd.read_stata(\"data/titanic.dta\")\nt[\"d\"]    = (t[\"class\"] == \"1st class\").astype(int)\nt[\"surv\"] = (t[\"survived\"] == \"yes\").astype(int)\nt[\"man\"]  = (t[\"sex\"] == \"man\").astype(int)\nt[\"adult\"]= (t[\"age\"] == \"adults\").astype(int)\n\nsdo = t.loc[t.d == 1, \"surv\"].mean() - t.loc[t.d == 0, \"surv\"].mean()\nprint(\"SDO:\", round(sdo, 3))\n\ncell = t.groupby([\"man\", \"adult\", \"d\"])[\"surv\"].mean().unstack(\"d\")\ndiff = cell[1] - cell[0]\nw = t[t.d == 1].groupby([\"man\", \"adult\"]).size() / (t.d == 1).sum()\nprint(pd.DataFrame({\"diff\": diff.round(3), \"treated_share\": w.round(3)}))\nprint(\"Subclassified ATT:\", round((diff * w).sum(), 3))\n\n\nlibrary(tidyverse); library(haven)\n\nt &lt;- read_dta(\"data/titanic.dta\") %&gt;%\n  mutate(d = as.integer(class == 1),\n         man = as.integer(sex == 1), adult = as.integer(age == 1))\n# haven keeps Stata's numeric codes; attributes(t$sex)$labels shows\n# 1 = man, and age 1 = adults, class 1 = 1st class, survived 1 = yes\n\nsdo &lt;- with(t, mean(survived[d == 1]) - mean(survived[d == 0]))\n\natt &lt;- t %&gt;%\n  group_by(man, adult) %&gt;%\n  summarise(diff = mean(survived[d == 1]) - mean(survived[d == 0]),\n            n_treated = sum(d == 1), .groups = \"drop\") %&gt;%\n  mutate(w = n_treated / sum(n_treated))\natt\nsum(att$diff * att$w)\n\n\n\n\nSDO ≈ 0.354: first-class passengers survived 35 points more often. Within sex×age strata the gaps are smaller (adult men: 0.33 vs 0.19; adult women: 0.97 vs 0.63), and the subclassified ATT is ≈ 0.24. A third of the raw gap was who was in first class, not being in first class.\n\n\n\nStep 2 — NSW: the experimental benchmark and the naive comparison\nnsw_mixtape.dta is the randomized job-training experiment; cps_mixtape.dta is a non-experimental comparison group from the CPS.\n\nPythonR\n\n\nnsw = pd.read_stata(\"data/nsw_mixtape.dta\")\ncps = pd.read_stata(\"data/cps_mixtape.dta\")\n\nexp = nsw.loc[nsw.treat == 1, \"re78\"].mean() - nsw.loc[nsw.treat == 0, \"re78\"].mean()\nprint(\"experimental effect on 1978 earnings:\", round(exp, 0))\n\nd = pd.concat([nsw[nsw.treat == 1], cps[cps.treat == 0]], ignore_index=True)\nnaive = d.loc[d.treat == 1, \"re78\"].mean() - d.loc[d.treat == 0, \"re78\"].mean()\nprint(\"NSW treated vs CPS controls:\", round(naive, 0))\n\n\nnsw &lt;- read_dta(\"data/nsw_mixtape.dta\")\ncps &lt;- read_dta(\"data/cps_mixtape.dta\")\n\nwith(nsw, mean(re78[treat == 1]) - mean(re78[treat == 0]))\n\nd &lt;- bind_rows(filter(nsw, treat == 1), filter(cps, treat == 0))\nwith(d, mean(re78[treat == 1]) - mean(re78[treat == 0]))\n\n\n\n\nExperimental effect ≈ +$1,794. NSW treated vs CPS controls ≈ −$8,498. The CPS sample is older, better educated and far richer than NSW enrollees; selection bias swamps the effect.\n\n\n\nStep 3 — Estimate the propensity score\nThe Dehejia–Wahba specification: polynomials in age and education, indicators for zero earnings, and an education×earnings interaction.\n\nPythonR\n\n\nd[\"age2\"] = d.age**2;  d[\"age3\"] = d.age**3;  d[\"educ2\"] = d.educ**2\nd[\"u74\"]  = (d.re74 == 0).astype(int);  d[\"u75\"] = (d.re75 == 0).astype(int)\nd[\"interaction1\"] = d.educ * d.re74\n\nlogit = smf.logit(\"treat ~ age + age2 + age3 + educ + educ2 + marr + nodegree + black \"\n                  \"+ hisp + re74 + re75 + u74 + u75 + interaction1\", data=d).fit(disp=0)\nd[\"pscore\"] = logit.predict(d)\nprint(d.groupby(\"treat\")[\"pscore\"].describe()[[\"mean\", \"min\", \"max\"]].round(3))\n\n\nd &lt;- d %&gt;% mutate(age2 = age^2, age3 = age^3, educ2 = educ^2,\n                  u74 = as.integer(re74 == 0), u75 = as.integer(re75 == 0),\n                  interaction1 = educ * re74)\nlogit &lt;- glm(treat ~ age + age2 + age3 + educ + educ2 + marr + nodegree + black +\n               hisp + re74 + re75 + u74 + u75 + interaction1,\n             family = binomial(), data = d)\nd$pscore &lt;- predict(logit, type = \"response\")\nd %&gt;% group_by(treat) %&gt;% summarise(mean = mean(pscore), min = min(pscore), max = max(pscore))\n\nggplot(d, aes(pscore, fill = factor(treat))) +\n  geom_histogram(bins = 50, position = \"identity\", alpha = 0.5) + theme_minimal()\n\n\n\n\nMean score ≈ 0.33 for treated and 0.008 for controls. Most CPS people have essentially zero probability of being in NSW. That is the common-support problem in one histogram; the next step trims to the overlap region.\n\n\n\nStep 4 — Inverse-probability weighting on the overlap region\n\nPythonR\n\n\nov = d[(d.pscore &gt; 0.1) & (d.pscore &lt; 0.9)].copy()\nprint(\"units in overlap:\", len(ov), \" treated:\", int(ov.treat.sum()))\n\n# normalized IPW (ATE)\nw1 = ov.treat / ov.pscore\nw0 = (1 - ov.treat) / (1 - ov.pscore)\ny1 = (w1 * ov.re78).sum() / w1.sum()\ny0 = (w0 * ov.re78).sum() / w0.sum()\nprint(\"normalized IPW estimate:\", round(y1 - y0, 0))\n\n# non-normalized version for comparison\nprint(\"non-normalized IPW:\", round((w1 * ov.re78).mean() - (w0 * ov.re78).mean(), 0))\n\n\nov &lt;- d %&gt;% filter(pscore &gt; 0.1, pscore &lt; 0.9) %&gt;%\n  mutate(w1 = treat / pscore, w0 = (1 - treat) / (1 - pscore))\n\ny1 &lt;- with(ov, sum(w1 * re78) / sum(w1))\ny0 &lt;- with(ov, sum(w0 * re78) / sum(w0))\ny1 - y0\n\nwith(ov, mean(w1 * re78) - mean(w0 * re78))\n\n\n\n\nAbout 445 units remain in the overlap region, 147 of them treated. Normalized IPW ≈ +$2,030; non-normalized ≈ +$2,860. Both are within shouting distance of the $1,794 experimental benchmark and nowhere near −$8,498. Normalized weights are more stable; always report them.\n\n\n\nStep 5 — Nearest-neighbor matching on the score (ATT)\n\nPythonR\n\n\nfrom sklearn.neighbors import NearestNeighbors\n\ntr = d[d.treat == 1]; co = d[d.treat == 0]\nnn = NearestNeighbors(n_neighbors=1).fit(co[[\"pscore\"]].to_numpy())\n_, idx = nn.kneighbors(tr[[\"pscore\"]].to_numpy())\natt = (tr.re78.to_numpy() - co.re78.to_numpy()[idx[:, 0]]).mean()\nprint(\"1-NN ATT on pscore:\", round(att, 0))\n\n\nlibrary(MatchIt)\nm &lt;- matchit(treat ~ age + age2 + age3 + educ + educ2 + marr + nodegree + black +\n               hisp + re74 + re75 + u74 + u75 + interaction1,\n             data = d, method = \"nearest\", distance = \"glm\", replace = TRUE)\nmd &lt;- match.data(m)\nlm(re78 ~ treat, data = md, weights = weights)\nsummary(m)$sum.matched[, c(\"Means Treated\", \"Means Control\")]\n\n\n\n\n1-NN ATT ≈ +$1,760, almost exactly the experimental estimate. (MatchIt with replacement gives a similar number; its summary() also shows covariate balance before and after, which is the diagnostic you should always print.)",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 4 · Matching and subclassification"
+    ]
+  },
+  {
+    "objectID": "sessions/04-matching.html#exercises",
+    "href": "sessions/04-matching.html#exercises",
+    "title": "Session 4 · Matching and subclassification",
+    "section": "Exercises",
+    "text": "Exercises\n\nBias reduction by matching. Using training_bias_reduction.dta (8 units, book §5.3), compute the raw SDO, then match each treated unit to the control with the closest X, and compute the ATT. Then compute the bias-corrected matching estimate using a regression of \\(Y\\) on \\(X\\) in the control group. Compare all three to each other.\nTrimming sensitivity. Rerun Step 4 with overlap windows (0.05, 0.95), (0.1, 0.9) and (0.2, 0.8). How does the estimate and the sample size move? Write two sentences on the bias–variance trade-off involved.\nBreak CIA. Drop re74 and re75 from the propensity-score model and redo Steps 3–5. What happens, and what does it tell you about which covariates drive selection into NSW?",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 4 · Matching and subclassification"
+    ]
+  },
+  {
+    "objectID": "sessions/04-matching.html#solutions",
+    "href": "sessions/04-matching.html#solutions",
+    "title": "Session 4 · Matching and subclassification",
+    "section": "Solutions",
+    "text": "Solutions\n\n\n\n\n\n\nSolutions (click to expand)\n\n\n\n\n\n1. Raw SDO = 3.25. Matching each treated unit to the control with the closest X (11→10, 7→8, 5→4, 3→4) gives an ATT of 2.25. The bias-corrected version adjusts each matched pair by \\(\\hat{\\mu}_0(X_{treated}) - \\hat{\\mu}_0(X_{match})\\), where \\(\\hat{\\mu}_0\\) is the control-group regression of \\(Y\\) on \\(X\\). In this tiny example the \\(X\\) mismatches are +1, −1, +1, −1, so with a linear \\(\\hat{\\mu}_0\\) the corrections cancel and the bias-corrected ATT is also 2.25 — which is itself a useful lesson: the correction matters when mismatches are systematic, not when they are balanced.\ntb = pd.read_stata(\"data/training_bias_reduction.dta\")\ntr, co = tb[tb.D == 1], tb[tb.D == 0]\nmu0 = smf.ols(\"Y ~ X\", co).fit()\nrows = []\nfor _, r in tr.iterrows():\n    j = (co.X - r.X).abs().idxmin()\n    rows.append((r.Y - co.loc[j, \"Y\"],\n                 r.Y - co.loc[j, \"Y\"] - (mu0.predict(pd.DataFrame({\"X\":[r.X]}))[0]\n                                        - mu0.predict(pd.DataFrame({\"X\":[co.loc[j,\"X\"]]}))[0])))\nprint(np.mean(rows, axis=0))   # [naive NN ATT, bias-corrected ATT]\n2. (0.05, 0.95): ≈ +$1,320 on 601 units; (0.1, 0.9): ≈ +$2,030 on 445; (0.2, 0.8): ≈ +$3,210 on 256. Wider windows keep more controls (lower variance) but include units with poor overlap (more bias); narrower windows do the reverse. The estimate swings by almost $2,000 across reasonable choices — report the sensitivity, not one number.\n3. Without lagged earnings the treated group’s mean score drops from 0.33 to about 0.20, and the (0.1, 0.9) IPW estimate flips to ≈ −$2,080. The score no longer captures the dimension that matters most (NSW enrollees had near-zero 1974–75 earnings). Pre-treatment outcomes are the single most important covariate in this design.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 4 · Matching and subclassification"
+    ]
+  },
+  {
+    "objectID": "sessions/04-matching.html#facilitator-notes",
+    "href": "sessions/04-matching.html#facilitator-notes",
+    "title": "Session 4 · Matching and subclassification",
+    "section": "Facilitator notes",
+    "text": "Facilitator notes\n\n\n\n\n\n\nFacilitator notes (click to expand)\n\n\n\n\n\nThe Titanic step is the whole chapter in miniature. Make sure everyone can reproduce the 0.24 by hand (four cells, four weights) before touching propensity scores. The weights are the treated group’s shares, which is what makes it the ATT.\nMisconception: the propensity score is a prediction model. You are not trying to predict treatment well; you are trying to achieve covariate balance. A score with AUC 0.99 means no overlap. Say this out loud; it surprises people who come from ML.\nMisconception: matching “controls for” unobservables. It does not. The only thing that justifies CIA is the DAG from Session 2.\nOn the categorical columns. pd.read_stata() returns Stata value labels as categoricals, which is why Step 1 compares to strings. In R, haven keeps the numeric codes with labels attached; attributes(t$class)$labels shows them.\nIf running short. Drop Step 5; IPW alone makes the point.\nDiscussion prompts. (a) Why does Dehejia–Wahba work for NSW but Session 2’s discrimination example cannot be fixed by matching? (b) What covariate would you most want that is not in the CPS?\nBridge to next session. Matching needs CIA. RDD gives up on observing everything and instead finds a place where treatment flips for reasons that are locally as good as random.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 4 · Matching and subclassification"
+    ]
+  },
+  {
+    "objectID": "sessions/02-dags.html",
+    "href": "sessions/02-dags.html",
+    "title": "Session 2 · Directed acyclic graphs",
+    "section": "",
+    "text": "Read before the meeting: Chapter 3 — Directed Acyclic Graphs. Data: simulated. Code files: code/session02.py · code/session02.R · Slides",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 2 · Directed acyclic graphs"
+    ]
+  },
+  {
+    "objectID": "sessions/02-dags.html#learning-goals",
+    "href": "sessions/02-dags.html#learning-goals",
+    "title": "Session 2 · Directed acyclic graphs",
+    "section": "Learning goals",
+    "text": "Learning goals\nEveryone should leave able to read a DAG (nodes, arrows, missing arrows), list the backdoor paths between a treatment and an outcome, apply the backdoor criterion to decide what to condition on, and explain — with a simulation they ran — why conditioning on a collider creates bias where none existed.\n\n\n\n\n\n\n\n\nTime\nBlock\n\n\n\n\n0:00\nRecap: regression anatomy; “controlling for” is mechanical\n\n\n0:05\nConcepts: DAG grammar, confounders, colliders, the backdoor criterion\n\n\n0:20\nWalkthrough: the gender-discrimination DAG by simulation; the talent–beauty collider\n\n\n0:45\nExercise 1 kickoff (draw the DAG first!)\n\n\n0:55\nAssign exercises; preview potential outcomes",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 2 · Directed acyclic graphs"
+    ]
+  },
+  {
+    "objectID": "sessions/02-dags.html#key-ideas",
+    "href": "sessions/02-dags.html#key-ideas",
+    "title": "Session 2 · Directed acyclic graphs",
+    "section": "Key ideas",
+    "text": "Key ideas\nA DAG is a set of causal claims, including the arrows you leave out. Nodes are variables; a directed edge \\(A \\to B\\) says \\(A\\) causes \\(B\\); the absence of an edge is the strong claim that there is no direct effect. The DAG encodes your prior knowledge of the data-generating process — theory, institutional detail, previous studies — and that is what makes it useful: it forces you to write down what you believe before you touch data.\nPaths and what blocks them. A backdoor path from \\(D\\) to \\(Y\\) is any path starting with an arrow into \\(D\\). Backdoor paths carry non-causal association. A path is blocked if it contains a non-collider you condition on, or a collider you do not condition on. A collider is a node where two arrows meet (\\(A \\to C \\leftarrow B\\)). Conditioning on a collider (or its descendant) opens the path.\nThe backdoor criterion. A set of variables \\(X\\) satisfies the backdoor criterion for \\((D, Y)\\) if \\(X\\) blocks every backdoor path and contains no descendant of \\(D\\). Then conditioning on \\(X\\) identifies the causal effect of \\(D\\) on \\(Y\\). This is the formal version of “conditional independence” and “selection on observables” that Sessions 4 and 7 rely on.\nCollider bias is the chapter’s main warning. The book’s discrimination example: female \\(\\to\\) discrimination \\(\\to\\) occupation \\(\\to\\) wage, with discrimination \\(\\to\\) wage directly and unobserved ability \\(\\to\\) occupation and ability \\(\\to\\) wage. Occupation is a collider on the path discrimination \\(\\to\\) occupation \\(\\leftarrow\\) ability \\(\\to\\) wage. “Controlling for occupation,” which sounds like good practice, opens that path and makes discrimination look like it raises wages. The second example — a negative talent–beauty correlation among movie stars when both are independent in the population — is the same mechanism via sample selection.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 2 · Directed acyclic graphs"
+    ]
+  },
+  {
+    "objectID": "sessions/02-dags.html#walkthrough",
+    "href": "sessions/02-dags.html#walkthrough",
+    "title": "Session 2 · Directed acyclic graphs",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nStep 1 — Simulate the discrimination DAG\nThe DGP, following the book: discrimination is a deterministic function of being female; occupation depends on ability and discrimination; wages depend on discrimination, occupation and ability.\n\nPythonR\n\n\nimport numpy as np\nimport pandas as pd\nimport statsmodels.formula.api as smf\n\nrng = np.random.default_rng(42)\nn = 10_000\nfemale = rng.binomial(1, 0.5, n)\nability = rng.normal(size=n)\ndiscrimination = female.copy()\noccupation = 1 + 2 * ability + 0 * female - 2 * discrimination + rng.normal(size=n)\nwage = 1 - 1 * discrimination + 1 * occupation + 2 * ability + rng.normal(size=n)\n\ntb = pd.DataFrame(dict(female=female, ability=ability, discrimination=discrimination,\n                       occupation=occupation, wage=wage))\n\n\nlibrary(tidyverse)\nlibrary(estimatr)\n\nset.seed(42)\nn &lt;- 10000\ntb &lt;- tibble(\n  female         = rbinom(n, 1, 0.5),\n  ability        = rnorm(n),\n  discrimination = female,\n  occupation     = 1 + 2 * ability + 0 * female - 2 * discrimination + rnorm(n),\n  wage           = 1 - 1 * discrimination + 1 * occupation + 2 * ability + rnorm(n)\n)\n\n\n\n\n\nStep 2 — Three regressions, three answers\n\nPythonR\n\n\nfor f in [\"wage ~ female\",\n          \"wage ~ female + occupation\",\n          \"wage ~ female + occupation + ability\"]:\n    print(f, \"\\n\", smf.ols(f, data=tb).fit().params.round(3), \"\\n\")\n\n\nlm_1 &lt;- lm(wage ~ female, data = tb)\nlm_2 &lt;- lm(wage ~ female + occupation, data = tb)\nlm_3 &lt;- lm(wage ~ female + occupation + ability, data = tb)\nmodelsummary::modelsummary(list(\"Biased unconditional\" = lm_1,\n                                \"Biased (collider)\"    = lm_2,\n                                \"Unbiased conditional\" = lm_3),\n                           gof_omit = \".*\")\n\n\n\n\nfemale ≈ −3.0 unconditionally (the total effect: −1 direct, −2 through occupation). Adding occupation flips it to ≈ +0.57 — controlling for a collider makes discrimination look beneficial. Adding ability restores the direct effect ≈ −1.0. Only the third regression could be run in real life if ability were observed, which it usually is not.\n\n\n\nStep 3 — Why: trace the paths\nHave participants list every path from discrimination to wage and classify each node.\n\n\n\n\n\n\n\n\nPath\nType\nOpen when conditioning on occupation?\n\n\n\n\ndiscrimination → wage\ncausal (direct)\nyes, always\n\n\ndiscrimination → occupation → wage\ncausal (mediated)\nblocked (you removed it)\n\n\ndiscrimination → occupation ← ability → wage\nnon-causal, occupation is a collider\nopened\n\n\n\nConditioning on occupation removes the mediated effect you probably wanted to keep and opens a spurious path you definitely did not want. Both move the estimate upward.\n\n\nStep 4 — The talent–beauty collider by selection\n\nPythonR\n\n\nrng = np.random.default_rng(3)\npop = pd.DataFrame({\"beauty\": rng.normal(size=10_000),\n                    \"talent\": rng.normal(size=10_000)})\npop[\"score\"] = pop.beauty + pop.talent\ncutoff = pop.score.quantile(0.85)\npop[\"star\"] = pop.score &gt;= cutoff\n\nprint(\"population corr:\", pop[[\"beauty\", \"talent\"]].corr().iloc[0, 1].round(3))\nprint(\"stars corr:     \", pop.loc[pop.star, [\"beauty\", \"talent\"]].corr().iloc[0, 1].round(3))\n\n\nset.seed(3)\npop &lt;- tibble(beauty = rnorm(10000), talent = rnorm(10000)) %&gt;%\n  mutate(score = beauty + talent,\n         star  = score &gt;= quantile(score, 0.85))\n\ncor(pop$beauty, pop$talent)\nwith(filter(pop, star), cor(beauty, talent))\n\nggplot(pop, aes(beauty, talent, colour = star)) +\n  geom_point(alpha = 0.3) + theme_minimal()\n\n\n\n\nPopulation correlation ≈ 0 ; among “stars” it is strongly negative (around −0.65). Nothing causal links beauty and talent; the sample was selected on their sum. Selection on a collider is conditioning on a collider.\n\n\n\nStep 5 — (Optional, R only) Let dagitty find the adjustment set\nlibrary(dagitty); library(ggdag)\n\ng &lt;- dagitty(\"dag {\n  female -&gt; discrimination\n  discrimination -&gt; occupation\n  discrimination -&gt; wage\n  ability -&gt; occupation\n  ability -&gt; wage\n  occupation -&gt; wage\n}\")\nadjustmentSets(g, exposure = \"discrimination\", outcome = \"wage\", effect = \"total\")\nadjustmentSets(g, exposure = \"discrimination\", outcome = \"wage\", effect = \"direct\")\nggdag(g) + theme_dag()\nFor the total effect the empty set suffices (no backdoor paths into discrimination). For the direct effect you must condition on occupation and ability. In Python, networkx can draw the graph but has no backdoor solver; this is one place where the R tooling is simply better.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 2 · Directed acyclic graphs"
+    ]
+  },
+  {
+    "objectID": "sessions/02-dags.html#exercises",
+    "href": "sessions/02-dags.html#exercises",
+    "title": "Session 2 · Directed acyclic graphs",
+    "section": "Exercises",
+    "text": "Exercises\n\nDraw before you regress. A study finds that among hospitalized patients, smoking is negatively associated with COVID-19 severity. Draw a DAG in which smoking does not protect against severe illness but this association appears anyway. Simulate it and show the sign reversal.\nMediator or collider? In the Step 1 DGP, change occupation so that it is caused by female directly (set the 0 * female coefficient to −1) rather than only through discrimination. Re-run the three regressions. Which coefficients change, which do not, and why does the backdoor criterion still give the same answer for the total effect?\nBad controls in the wild. Find one published or newsroom regression (any field) that controls for something plausibly downstream of the treatment. Draw its DAG, and write three sentences on whether the control is a mediator, a collider, or harmless.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 2 · Directed acyclic graphs"
+    ]
+  },
+  {
+    "objectID": "sessions/02-dags.html#solutions",
+    "href": "sessions/02-dags.html#solutions",
+    "title": "Session 2 · Directed acyclic graphs",
+    "section": "Solutions",
+    "text": "Solutions\n\n\n\n\n\n\nSolutions (click to expand)\n\n\n\n\n\n1. One DAG: smoking → hospitalization ← severity (both smoking-related illness and severe COVID get you admitted), with smoking having no arrow to severity. Restricting the sample to the hospitalized conditions on the collider.\nrng = np.random.default_rng(7); n = 100_000\nsmoke = rng.binomial(1, 0.3, n)\nseverity = rng.normal(size=n)                      # independent of smoking\nhosp = (0.8*smoke + severity + rng.normal(size=n)) &gt; 1.0\nd = pd.DataFrame(dict(smoke=smoke, severity=severity, hosp=hosp))\nprint(smf.ols(\"severity ~ smoke\", d).fit().params[\"smoke\"])            # ≈ 0\nprint(smf.ols(\"severity ~ smoke\", d[d.hosp]).fit().params[\"smoke\"])    # &lt; 0\n2. The unconditional female coefficient becomes more negative, ≈ −4 (−1 direct via discrimination, −2 via discrimination→occupation, and now −1 more via female→occupation); the collider regression is now ≈ +1.4, even more misleading; the full regression still returns ≈ −1. The collider regression is still wrong, and the full regression now returns the direct effect of female holding occupation fixed, which is −1 (through discrimination). The total effect is still identified with no controls because there are still no arrows into female: randomness of the treatment is what makes the empty adjustment set valid.\n3. Open-ended. Common finds: wage regressions that control for occupation or industry; health studies that control for BMI when the treatment affects weight; education studies controlling for test scores measured after the intervention.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 2 · Directed acyclic graphs"
+    ]
+  },
+  {
+    "objectID": "sessions/02-dags.html#facilitator-notes",
+    "href": "sessions/02-dags.html#facilitator-notes",
+    "title": "Session 2 · Directed acyclic graphs",
+    "section": "Facilitator notes",
+    "text": "Facilitator notes\n\n\n\n\n\n\nFacilitator notes (click to expand)\n\n\n\n\n\nMake them draw. The biggest failure mode of this session is treating the DAG as decoration for a regression someone already planned. Have each participant sketch the discrimination DAG on paper before Step 2 and predict the sign of the collider regression. Most will predict it stays negative.\nMisconception: “more controls are always safer.” Steps 2–3 are the counterexample. Reinforce that the backdoor criterion is a set of variables, and that it can be empty.\nMisconception: colliders only matter if you put them in the regression. Step 4 shows selection into the sample does the same thing. Ask: how was this dataset assembled?\nIf running short. Drop Step 5; it is a nice-to-have for the R users.\nDiscussion prompts. (a) Where did the arrows in the discrimination DAG come from — data or theory? (b) Can a DAG be tested? (Partially: it implies conditional independencies you can check, but it cannot be derived from data alone.)\nBridge to next session. DAGs tell you what must be true for conditioning to work. Potential outcomes give you the language for what you are estimating — ATE, ATT — and what randomization buys you.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 2 · Directed acyclic graphs"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Mixtape Workshops",
+    "section": "",
+    "text": "This site is the companion for a small-group workshop series that works through Scott Cunningham’s free textbook Causal Inference: The Mixtape one research design at a time. Each session is a one-hour meeting built around the same rhythm: a short conceptual recap, a live replication of the chapter’s headline result in both Python and R, and exercises to take home.\nThe book ships its code in R and Stata. Here every walkthrough is written side-by-side in Python (pandas, statsmodels, linearmodels) and R (tidyverse, fixest, estimatr), with the datasets bundled in the repo so nothing depends on a network connection during the meeting.",
+    "crumbs": [
+      "Home",
+      "Mixtape Workshops"
+    ]
+  },
+  {
+    "objectID": "index.html#schedule",
+    "href": "index.html#schedule",
+    "title": "Mixtape Workshops",
+    "section": "Schedule",
+    "text": "Schedule\nNine sessions cover the book’s eleven chapters. Short chapters are paired, and the difference-in-differences chapter is split in two because the modern staggered-timing material deserves its own hour.\n\n\n\n#\nSession\nBook chapters\nHeadline replication\n\n\n\n\n1\nWhy causal inference + regression review\n1, 2\nRegression anatomy on auto; robust vs. clustered SEs\n\n\n2\nDirected acyclic graphs\n3\nCollider bias in a simulated gender-discrimination DAG\n\n\n3\nPotential outcomes\n4\nThornton’s HIV experiment; Fisher randomization inference\n\n\n4\nMatching & subclassification\n5\nTitanic subclassification; NSW/CPS propensity scores\n\n\n5\nRegression discontinuity\n6\nLee, Moretti & Butler close elections\n\n\n6\nInstrumental variables\n7\nCard’s college proximity; judge-leniency design\n\n\n7\nPanel data + the 2×2 DiD\n8, 9.1–9.3\nFixed effects on the SASP panel; John Snow as a DiD\n\n\n8\nDiD deep dive\n9.4–9.7\nAbortion-legalization event study; castle-doctrine TWFE\n\n\n9\nSynthetic control + wrap-up\n10, 11\nTexas prison construction",
+    "crumbs": [
+      "Home",
+      "Mixtape Workshops"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use-this-site",
+    "href": "index.html#how-to-use-this-site",
+    "title": "Mixtape Workshops",
+    "section": "How to use this site",
+    "text": "How to use this site\nBefore the first meeting, everyone should work through Setup so that the data loads and both toolchains run. If you are facilitating, Facilitating has the 60-minute template and the norms the sessions assume. Each session page is self-contained: read Key ideas before the meeting, follow the Walkthrough live, and do the Exercises before the next session. Solutions and facilitator notes are collapsed at the bottom of every page so they do not spoil the exercises.\nCode on this site is displayed but not executed at build time. Every snippet was run against the bundled data while the site was written, and each walkthrough step has a What you should see box with the numbers to check against. Copy the code into a notebook or script to reproduce them.",
+    "crumbs": [
+      "Home",
+      "Mixtape Workshops"
+    ]
+  },
+  {
+    "objectID": "facilitating.html",
+    "href": "facilitating.html",
+    "title": "Facilitating",
+    "section": "",
+    "text": "Every session page is written to the same clock. The timings are tight on purpose: an hour is enough to see one design work end to end, and not enough to also cover every extension in the chapter. The extensions are what the exercises are for.",
+    "crumbs": [
+      "Home",
+      "Facilitating"
+    ]
+  },
+  {
+    "objectID": "facilitating.html#the-60-minute-template",
+    "href": "facilitating.html#the-60-minute-template",
+    "title": "Facilitating",
+    "section": "The 60-minute template",
+    "text": "The 60-minute template\n\n\n\n\n\n\n\n\nTime\nBlock\nWhat happens\n\n\n\n\n0:00–0:05\nRecap\nOne participant summarizes last session’s design in two sentences; one question from the homework.\n\n\n0:05–0:20\nConcepts\nWalk the slides. Three things only: the identification problem, the assumption that buys identification, and what breaks it.\n\n\n0:20–0:45\nLive walkthrough\nReplicate the chapter’s headline result step by step. Lead in one language; show the other at the end so people can see the mapping.\n\n\n0:45–0:55\nExercise kickoff\nEveryone starts Exercise 1. Ask people to predict the answer before running anything.\n\n\n0:55–1:00\nClose\nAssign the remaining exercises, preview next session, note any open questions.",
+    "crumbs": [
+      "Home",
+      "Facilitating"
+    ]
+  },
+  {
+    "objectID": "facilitating.html#norms",
+    "href": "facilitating.html#norms",
+    "title": "Facilitating",
+    "section": "Norms",
+    "text": "Norms\nRead the chapter first. The sessions are replication-and-discussion, not lecture; they do not work if the group is meeting the material for the first time.\nPredict, then run. Before every regression in the walkthrough, ask the room what sign and rough magnitude they expect. Being wrong is where the learning is.\nOne language leads. Switching languages mid-walkthrough costs more time than it saves. Pick the language most of the room uses, lead in it, and show the other side-by-side at the end of the walkthrough.\nNumbers, not vibes. Every walkthrough step has a What you should see box. If someone’s output differs, stop and find out why — it is usually a dropped observation, a categorical variable, or a different standard-error default, and those are worth five minutes.",
+    "crumbs": [
+      "Home",
+      "Facilitating"
+    ]
+  },
+  {
+    "objectID": "facilitating.html#preparing-a-session",
+    "href": "facilitating.html#preparing-a-session",
+    "title": "Facilitating",
+    "section": "Preparing a session",
+    "text": "Preparing a session\nThe night before, run the walkthrough in both languages so the environment surprises happen to you, not to the group. Skim the facilitator notes at the bottom of the session page; they list the misconceptions that come up most and the discussion prompts for the close.",
+    "crumbs": [
+      "Home",
+      "Facilitating"
+    ]
+  },
+  {
+    "objectID": "facilitating.html#adjusting-the-pace",
+    "href": "facilitating.html#adjusting-the-pace",
+    "title": "Facilitating",
+    "section": "Adjusting the pace",
+    "text": "Adjusting the pace\nIf the group is new to regression, split Session 1 into two meetings (probability and expectations, then OLS and standard errors). If it is strong, Sessions 7 and 8 can be merged by dropping the SASP panel replication and going straight from the 2×2 DiD to event studies.",
+    "crumbs": [
+      "Home",
+      "Facilitating"
+    ]
+  },
+  {
+    "objectID": "sessions/01-intro-regression.html",
+    "href": "sessions/01-intro-regression.html",
+    "title": "Session 1 · Why causal inference, and regression as a tool",
+    "section": "",
+    "text": "Read before the meeting: Chapter 1 — Introduction and Chapter 2 — Probability and Regression Review (skim 2.1–2.12 if you are comfortable with expectations and variance; read 2.13–2.27 carefully). Data: data/auto.dta plus simulated data. Code files: code/session01.py · code/session01.R · Slides",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 1 · Why causal inference, and regression as a tool"
+    ]
+  },
+  {
+    "objectID": "sessions/01-intro-regression.html#learning-goals",
+    "href": "sessions/01-intro-regression.html#learning-goals",
+    "title": "Session 1 · Why causal inference, and regression as a tool",
+    "section": "Learning goals",
+    "text": "Learning goals\nBy the end of the hour everyone should be able to explain why optimizing agents make correlation uninformative about causation, state what a regression coefficient is (a conditional-expectation approximation, not a causal effect), reproduce a multiple-regression coefficient with the regression-anatomy formula, and say when to use heteroskedasticity-robust versus cluster-robust standard errors.\n\n\n\n\n\n\n\n\nTime\nBlock\n\n\n\n\n0:00\nIntroductions, how the series works, why this book\n\n\n0:05\nConcepts: price elasticity and endogenous supply; the CEF; regression anatomy; standard errors\n\n\n0:20\nWalkthrough: auto regressions, regression anatomy by hand, robust and clustered SEs on simulated data\n\n\n0:45\nExercise 1 kickoff\n\n\n0:55\nAssign exercises 2–3; preview DAGs",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 1 · Why causal inference, and regression as a tool"
+    ]
+  },
+  {
+    "objectID": "sessions/01-intro-regression.html#key-ideas",
+    "href": "sessions/01-intro-regression.html#key-ideas",
+    "title": "Session 1 · Why causal inference, and regression as a tool",
+    "section": "Key ideas",
+    "text": "Key ideas\nOptimization makes everything endogenous. The book’s opening example is price elasticity of demand. Observed prices and quantities are equilibrium outcomes: both supply and demand shifted to produce every point you see, so a regression of quantity on price identifies nothing unless something moved only one curve. Wright’s instrumental-variables solution (Session 6) is the first sighting of the whole book’s agenda: find variation in the cause that is unrelated to everything else that matters.\nRegression estimates a conditional expectation function, not a causal effect. Chapter 2 builds up to three theorems. The linear CEF theorem says if the CEF is linear, regression recovers it. The best linear predictor theorem says regression is always the best linear approximation to the CEF, whether or not it is linear. The regression CEF theorem says regression also gives the best linear approximation to the CEF itself. None of these say anything about causation; they say what the numbers mean descriptively. Causal content enters only through assumptions about the error term (mean independence, \\(E[u \\mid x] = 0\\)), and those assumptions are what the rest of the book is about.\nRegression anatomy. The coefficient on \\(x_1\\) in a multiple regression equals the bivariate regression of \\(y\\) on the residual from regressing \\(x_1\\) on the other covariates: \\[\\beta_1 = \\frac{\\mathrm{Cov}(y, \\tilde{x}_1)}{\\mathrm{Var}(\\tilde{x}_1)}, \\qquad \\tilde{x}_1 = x_1 - \\hat{E}[x_1 \\mid x_2, \\dots, x_k].\\] This is the Frisch–Waugh–Lovell theorem, and it is the single most useful mechanical fact about regression: “controlling for” means “using only the part of \\(x_1\\) that the controls cannot predict.”\nStandard errors. Conventional OLS standard errors assume homoskedasticity. Heteroskedasticity-robust (HC1, Stata’s robust) standard errors do not. When observations share a shock (students in the same classroom, firms in the same state), errors are correlated within groups and you need cluster-robust standard errors; the robust-versus-conventional gap on a single regression is a diagnostic, not a decision rule.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 1 · Why causal inference, and regression as a tool"
+    ]
+  },
+  {
+    "objectID": "sessions/01-intro-regression.html#walkthrough",
+    "href": "sessions/01-intro-regression.html#walkthrough",
+    "title": "Session 1 · Why causal inference, and regression as a tool",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nStep 1 — Load auto and run a bivariate regression\n\nPythonR\n\n\nimport pandas as pd\nimport numpy as np\nimport statsmodels.formula.api as smf\n\nauto = pd.read_stata(\"data/auto.dta\")\nauto.head()\n\nm1 = smf.ols(\"price ~ length\", data=auto).fit()\nprint(m1.summary().tables[1])\n\n\nlibrary(tidyverse)\nlibrary(haven)\nlibrary(estimatr)\n\nauto &lt;- read_dta(\"data/auto.dta\")\nglimpse(auto)\n\nm1 &lt;- lm(price ~ length, data = auto)\nsummary(m1)\n\n\n\n\nIntercept ≈ −4585, slope on length ≈ 57.2 dollars per inch. Ask the room: is a longer car caused to be more expensive? What else do longer cars have more of?\n\n\n\nStep 2 — Add controls and watch the sign flip\n\nPythonR\n\n\nm2 = smf.ols(\"price ~ length + weight + headroom + mpg\", data=auto).fit()\nprint(m2.params.round(2))\n\n\nm2 &lt;- lm(price ~ length + weight + headroom + mpg, data = auto)\ncoef(m2)\n\n\n\n\nlength ≈ −94.5, weight ≈ 4.34, headroom ≈ −491, mpg ≈ −88. Conditional on weight, headroom and fuel economy, a longer car is cheaper. Neither coefficient is “the” effect of length; they answer different descriptive questions.\n\n\n\nStep 3 — Reproduce the length coefficient with regression anatomy\nRegress length on the other covariates, keep the residual, and regress price on that residual alone.\n\nPythonR\n\n\naux = smf.ols(\"length ~ weight + headroom + mpg\", data=auto).fit()\nauto[\"length_resid\"] = aux.resid\n\nm3 = smf.ols(\"price ~ length_resid\", data=auto).fit()\nprint(m3.params.round(2))\n\n# the formula directly\ncov = np.cov(auto[\"price\"], auto[\"length_resid\"], ddof=1)[0, 1]\nvar = auto[\"length_resid\"].var(ddof=1)\nprint(cov / var)\n\n\nauto &lt;- auto %&gt;%\n  mutate(length_resid = resid(lm(length ~ weight + headroom + mpg, data = auto)))\n\nm3 &lt;- lm(price ~ length_resid, data = auto)\ncoef(m3)\n\ncov(auto$price, auto$length_resid) / var(auto$length_resid)\n\n\n\n\nThe slope on length_resid is −94.5, identical to the multiple-regression coefficient. The intercept differs (it is just the mean of price, ≈ 6165) because the residual has mean zero.\n\n\n\nStep 4 — Robust versus conventional standard errors\nSimulate data whose error variance grows with \\(|x|\\), so homoskedasticity fails.\n\nPythonR\n\n\nrng = np.random.default_rng(1)\nn = 10_000\nx = rng.normal(size=n)\nu = rng.normal(size=n) * (1 + np.abs(x))      # heteroskedastic\ny = 5.5 * x + 12 * u\nsim = pd.DataFrame({\"x\": x, \"y\": y})\n\nconv = smf.ols(\"y ~ x\", data=sim).fit()\nrob  = smf.ols(\"y ~ x\", data=sim).fit(cov_type=\"HC1\")\nprint(\"conventional SE:\", round(conv.bse[\"x\"], 3))\nprint(\"HC1 robust SE:  \", round(rob.bse[\"x\"], 3))\n\n\nset.seed(1)\nn &lt;- 10000\nx &lt;- rnorm(n)\nu &lt;- rnorm(n) * (1 + abs(x))\ny &lt;- 5.5 * x + 12 * u\nsim &lt;- tibble(x, y)\n\nconv &lt;- lm(y ~ x, data = sim)\nrob  &lt;- lm_robust(y ~ x, data = sim, se_type = \"HC1\")\nsqrt(diag(vcov(conv)))[\"x\"]\nrob$std.error[\"x\"]\n\n\n\n\nConventional SE ≈ 0.22, robust SE ≈ 0.31 (your exact numbers depend on the seed). The point estimate is unchanged; only the uncertainty was wrong. Discuss: in which direction does heteroskedasticity bias the conventional SE here, and why?\n\n\n\nStep 5 — Clustered standard errors\nNow give the data a group structure with a shared group-level shock.\n\nPythonR\n\n\ng = rng.integers(0, 50, size=n)                   # 50 clusters\ngroup_shock = rng.normal(size=50)[g]\nx = rng.normal(size=n) + group_shock\ny = 2 * x + 5 * group_shock + rng.normal(size=n)\ncl = pd.DataFrame({\"x\": x, \"y\": y, \"g\": g})\n\nplain   = smf.ols(\"y ~ x\", data=cl).fit(cov_type=\"HC1\")\ncluster = smf.ols(\"y ~ x\", data=cl).fit(cov_type=\"cluster\", cov_kwds={\"groups\": cl[\"g\"]})\nprint(plain.bse[\"x\"].round(3), cluster.bse[\"x\"].round(3))\n\n\ng &lt;- sample(0:49, n, replace = TRUE)\ngroup_shock &lt;- rnorm(50)[g + 1]\nx &lt;- rnorm(n) + group_shock\ny &lt;- 2 * x + 5 * group_shock + rnorm(n)\ncl &lt;- tibble(x, y, g)\n\nlm_robust(y ~ x, data = cl, se_type = \"HC1\")$std.error[\"x\"]\nlm_robust(y ~ x, data = cl, clusters = g)$std.error[\"x\"]\n\n\n\n\nThe clustered SE is several times the robust SE. The group shock is in both \\(x\\) and the error, so the point estimate is also biased upward from 2 — a preview of the omitted-variable problem the rest of the book attacks. Clustering fixes inference, never identification.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 1 · Why causal inference, and regression as a tool"
+    ]
+  },
+  {
+    "objectID": "sessions/01-intro-regression.html#exercises",
+    "href": "sessions/01-intro-regression.html#exercises",
+    "title": "Session 1 · Why causal inference, and regression as a tool",
+    "section": "Exercises",
+    "text": "Exercises\n\nAnatomy, again. Using auto, reproduce the coefficient on mpg from price ~ length + weight + headroom + mpg via regression anatomy. Then reproduce the coefficient on weight. Which residual has the smallest variance, and what does that imply about which coefficient is most precisely estimated?\nMonty Hall by simulation. Write a simulation of the Monty Hall problem (book §2.6) with 100,000 games. Report the win rate under “stay” and “switch.” Then modify the host so he opens a door at random (and the game is void if he reveals the car) and show that the switching advantage disappears. Explain in two sentences what conditioning on the host’s informed choice does.\nWhen does robust matter? Rerun Step 4 with u = rng.normal(size=n) (homoskedastic). How close are the conventional and robust standard errors now? Then set n = 50 and repeat both versions 500 times, recording the two SEs each time. In small samples, which SE is more variable, and why might a researcher still prefer it?",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 1 · Why causal inference, and regression as a tool"
+    ]
+  },
+  {
+    "objectID": "sessions/01-intro-regression.html#solutions",
+    "href": "sessions/01-intro-regression.html#solutions",
+    "title": "Session 1 · Why causal inference, and regression as a tool",
+    "section": "Solutions",
+    "text": "Solutions\n\n\n\n\n\n\nSolutions (click to expand)\n\n\n\n\n\n1. For mpg: residualize mpg on length + weight + headroom, regress price on the residual; slope is −87.96. For weight: residualize on length + headroom + mpg; slope is 4.34. Compare each residual’s variance to the variable’s raw variance: mpg keeps about 34% of its variation after partialling out the others, while length and weight each keep only about 10% (they are nearly collinear with one another). Precision is \\(\\sigma^2 / (n \\cdot \\mathrm{Var}(\\tilde{x}_k))\\) scaled by the variable’s units, so the coefficient whose regressor retains the most of its own variation — mpg — is the one estimated most precisely relative to its scale; length and weight are fighting over the same variation.\n2. Stay wins ≈ 1/3, switch wins ≈ 2/3. With a random host (void if the car is revealed), both strategies win 1/2 of the non-void games. The informed host’s choice is a function of where the car is, so conditioning on it moves probability; the random host’s choice is independent of the car’s location, so it carries no information.\nrng = np.random.default_rng(0); N = 100_000\ncar = rng.integers(0, 3, N); pick = rng.integers(0, 3, N)\n# informed host opens a goat door that is not the pick\nhost = np.array([next(d for d in rng.permutation(3) if d != c and d != p) for c, p in zip(car, pick)])\nswitch = 3 - pick - host\nprint((pick == car).mean(), (switch == car).mean())\n3. Homoskedastic case: the two SEs agree to two decimals. At n = 50 the robust SE has a noticeably larger spread across replications (it estimates more parameters from the same data). Researchers accept the variability because the robust estimator is consistent under a wider set of DGPs, but with tiny samples HC2/HC3 corrections are advisable.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 1 · Why causal inference, and regression as a tool"
+    ]
+  },
+  {
+    "objectID": "sessions/01-intro-regression.html#facilitator-notes",
+    "href": "sessions/01-intro-regression.html#facilitator-notes",
+    "title": "Session 1 · Why causal inference, and regression as a tool",
+    "section": "Facilitator notes",
+    "text": "Facilitator notes\n\n\n\n\n\n\nFacilitator notes (click to expand)\n\n\n\n\n\nWhat usually goes wrong. Participants read the sign flip in Step 2 as “the first regression was wrong.” Steer them to: both are correct descriptions of different conditional expectations, and neither is causal without an argument about the error term. This is the thesis of the whole book.\nMisconception: “robust SEs fix everything.” Clustered and robust SEs change inference, not the estimand. Use Step 5’s biased point estimate to make the point concretely.\nIf running short. Skip Step 5 and assign it as reading; it recurs in Sessions 7–8 where clustering is unavoidable.\nDiscussion prompts for the close. (a) In the price-elasticity example, what would count as something that shifts supply but not demand? (b) The book says regression is “a tool, not a design.” What would make the auto regressions a design?\nBridge to next session. “Controlling for” is mechanical (Step 3). Next session asks the question regression cannot answer: which variables should you control for? That is what DAGs are for.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 1 · Why causal inference, and regression as a tool"
+    ]
+  },
+  {
+    "objectID": "sessions/03-potential-outcomes.html",
+    "href": "sessions/03-potential-outcomes.html",
+    "title": "Session 3 · Potential outcomes",
+    "section": "",
+    "text": "Read before the meeting: Chapter 4 — Potential Outcomes Causal Model. Data: data/yule.dta, data/thornton_hiv.dta, data/ri.dta. Code files: code/session03.py · code/session03.R · Slides",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 3 · Potential outcomes"
+    ]
+  },
+  {
+    "objectID": "sessions/03-potential-outcomes.html#learning-goals",
+    "href": "sessions/03-potential-outcomes.html#learning-goals",
+    "title": "Session 3 · Potential outcomes",
+    "section": "Learning goals",
+    "text": "Learning goals\nParticipants should be able to write the simple difference in outcomes as ATE + selection bias + heterogeneous-treatment-effect bias, explain why physical randomization zeroes out the last two terms, and run a Fisher randomization-inference test by hand: state the sharp null, enumerate (or sample) the assignments, and compute an exact \\(p\\)-value.\n\n\n\n\n\n\n\n\nTime\nBlock\n\n\n\n\n0:00\nRecap: backdoor criterion; collider bias\n\n\n0:05\nConcepts: potential outcomes, the switching equation, SDO decomposition, randomization inference\n\n\n0:20\nWalkthrough: Yule’s pauperism regression (what not to do); Thornton’s HIV experiment; RI on the 8-unit toy data and on Thornton\n\n\n0:45\nExercise 1 kickoff\n\n\n0:55\nAssign exercises; preview matching",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 3 · Potential outcomes"
+    ]
+  },
+  {
+    "objectID": "sessions/03-potential-outcomes.html#key-ideas",
+    "href": "sessions/03-potential-outcomes.html#key-ideas",
+    "title": "Session 3 · Potential outcomes",
+    "section": "Key ideas",
+    "text": "Key ideas\nPotential outcomes. Each unit \\(i\\) has \\(Y_i^1\\) (outcome if treated) and \\(Y_i^0\\) (if not). The individual treatment effect is \\(\\delta_i = Y_i^1 - Y_i^0\\). We observe only \\(Y_i = D_i Y_i^1 + (1 - D_i) Y_i^0\\) — the switching equation. The missing potential outcome is the fundamental problem of causal inference; every design in this book is a strategy for filling it in credibly.\nEstimands. \\(ATE = E[\\delta]\\); \\(ATT = E[\\delta \\mid D = 1]\\); \\(ATU = E[\\delta \\mid D = 0]\\). They differ whenever effects are heterogeneous and treatment is selected on them.\nThe decomposition. The simple difference in outcomes (SDO) is \\[E[Y \\mid D=1] - E[Y \\mid D=0] = ATE + \\underbrace{E[Y^0 \\mid D=1] - E[Y^0 \\mid D=0]}_{\\text{selection bias}} + \\underbrace{(1-\\pi)(ATT - ATU)}_{\\text{HTE bias}}.\\] Selection bias: treated units would have done differently even untreated. HTE bias: treated units gain differently from treatment. Randomization makes \\(D\\) independent of \\((Y^0, Y^1)\\), so both bias terms are zero and the SDO is the ATE.\nRandomization inference. Fisher’s sharp null, \\(H_0: \\delta_i = 0\\) for every \\(i\\), fills in every missing potential outcome (they equal the observed ones). Under it, you can recompute the test statistic for every possible assignment and get an exact \\(p\\)-value with no distributional assumptions and no appeal to large samples. It is the right tool for small experiments and a useful stress test for any design.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 3 · Potential outcomes"
+    ]
+  },
+  {
+    "objectID": "sessions/03-potential-outcomes.html#walkthrough",
+    "href": "sessions/03-potential-outcomes.html#walkthrough",
+    "title": "Session 3 · Potential outcomes",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nStep 1 — Yule (1899): regression without a design\nYule regressed changes in pauperism on changes in out-relief (welfare outside the poorhouse), with controls for the share of elderly and population growth, and concluded out-relief caused pauperism.\n\nPythonR\n\n\nimport pandas as pd\nimport numpy as np\nimport statsmodels.formula.api as smf\n\nyule = pd.read_stata(\"data/yule.dta\")\nprint(smf.ols(\"paup ~ outrelief + old + pop\", data=yule).fit().summary().tables[1])\n\n\nlibrary(tidyverse); library(haven); library(estimatr)\n\nyule &lt;- read_dta(\"data/yule.dta\")\nlm(paup ~ outrelief + old + pop, data = yule) %&gt;% summary()\n\n\n\n\noutrelief ≈ 0.75: a 10% rise in out-relief is associated with a 7.5% rise in pauperism. Ask: what is the obvious reverse-causation story, and what would a DAG for this look like? (Hint: local poverty shocks drive both.)\n\n\n\nStep 2 — Thornton (2008): a real experiment\nThornton randomized cash incentives for learning one’s HIV status in rural Malawi. any is the randomized incentive indicator; got is whether the person collected their result.\n\nPythonR\n\n\nhiv = pd.read_stata(\"data/thornton_hiv.dta\").dropna(subset=[\"got\", \"any\"])\nprint(hiv.groupby(\"any\")[\"got\"].mean().round(3))\n\nm = smf.ols(\"got ~ any\", data=hiv).fit(cov_type=\"cluster\",\n                                        cov_kwds={\"groups\": hiv[\"villnum\"]})\nprint(m.summary().tables[1])\n\n\nhiv &lt;- read_dta(\"data/thornton_hiv.dta\") %&gt;% drop_na(got, any)\nhiv %&gt;% group_by(any) %&gt;% summarise(got = mean(got), n = n())\n\nlm_robust(got ~ any, data = hiv, clusters = villnum)\n\n\n\n\n34% of the no-incentive group learned their status; 79% of the incentive group did. The difference, 0.45 (SE ≈ 0.02 clustered by village), is the ATE because any was randomized. Note how little work the regression is doing; the design did it.\n\n\n\nStep 3 — Fisher’s exact \\(p\\)-value on the 8-unit toy data\nri.dta has four treated and four control units. The sharp null says every unit’s \\(Y^1 = Y^0 = Y\\), so we can recompute the difference in means for all \\(\\binom{8}{4} = 70\\) assignments.\n\nPythonR\n\n\nimport itertools\n\nri = pd.read_stata(\"data/ri.dta\")\ny = ri[\"y\"].to_numpy()\nd = ri[\"d\"].to_numpy()\nobs = y[d == 1].mean() - y[d == 0].mean()\n\nstats = []\nfor treated in itertools.combinations(range(8), 4):\n    mask = np.zeros(8, dtype=bool); mask[list(treated)] = True\n    stats.append(y[mask].mean() - y[~mask].mean())\nstats = np.array(stats)\n\np = (np.abs(stats) &gt;= abs(obs)).mean()\nprint(f\"observed diff = {obs:.2f}, exact two-sided p = {p:.3f} over {len(stats)} assignments\")\n\n\nri &lt;- read_dta(\"data/ri.dta\")\ny &lt;- ri$y; d &lt;- ri$d\nobs &lt;- mean(y[d == 1]) - mean(y[d == 0])\n\ncombos &lt;- combn(8, 4)\nstats &lt;- apply(combos, 2, function(idx) mean(y[idx]) - mean(y[-idx]))\np &lt;- mean(abs(stats) &gt;= abs(obs))\nc(observed = obs, p_value = p, n_assignments = ncol(combos))\n\n\n\n\nObserved difference = 1.0; 60 of 70 assignments give a difference at least that large in absolute value, so \\(p ≈\\) 0.86. With eight units you learn almost nothing, and the exact test says so without pretending otherwise.\n\n\n\nStep 4 — Randomization inference on Thornton\nWith 4,820 people there are too many assignments to enumerate; sample 1,000 random permutations of the treatment vector.\n\nPythonR\n\n\nrng = np.random.default_rng(1)\ngot = hiv[\"got\"].to_numpy(); anyv = hiv[\"any\"].to_numpy()\nobs = got[anyv == 1].mean() - got[anyv == 0].mean()\n\nperm = np.empty(1000)\nfor i in range(1000):\n    a = rng.permutation(anyv)\n    perm[i] = got[a == 1].mean() - got[a == 0].mean()\n\nprint(\"observed:\", round(obs, 3))\nprint(\"largest |placebo| diff:\", np.abs(perm).max().round(3))\nprint(\"p-value:\", (np.abs(perm) &gt;= abs(obs)).mean())\n\n\nset.seed(1)\nobs &lt;- with(hiv, mean(got[any == 1]) - mean(got[any == 0]))\nperm &lt;- replicate(1000, {\n  a &lt;- sample(hiv$any)\n  mean(hiv$got[a == 1]) - mean(hiv$got[a == 0])\n})\nc(observed = obs, max_placebo = max(abs(perm)), p = mean(abs(perm) &gt;= abs(obs)))\n\nggplot(tibble(perm), aes(perm)) + geom_histogram(bins = 40) +\n  geom_vline(xintercept = obs, colour = \"red\") + theme_minimal()\n\n\n\n\nThe largest placebo difference is around 0.07; the observed 0.45 is more than six times further out. $p = $ 0 at 1,000 draws. The histogram with the red line is the slide to keep: it is the sampling distribution under the sharp null.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 3 · Potential outcomes"
+    ]
+  },
+  {
+    "objectID": "sessions/03-potential-outcomes.html#exercises",
+    "href": "sessions/03-potential-outcomes.html#exercises",
+    "title": "Session 3 · Potential outcomes",
+    "section": "Exercises",
+    "text": "Exercises\n\nDecompose the bias. Build a population of 10,000 units with \\(Y^0 \\sim N(10, 2)\\) and \\(\\delta_i \\sim N(2, 1)\\). Let units select into treatment when \\(Y^1 - Y^0 &gt; 2.3\\) (they take it if it helps them more than average). Compute the true ATE, ATT, ATU, the SDO, and verify the decomposition formula numerically term by term.\nRI with a different statistic. Redo Step 3 using the difference in medians and then the Kolmogorov–Smirnov statistic. Do the \\(p\\)-values change? When would you want a statistic other than the mean difference?\nThornton heterogeneity. The incentive amount tinc varied. Plot the share who got results by incentive amount (bin it) and test whether any positive incentive versus none explains most of the effect. What does this say about the ATE being an average over very different \\(\\delta_i\\)?",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 3 · Potential outcomes"
+    ]
+  },
+  {
+    "objectID": "sessions/03-potential-outcomes.html#solutions",
+    "href": "sessions/03-potential-outcomes.html#solutions",
+    "title": "Session 3 · Potential outcomes",
+    "section": "Solutions",
+    "text": "Solutions\n\n\n\n\n\n\nSolutions (click to expand)\n\n\n\n\n\n1.\nrng = np.random.default_rng(0); N = 10_000\ny0 = rng.normal(10, 2, N); delta = rng.normal(2, 1, N); y1 = y0 + delta\nD = (delta &gt; 2.3).astype(int); Y = np.where(D == 1, y1, y0)\nATE = delta.mean(); ATT = delta[D==1].mean(); ATU = delta[D==0].mean()\nSDO = Y[D==1].mean() - Y[D==0].mean()\nsel = y0[D==1].mean() - y0[D==0].mean()\npi = D.mean()\nprint(SDO, ATE + sel + (1-pi)*(ATT-ATU))\nSelection bias is ≈ 0 here (selection is on \\(\\delta\\), not on \\(Y^0\\)), but HTE bias is large: ATT ≈ 3.0 vs ATU ≈ 1.4, so the SDO (≈ 3.0) overstates the ATE (= 2.0) by about 1.\n2. The median-difference \\(p\\)-value on 8 units is similar (≈ 0.9). KS is more sensitive to distributional differences beyond location; use it when treatment might change spread or shape rather than the mean.\n3. Collection rates jump from 34% at zero incentive to about 67% for the smallest positive amounts (under half a dollar), then rise to about 85% for amounts over a dollar. Most of the 0.45 ATE is the extensive margin; individual \\(\\delta_i\\) clearly differ (for people who would have collected anyway, \\(\\delta_i = 0\\)).",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 3 · Potential outcomes"
+    ]
+  },
+  {
+    "objectID": "sessions/03-potential-outcomes.html#facilitator-notes",
+    "href": "sessions/03-potential-outcomes.html#facilitator-notes",
+    "title": "Session 3 · Potential outcomes",
+    "section": "Facilitator notes",
+    "text": "Facilitator notes\n\n\n\n\n\n\nFacilitator notes (click to expand)\n\n\n\n\n\nSpend the time on the decomposition. Write it on the board with the three terms labeled and keep pointing at it for the rest of the series; every later design is a story about which term it kills.\nMisconception: “randomization makes individuals comparable.” It makes groups comparable in expectation. Use Step 3 to show that in a tiny sample randomization has done very little.\nMisconception: RI is a bootstrap. The bootstrap resamples the data to approximate sampling variation; RI re-randomizes assignment holding the data fixed. Different null, different question.\nIf running short. Do Step 3 and skip Step 4; Step 4 is mostly a scaling exercise.\nDiscussion prompts. (a) Yule had a control for the elderly share and population growth; why wasn’t that enough? (b) In Thornton, why cluster by village?\nBridge to next session. Without randomization, selection bias is the enemy. Matching assumes we can see everything that drives selection and condition on it — the backdoor criterion from Session 2 meets the decomposition from today.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 3 · Potential outcomes"
+    ]
+  },
+  {
+    "objectID": "sessions/05-rdd.html",
+    "href": "sessions/05-rdd.html",
+    "title": "Session 5 · Regression discontinuity",
+    "section": "",
+    "text": "Read before the meeting: Chapter 6 — Regression Discontinuity. Data: data/close_elections_lmb.dta (Lee, Moretti & Butler 2004). Code files: code/session05.py · code/session05.R · Slides",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 5 · Regression discontinuity"
+    ]
+  },
+  {
+    "objectID": "sessions/05-rdd.html#learning-goals",
+    "href": "sessions/05-rdd.html#learning-goals",
+    "title": "Session 5 · Regression discontinuity",
+    "section": "Learning goals",
+    "text": "Learning goals\nParticipants should be able to explain what continuity of the potential-outcome CEFs at the cutoff buys, estimate a sharp RD with global and local polynomials and see how much the answer depends on those choices, run the two standard validity checks (covariate smoothness and the McCrary density test), and say what the estimand is — a local effect at the threshold — and why that is sometimes exactly what you want.\n\n\n\n\n\n\n\n\nTime\nBlock\n\n\n\n\n0:00\nRecap: CIA and common support\n\n\n0:05\nConcepts: running variable, cutoff, continuity, sharp vs fuzzy, bandwidth, manipulation\n\n\n0:20\nWalkthrough: Lee–Moretti–Butler — plot, estimate with four specifications, density test\n\n\n0:45\nExercise 1 kickoff\n\n\n0:55\nAssign exercises; preview IV",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 5 · Regression discontinuity"
+    ]
+  },
+  {
+    "objectID": "sessions/05-rdd.html#key-ideas",
+    "href": "sessions/05-rdd.html#key-ideas",
+    "title": "Session 5 · Regression discontinuity",
+    "section": "Key ideas",
+    "text": "Key ideas\nThe design. Treatment \\(D\\) is a deterministic function of a running variable \\(X\\) relative to a cutoff \\(c_0\\): \\(D = 1[X \\geq c_0]\\) (sharp) or jumps in probability there (fuzzy). Units just above and just below the cutoff differ in treatment but, if nothing else jumps at \\(c_0\\), in nothing else.\nIdentification by continuity. \\(E[Y^0 \\mid X]\\) and \\(E[Y^1 \\mid X]\\) must be continuous at \\(c_0\\). Then \\[\\delta_{SRD} = \\lim_{x \\downarrow c_0} E[Y \\mid X = x] - \\lim_{x \\uparrow c_0} E[Y \\mid X = x].\\] No conditional-independence assumption, no need to observe confounders: everything that matters is a smooth function of \\(X\\) except the treatment.\nEstimation is a bias–variance problem. You need the two limits. Global polynomials use all the data but let far-away observations drive the fit at the cutoff (Gelman and Imbens’s warning against high-order polynomials). Local linear regression within a bandwidth \\(h\\) is the modern default, with rdrobust choosing \\(h\\) and correcting for bias. The honest report shows several.\nThreats and checks. If units can precisely manipulate \\(X\\) (sorting just above a test-score cutoff), continuity fails. Check that the density of \\(X\\) is smooth at \\(c_0\\) (McCrary) and that pre-determined covariates do not jump there. Fuzzy RD is IV with the cutoff as instrument, which is next session’s topic.\nThe LMB question. Do close elections reveal whether politicians converge to the median voter (Downs) or diverge to their party’s preferences? In a 50–50 district the party barely won is as-good-as random; if the winner’s voting score jumps at the 50% line, parties do not converge.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 5 · Regression discontinuity"
+    ]
+  },
+  {
+    "objectID": "sessions/05-rdd.html#walkthrough",
+    "href": "sessions/05-rdd.html#walkthrough",
+    "title": "Session 5 · Regression discontinuity",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nStep 1 — Look at the data\n\nPythonR\n\n\nimport pandas as pd\nimport numpy as np\nimport statsmodels.formula.api as smf\nimport matplotlib.pyplot as plt\n\nlmb = (pd.read_stata(\"data/close_elections_lmb.dta\")\n         .dropna(subset=[\"score\", \"lagdemvoteshare\", \"lagdemocrat\"]))   # 11 rows lack a lagged vote share\nlmb[\"dem_c\"] = lmb.lagdemvoteshare - 0.5          # centered running variable\n\nbins = lmb.groupby(pd.cut(lmb.lagdemvoteshare, np.arange(0, 1.01, 0.02)), observed=True)[\"score\"].mean()\nax = bins.plot(marker=\"o\", linestyle=\"\")\nax.axvline(x=24.5, color=\"grey\")                   # the 0.50 bin boundary\nax.set_xlabel(\"Democratic vote share, previous election (binned)\")\nax.set_ylabel(\"ADA score of the representative\")\nplt.show()\n\n\nlibrary(tidyverse); library(haven); library(estimatr)\n\nlmb &lt;- read_dta(\"data/close_elections_lmb.dta\") %&gt;%\n  drop_na(score, lagdemvoteshare, lagdemocrat) %&gt;%\n  mutate(dem_c = lagdemvoteshare - 0.5)\n\nlmb %&gt;%\n  mutate(bin = cut(lagdemvoteshare, seq(0, 1, 0.02))) %&gt;%\n  group_by(bin) %&gt;% summarise(score = mean(score), x = mean(lagdemvoteshare)) %&gt;%\n  ggplot(aes(x, score)) + geom_point() + geom_vline(xintercept = 0.5) + theme_minimal()\n\n\n\n\nA cloud of points rising with Democratic vote share, with a visible vertical jump at 0.5 of roughly 20–40 ADA points. score is the ADA liberalism score of the sitting representative; lagdemocrat is whether a Democrat won the previous election, which is the treatment.\n\n\n\nStep 2 — The naive and the close-election comparisons\n\nPythonR\n\n\ndef fit(df, formula):\n    return smf.ols(formula, data=df).fit(cov_type=\"cluster\", cov_kwds={\"groups\": df[\"id\"]})\n\nall_ = fit(lmb, \"score ~ lagdemocrat\")\nclose = fit(lmb[(lmb.lagdemvoteshare &gt; 0.48) & (lmb.lagdemvoteshare &lt; 0.52)], \"score ~ lagdemocrat\")\nprint(\"all elections:  \", all_.params[\"lagdemocrat\"].round(2), all_.bse[\"lagdemocrat\"].round(2))\nprint(\"within ±2 points:\", close.params[\"lagdemocrat\"].round(2), close.bse[\"lagdemocrat\"].round(2),\n      \" n =\", int(close.nobs))\n\n\nlm_robust(score ~ lagdemocrat, data = lmb, clusters = id)\nlm_robust(score ~ lagdemocrat,\n          data = filter(lmb, lagdemvoteshare &gt; 0.48, lagdemvoteshare &lt; 0.52),\n          clusters = id)\n\n\n\n\nAll elections: ≈ 31.5. Within ±2 points of the cutoff: ≈ 21.3 (SE ≈ 2, n = 915). The simple comparison is contaminated by district ideology; the close-election estimate is the book’s headline number.\n\n\n\nStep 3 — Polynomial specifications, global and local\nInteract the treatment with the centered running variable so each side gets its own slope.\n\nPythonR\n\n\nlmb[\"dem_c2\"] = lmb.dem_c**2\nlocal = lmb[(lmb.lagdemvoteshare &gt; 0.45) & (lmb.lagdemvoteshare &lt; 0.55)]\n\nspecs = {\n  \"linear, all data\":     fit(lmb,   \"score ~ lagdemocrat * dem_c\"),\n  \"linear, ±5 points\":    fit(local, \"score ~ lagdemocrat * dem_c\"),\n  \"quadratic, all data\":  fit(lmb,   \"score ~ lagdemocrat * (dem_c + dem_c2)\"),\n  \"quadratic, ±5 points\": fit(local, \"score ~ lagdemocrat * (dem_c + dem_c2)\"),\n}\nfor k, m in specs.items():\n    print(f\"{k:22s} {m.params['lagdemocrat']:6.2f}  (SE {m.bse['lagdemocrat']:.2f})\")\n\n\nlocal &lt;- filter(lmb, lagdemvoteshare &gt; 0.45, lagdemvoteshare &lt; 0.55)\nlmb   &lt;- mutate(lmb, dem_c2 = dem_c^2); local &lt;- mutate(local, dem_c2 = dem_c^2)\n\nlist(\n  \"linear, all\"     = lm_robust(score ~ lagdemocrat * dem_c, data = lmb,   clusters = id),\n  \"linear, ±5\"      = lm_robust(score ~ lagdemocrat * dem_c, data = local, clusters = id),\n  \"quadratic, all\"  = lm_robust(score ~ lagdemocrat * (dem_c + dem_c2), data = lmb,   clusters = id),\n  \"quadratic, ±5\"   = lm_robust(score ~ lagdemocrat * (dem_c + dem_c2), data = local, clusters = id)\n) %&gt;% map_dbl(~ coef(.x)[\"lagdemocrat\"])\n\n\n\n\nLinear/all ≈ 37.7; linear/±5 ≈ 19.8; quadratic/all ≈ 18.1; quadratic/±5 ≈ 25.6. The sign and rough size are robust; the exact number is not. Show the room all four and ask which they would put in the abstract. The honest answer is “the local ones, with the bandwidth stated.”\n\n\n\nStep 4 — Let rdrobust pick the bandwidth\n\nPythonR\n\n\n# pip install rdrobust\nfrom rdrobust import rdrobust, rdplot\nr = rdrobust(y=lmb[\"score\"], x=lmb[\"lagdemvoteshare\"], c=0.5, cluster=lmb[\"id\"])\nprint(r)\nrdplot(y=lmb[\"score\"], x=lmb[\"lagdemvoteshare\"], c=0.5)\n\n\nlibrary(rdrobust)\nr &lt;- rdrobust(y = lmb$score, x = lmb$lagdemvoteshare, c = 0.5, cluster = lmb$id)\nsummary(r)\nrdplot(y = lmb$score, x = lmb$lagdemvoteshare, c = 0.5)\n\n\n\n\nA conventional local-linear estimate of ≈ 18.6 (SE 2.0), a bias-corrected robust 95% CI of about [13.5, 22.9], and a data-driven MSE-optimal bandwidth of ≈ 0.088 vote-share points on each side (about 2,200 effective observations per side). rdplot draws the binned means with separate fits on each side — the figure to put on the slide.\n\n\n\nStep 5 — Is the density smooth at the cutoff?\nIf incumbents could engineer bare wins, there would be a pile-up just above 0.5.\n\nPythonR\n\n\ncounts, edges = np.histogram(lmb.lagdemvoteshare.dropna(), bins=np.arange(0.40, 0.61, 0.01))\nprint(pd.Series(counts, index=edges[:-1].round(2)))\n\n# pip install rddensity\nfrom rddensity import rddensity\ndens = rddensity(X=lmb[\"lagdemvoteshare\"], c=0.5)\nprint(dens.test)           # t_jk is the jackknife test statistic, p_jk its p-value\n\n\nlibrary(rddensity)\ndens &lt;- rddensity(X = lmb$lagdemvoteshare, c = 0.5)\nsummary(dens)\nrdplotdensity(dens, lmb$lagdemvoteshare)\n\n\n\n\nBin counts hover around 200–300 on both sides of 0.50 with no spike; the density test does not reject (jackknife \\(t ≈ 0.68\\), \\(p ≈ 0.49\\)). Also check that a pre-determined covariate (for example lagdemvoteshare from two elections back, or district demographics if available) does not jump at the cutoff.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 5 · Regression discontinuity"
+    ]
+  },
+  {
+    "objectID": "sessions/05-rdd.html#exercises",
+    "href": "sessions/05-rdd.html#exercises",
+    "title": "Session 5 · Regression discontinuity",
+    "section": "Exercises",
+    "text": "Exercises\n\nPlacebo cutoffs. Re-estimate the linear ±5-point specification at fake cutoffs of 0.40, 0.45, 0.55 and 0.60. What do you find, and what would it mean if one of them were large?\nBandwidth curve. Loop over bandwidths from ±1 to ±25 vote-share points in steps of 1 using the local-linear specification. Plot the estimate and its 95% CI against bandwidth. Where does it stabilize? Compare to the rdrobust choice.\nFuzzy preview. Suppose the data had an actual Democrat indicator democrat for the current term (it does). What is the first-stage relationship between lagdemocrat and democrat at the cutoff? Estimate it the same way as Step 3. Why is this a sharp rather than a fuzzy design for the score question, and when would it become fuzzy?",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 5 · Regression discontinuity"
+    ]
+  },
+  {
+    "objectID": "sessions/05-rdd.html#solutions",
+    "href": "sessions/05-rdd.html#solutions",
+    "title": "Session 5 · Regression discontinuity",
+    "section": "Solutions",
+    "text": "Solutions\n\n\n\n\n\n\nSolutions (click to expand)\n\n\n\n\n\n1. Placebo estimates at 0.40, 0.45, 0.55 and 0.60 are ≈ −2.6, 1.7, 3.1 and −4.8 with SEs around 2 — small, mixed in sign, and nowhere near the 20-point jump at 0.50. A large placebo jump would suggest the relationship between vote share and ideology is non-linear in ways the specification does not capture, or that something else happens at that value.\nfor c in [0.40, 0.45, 0.55, 0.60]:\n    sub = lmb[(lmb.lagdemvoteshare &gt; c - 0.05) & (lmb.lagdemvoteshare &lt; c + 0.05)].copy()\n    sub[\"above\"] = (sub.lagdemvoteshare &gt;= c).astype(int); sub[\"xc\"] = sub.lagdemvoteshare - c\n    print(c, fit(sub, \"score ~ above * xc\").params[\"above\"].round(2))\n2. At ±1 point the estimate is ≈ 32 with SE 5.6; it drops to ≈ 22 at ±3, ≈ 20 at ±5, ≈ 18 at ±10, then drifts back up to ≈ 21, 23 and 24 at ±15, ±20 and ±25 as far-away districts bend the linear fit. The SE shrinks monotonically. The rdrobust bandwidth (≈ ±9 points) lands in the stable region.\n3. lagdemocrat predicts democrat with a jump of ≈ 0.42 at the cutoff — winning narrowly last time makes you much more likely to hold the seat (incumbency). The score question is sharp because treatment is defined as who won last time. It would be fuzzy if the treatment of interest were “a Democrat holds the seat now,” since that only jumps partially at the cutoff; then $= $ (jump in score) / (jump in Democrat), which is an IV estimate.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 5 · Regression discontinuity"
+    ]
+  },
+  {
+    "objectID": "sessions/05-rdd.html#facilitator-notes",
+    "href": "sessions/05-rdd.html#facilitator-notes",
+    "title": "Session 5 · Regression discontinuity",
+    "section": "Facilitator notes",
+    "text": "Facilitator notes\n\n\n\n\n\n\nFacilitator notes (click to expand)\n\n\n\n\n\nStart with the picture. RDD is the one design where the plot is the argument. Spend five minutes on Step 1 and make people say what they see before any regression.\nMisconception: RDD needs the running variable to be random. It needs potential outcomes to be continuous at the cutoff. Vote share is not random; what matters is that barely winning is not systematically different from barely losing.\nMisconception: more data is better. Step 3’s global polynomials show far-away observations changing the estimate at the cutoff. This is the one session where throwing data away is the right move.\nIf rdrobust is not installed. Skip Step 4 and point to the bandwidth curve in Exercise 2, which teaches the same thing by hand.\nDiscussion prompts. (a) What is the population the LMB estimate applies to? (Districts near 50–50.) Is that a limitation or the point? (b) What would manipulation look like in an election context?\nBridge to next session. A fuzzy RD is an IV. Next session generalizes: any variable that moves treatment and affects the outcome only through treatment can play the cutoff’s role.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 5 · Regression discontinuity"
+    ]
+  },
+  {
+    "objectID": "sessions/07-panel-did.html",
+    "href": "sessions/07-panel-did.html",
+    "title": "Session 7 · Panel data and the 2×2 difference-in-differences",
+    "section": "",
+    "text": "Read before the meeting: Chapter 8 — Panel Data and Chapter 9, sections 9.1–9.3. Data: data/sasp_panel.dta; John Snow’s cholera table (typed in). Code files: code/session07.py · code/session07.R · Slides",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 7 · Panel data and the 2×2 difference-in-differences"
+    ]
+  },
+  {
+    "objectID": "sessions/07-panel-did.html#learning-goals",
+    "href": "sessions/07-panel-did.html#learning-goals",
+    "title": "Session 7 · Panel data and the 2×2 difference-in-differences",
+    "section": "Learning goals",
+    "text": "Learning goals\nParticipants should be able to write the fixed-effects model and explain what within variation is, implement FE three ways (dummies, demeaning, a panel routine) and show they agree, say what FE can and cannot fix (time-invariant versus time-varying unobservables), and compute a 2×2 difference-in-differences by hand, as a regression, and in terms of the parallel-trends assumption.\n\n\n\n\n\n\n\n\nTime\nBlock\n\n\n\n\n0:00\nRecap: LATE and compliers\n\n\n0:05\nConcepts: the FE model, within transformation, strict exogeneity; the 2×2 DiD and parallel trends\n\n\n0:20\nWalkthrough: SASP panel — pooled OLS vs FE on the price of unprotected sex; John Snow’s cholera DiD by hand and by regression\n\n\n0:45\nExercise 1 kickoff\n\n\n0:55\nAssign exercises; preview event studies",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 7 · Panel data and the 2×2 difference-in-differences"
+    ]
+  },
+  {
+    "objectID": "sessions/07-panel-did.html#key-ideas",
+    "href": "sessions/07-panel-did.html#key-ideas",
+    "title": "Session 7 · Panel data and the 2×2 difference-in-differences",
+    "section": "Key ideas",
+    "text": "Key ideas\nThe fixed-effects model. \\(Y_{it} = \\delta D_{it} + \\mathbf{X}_{it}\\beta + u_i + \\varepsilon_{it}\\). The unit effect \\(u_i\\) can be correlated with \\(D_{it}\\) in any way; FE removes it by comparing each unit to itself across time. Three equivalent implementations: unit dummies, demeaning every variable within unit, or first-differencing (with two periods).\nWhat FE needs. Strict exogeneity: \\(E[\\varepsilon_{it} \\mid D_{i1}, \\dots, D_{iT}, u_i] = 0\\). Time-varying unobservables that move with \\(D\\) are still a problem. Reverse causality and feedback (today’s shock affects tomorrow’s treatment) violate it. FE also needs within variation; a regressor that never changes for a unit is absorbed.\nThe SASP question. Sex workers charge more for unprotected sex. Is that a compensating differential for risk, or do higher-priced providers simply differ in ways that also make them more likely to offer it? The panel follows the same provider across clients, so provider-level unobservables drop out.\nThe 2×2 DiD. Two groups, two periods. \\(\\hat{\\delta} = (\\bar{Y}_{T,post} - \\bar{Y}_{T,pre}) - (\\bar{Y}_{C,post} - \\bar{Y}_{C,pre})\\). The identifying assumption is parallel trends: absent treatment, the treated group’s outcome would have moved by the same amount as the control group’s. It is a statement about a counterfactual and is untestable in the 2×2 case. As a regression: \\(Y = \\alpha + \\beta\\,\\text{Treat} + \\gamma\\,\\text{Post} + \\delta\\,(\\text{Treat} \\times \\text{Post}) + e\\).\nJohn Snow. In 1854 London, the Lambeth water company had moved its intake upstream of the sewage; Southwark & Vauxhall had not. Cholera deaths fell in Lambeth-served households and rose elsewhere. It is the first DiD and still one of the cleanest.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 7 · Panel data and the 2×2 difference-in-differences"
+    ]
+  },
+  {
+    "objectID": "sessions/07-panel-did.html#walkthrough",
+    "href": "sessions/07-panel-did.html#walkthrough",
+    "title": "Session 7 · Panel data and the 2×2 difference-in-differences",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nStep 1 — SASP: pooled OLS\n\nPythonR\n\n\nimport pandas as pd\nimport numpy as np\nimport statsmodels.formula.api as smf\nfrom linearmodels.panel import PanelOLS\n\nsasp = pd.read_stata(\"data/sasp_panel.dta\", convert_categoricals=False)\n\ntimevar = [\"unsafe\", \"llength\", \"reg\", \"asq_cl\", \"appearance_cl\", \"provider_second\",\n           \"asian_cl\", \"black_cl\", \"hispanic_cl\", \"othrace_cl\", \"hot\", \"massage_cl\", \"age_cl\"]\nfixed   = [\"age\", \"asq\", \"bmi\", \"hispanic\", \"black\", \"other\", \"asian\", \"schooling\",\n           \"cohab\", \"married\", \"divorced\", \"separated\"]\nsasp = sasp.dropna(subset=[\"lnw\", \"id\"] + timevar + fixed)\n\npooled = smf.ols(\"lnw ~ \" + \" + \".join(timevar + fixed), data=sasp)\\\n            .fit(cov_type=\"cluster\", cov_kwds={\"groups\": sasp[\"id\"]})\nprint(\"pooled OLS, unsafe:\", pooled.params[\"unsafe\"].round(3), \" SE\", pooled.bse[\"unsafe\"].round(3))\n\n\nlibrary(tidyverse); library(haven); library(fixest)\n\nsasp &lt;- read_dta(\"data/sasp_panel.dta\")\ntimevar &lt;- c(\"unsafe\",\"llength\",\"reg\",\"asq_cl\",\"appearance_cl\",\"provider_second\",\n             \"asian_cl\",\"black_cl\",\"hispanic_cl\",\"othrace_cl\",\"hot\",\"massage_cl\",\"age_cl\")\nfixed   &lt;- c(\"age\",\"asq\",\"bmi\",\"hispanic\",\"black\",\"other\",\"asian\",\"schooling\",\n             \"cohab\",\"married\",\"divorced\",\"separated\")\n\nf_pooled &lt;- as.formula(paste(\"lnw ~\", paste(c(timevar, fixed), collapse = \" + \")))\npooled &lt;- feols(f_pooled, data = sasp, cluster = ~id)\ncoeftable(pooled)[\"unsafe\", ]\n\n\n\n\nunsafe ≈ 0.00 (SE 0.03): pooled across providers, there is no price premium for unprotected sex once client and provider characteristics are controlled. About 1,500 sessions enter after dropping missing values.\n\n\n\nStep 2 — Fixed effects, three ways\n\nPythonR\n\n\n# (a) demeaning by hand\ndm = sasp.copy()\nfor v in [\"lnw\"] + timevar:\n    dm[v] = sasp[v] - sasp.groupby(\"id\")[v].transform(\"mean\")\nfe_dm = smf.ols(\"lnw ~ \" + \" + \".join(timevar), data=dm)\\\n           .fit(cov_type=\"cluster\", cov_kwds={\"groups\": dm[\"id\"]})\n\n# (b) unit dummies (slow with many ids, but transparent)\nfe_dummy = smf.ols(\"lnw ~ \" + \" + \".join(timevar) + \" + C(id)\", data=sasp).fit()\n\n# (c) PanelOLS\np = sasp.set_index([\"id\", \"session\"])\nfe_panel = PanelOLS.from_formula(\"lnw ~ \" + \" + \".join(timevar) + \" + EntityEffects\", data=p)\\\n             .fit(cov_type=\"clustered\", cluster_entity=True)\n\nprint(\"demeaned:\", fe_dm.params[\"unsafe\"].round(3),\n      \" dummies:\", fe_dummy.params[\"unsafe\"].round(3),\n      \" PanelOLS:\", fe_panel.params[\"unsafe\"].round(3), \" SE\", fe_panel.std_errors[\"unsafe\"].round(3))\n\n\nf_fe &lt;- as.formula(paste(\"lnw ~\", paste(timevar, collapse = \" + \"), \"| id\"))\nfe &lt;- feols(f_fe, data = sasp, cluster = ~id)\ncoeftable(fe)[\"unsafe\", ]\n\n# the same thing by hand\ndm &lt;- sasp %&gt;% group_by(id) %&gt;%\n  mutate(across(all_of(c(\"lnw\", timevar)), ~ .x - mean(.x, na.rm = TRUE))) %&gt;% ungroup()\ncoef(lm(as.formula(paste(\"lnw ~\", paste(timevar, collapse = \" + \"))), data = dm))[\"unsafe\"]\n\netable(pooled, fe, keep = \"unsafe\")\n\n\n\n\nAll three give unsafe ≈ 0.05 (SE ≈ 0.024): within the same provider, an unprotected session commands about a 5% premium. The time-invariant provider characteristics (age, schooling, race, marital status) are absorbed; try adding them to the FE model and watch them vanish or error. The dummy version’s SE is wrong (not clustered) — note it and move on.\n\n\n\nStep 3 — Why they differ\nThe pooled estimate mixes two comparisons: within a provider (does she charge more when the session is unprotected?) and between providers (do the ones who offer unprotected sex charge more in general?). FE keeps only the first. The near-zero pooled estimate means the between-provider correlation is negative enough to cancel the within premium: providers willing to offer unprotected sex are, on average, lower-priced. That is exactly the selection story FE was built to remove.\n\n\nStep 4 — John Snow’s cholera DiD by hand\nDeaths per 10,000 households, from the book’s Table 9.1:\n\n\n\n\n1849 (pre)\n1854 (post)\n\n\n\n\nSouthwark & Vauxhall (control)\n135\n147\n\n\nLambeth (treated: moved intake upstream in 1852)\n85\n19\n\n\n\n\nPythonR\n\n\nsnow = pd.DataFrame({\n    \"company\": [\"SV\", \"SV\", \"Lambeth\", \"Lambeth\"],\n    \"year\":    [1849, 1854, 1849, 1854],\n    \"deaths\":  [135, 147, 85, 19],\n})\nsnow[\"treat\"] = (snow.company == \"Lambeth\").astype(int)\nsnow[\"post\"]  = (snow.year == 1854).astype(int)\n\nby_hand = (19 - 85) - (147 - 135)\nreg = smf.ols(\"deaths ~ treat * post\", data=snow).fit()\nprint(\"by hand:\", by_hand, \"  regression:\", reg.params[\"treat:post\"].round(1))\n\n\nsnow &lt;- tibble(company = c(\"SV\",\"SV\",\"Lambeth\",\"Lambeth\"),\n               year = c(1849, 1854, 1849, 1854),\n               deaths = c(135, 147, 85, 19)) %&gt;%\n  mutate(treat = as.integer(company == \"Lambeth\"), post = as.integer(year == 1854))\n\n(19 - 85) - (147 - 135)\ncoef(lm(deaths ~ treat * post, data = snow))[\"treat:post\"]\n\n\n\n\nBoth give −78 deaths per 10,000 households. With four cells there are no standard errors — the regression is exactly identified — which is the point: the 2×2 is an identification argument, and inference needs more groups or more periods (next session).\n\n\n\nStep 5 — Draw the counterfactual\nSketch (or plot) the four points. The DiD estimate is the gap between Lambeth’s actual 1854 value (19) and what parallel trends says it would have been: \\(85 + (147 - 135) = 97\\). Ask the room what would make the dotted line wrong — for example, if Lambeth’s neighborhoods were already becoming cleaner for other reasons.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 7 · Panel data and the 2×2 difference-in-differences"
+    ]
+  },
+  {
+    "objectID": "sessions/07-panel-did.html#exercises",
+    "href": "sessions/07-panel-did.html#exercises",
+    "title": "Session 7 · Panel data and the 2×2 difference-in-differences",
+    "section": "Exercises",
+    "text": "Exercises\n\nFirst differences vs FE. Keep only providers with exactly two sessions in the SASP data (about 68 of them). Estimate the unsafe effect by first-differencing (session 2 minus session 1, regression without a constant) and by FE on the demeaned data. Show they are identical with \\(T = 2\\), explain what adding a constant to the FD regression corresponds to in the FE model, and say in one sentence why FD and FE diverge for \\(T &gt; 2\\).\nWhat FE cannot fix. Simulate a panel of 500 units × 5 periods where \\(D_{it}\\) responds to last period’s shock: \\(D_{it} = 1[\\varepsilon_{i,t-1} &gt; 0]\\). Set the true effect to 1. Show that FE is biased and explain which assumption failed.\nSnow with a placebo. Suppose a third company, “Chelsea,” had deaths of 110 in 1849 and 125 in 1854 and did not move its intake. Compute the DiD of Chelsea vs Southwark & Vauxhall. What does a near-zero number tell you about parallel trends, and what does it not tell you?",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 7 · Panel data and the 2×2 difference-in-differences"
+    ]
+  },
+  {
+    "objectID": "sessions/07-panel-did.html#solutions",
+    "href": "sessions/07-panel-did.html#solutions",
+    "title": "Session 7 · Panel data and the 2×2 difference-in-differences",
+    "section": "Solutions",
+    "text": "Solutions\n\n\n\n\n\n\nSolutions (click to expand)\n\n\n\n\n\n1. With \\(T = 2\\), demeaning and differencing use the same single within-unit contrast, so the estimates coincide exactly (≈ −0.06 in this small subsample — note it has the opposite sign from the full-panel FE estimate, a reminder that 68 providers is not much data). Adding a constant to the FD regression is the same as adding a period fixed effect to the FE model. For \\(T &gt; 2\\) FE uses all pairwise contrasts weighted by the within-unit variance, while FD uses only adjacent-period contrasts; they differ, and FD is more robust when \\(\\varepsilon_{it}\\) is a random walk.\n2. FE is biased because strict exogeneity fails: \\(D_{it}\\) depends on \\(\\varepsilon_{i,t-1}\\), and demeaning puts every period’s \\(\\varepsilon\\) into every period’s transformed error. The bias shrinks as \\(T\\) grows (it is of order \\(1/T\\)). First differencing also fails here, because \\(\\Delta D_{it}\\) depends on \\(\\varepsilon_{i,t-1}\\) which is in \\(\\Delta \\varepsilon_{it}\\).\nrng = np.random.default_rng(0); N, T = 500, 5\ne = rng.normal(size=(N, T)); D = np.zeros((N, T), int); D[:, 1:] = (e[:, :-1] &gt; 0)\nu = rng.normal(size=(N, 1)); Y = 1 * D + u + e\ndf = pd.DataFrame({\"y\": Y.ravel(), \"d\": D.ravel(), \"i\": np.repeat(np.arange(N), T), \"t\": np.tile(np.arange(T), N)})\ndm = df.assign(y=df.y - df.groupby(\"i\").y.transform(\"mean\"), d=df.d - df.groupby(\"i\").d.transform(\"mean\"))\nprint(smf.ols(\"y ~ d\", dm).fit().params[\"d\"])    # noticeably below 1\n3. Chelsea vs S&V: \\((125 - 110) - (147 - 135) = 3\\): two untreated companies moved in parallel. That is evidence consistent with parallel trends for the untreated, which makes the assumption more plausible for Lambeth. It does not test Lambeth’s own counterfactual trend, which is unobservable by construction.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 7 · Panel data and the 2×2 difference-in-differences"
+    ]
+  },
+  {
+    "objectID": "sessions/07-panel-did.html#facilitator-notes",
+    "href": "sessions/07-panel-did.html#facilitator-notes",
+    "title": "Session 7 · Panel data and the 2×2 difference-in-differences",
+    "section": "Facilitator notes",
+    "text": "Facilitator notes\n\n\n\n\n\n\nFacilitator notes (click to expand)\n\n\n\n\n\nStep 2 is the demo. Three implementations agreeing to three decimals is what makes “fixed effects” stop being a black box. Have one person run the demeaned version and another the panel routine, and compare live.\nMisconception: FE controls for everything about the unit. Everything fixed about the unit. Say “time-invariant” every time you say “fixed effect” for the first ten minutes.\nMisconception: the pooled and FE estimates disagreeing means one is wrong. They answer different questions (Step 3). Only one answers the causal question, and only under strict exogeneity.\nOn the data. The SASP file loads provider_second as a categorical in pandas; convert_categoricals=False avoids a crash in the demeaning step. In R, haven keeps it numeric.\nIf running short. Compress Steps 4–5 to the by-hand calculation and the sketch; the regression version recurs next session.\nDiscussion prompts. (a) In SASP, what time-varying unobservable could still bias the FE estimate? (b) Why is the 2×2 DiD a special case of FE (two units, two periods)?\nBridge to next session. The 2×2 has no SEs and no test of parallel trends. With many groups and many periods you get both — and a new problem when treatment turns on at different times.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 7 · Panel data and the 2×2 difference-in-differences"
+    ]
+  },
+  {
+    "objectID": "sessions/09-synth-wrapup.html",
+    "href": "sessions/09-synth-wrapup.html",
+    "title": "Session 9 · Synthetic control, and which design when",
+    "section": "",
+    "text": "Read before the meeting: Chapter 10 — Synthetic Control and Chapter 11 — Conclusion. Data: data/texas.dta (Cunningham & Kang 2019). Code files: code/session09.py · code/session09.R · Slides",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 9 · Synthetic control, and which design when"
+    ]
+  },
+  {
+    "objectID": "sessions/09-synth-wrapup.html#learning-goals",
+    "href": "sessions/09-synth-wrapup.html#learning-goals",
+    "title": "Session 9 · Synthetic control, and which design when",
+    "section": "Learning goals",
+    "text": "Learning goals\nParticipants should be able to explain the synthetic-control estimator as a constrained weighted average of donor units chosen to match the treated unit’s pre-period, fit one and read the weights, run placebo-in-space inference and compute the treated unit’s rank, and — the point of the final session — look at a new causal question and say which of the book’s designs fits it and why.\n\n\n\n\n\n\n\n\nTime\nBlock\n\n\n\n\n0:00\nRecap: the Bacon decomposition; what a control group is for\n\n\n0:05\nConcepts: comparative case studies, the synthetic-control weights, placebo inference\n\n\n0:20\nWalkthrough: Texas prison construction — fit, plot, placebos, rank\n\n\n0:40\nWrap-up: the design decision tree, applied to three new questions\n\n\n0:55\nWhere to go next",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 9 · Synthetic control, and which design when"
+    ]
+  },
+  {
+    "objectID": "sessions/09-synth-wrapup.html#key-ideas",
+    "href": "sessions/09-synth-wrapup.html#key-ideas",
+    "title": "Session 9 · Synthetic control, and which design when",
+    "section": "Key ideas",
+    "text": "Key ideas\nThe comparative case study. One treated aggregate unit (a state, a country), a handful of candidate controls, and a long pre-period. DiD with one treated unit has no credible standard error and picks the control arbitrarily. Synthetic control replaces the choice with an algorithm: find weights \\(w_j \\geq 0\\), \\(\\sum w_j = 1\\), over donor units \\(j\\) that make the weighted average of donors match the treated unit’s pre-treatment outcomes and predictors as closely as possible. The post-period gap between the treated unit and its synthetic version is the estimated effect.\nWhy the constraints matter. Non-negativity and summing to one keep the synthetic unit inside the convex hull of the donors: no extrapolation, and the weights are interpretable (“Texas is 45% California, 32% Ohio…”). A poor pre-period fit means the method has nothing to say; report the pre-period RMSPE.\nInference by placebo. Reassign treatment to each donor in turn, fit its synthetic control, and compute its post/pre RMSPE ratio. If the treated unit’s ratio is extreme relative to the placebo distribution, the effect is unlikely to be luck. The “p-value” is the treated unit’s rank divided by the number of units.\nThe Texas question. Texas massively expanded prison capacity in 1993–1994. Black male incarceration roughly doubled over the following years. Did the building cause the filling, relative to a synthetic Texas built from other states?\nWhat the book wants you to leave with. Every chapter answered the same question: where does the exogenous variation come from? Randomization (Ch. 4), observable selection you can model (Ch. 5), a threshold (Ch. 6), an instrument (Ch. 7), within-unit change (Ch. 8), a policy difference across groups and time (Ch. 9), a weighted comparison unit (Ch. 10). The method follows the source of variation, never the reverse.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 9 · Synthetic control, and which design when"
+    ]
+  },
+  {
+    "objectID": "sessions/09-synth-wrapup.html#walkthrough",
+    "href": "sessions/09-synth-wrapup.html#walkthrough",
+    "title": "Session 9 · Synthetic control, and which design when",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nStep 1 — Fit the synthetic Texas\nPredictors follow the book: poverty and income averaged over the pre-period, plus the Black male prison population in selected years, alcohol consumption, AIDS incidence, the Black population share and the 15–19 share.\n\nPythonR\n\n\nimport pandas as pd\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom pysyncon import Dataprep, Synth        # pip install pysyncon\n\ntx = pd.read_stata(\"data/texas.dta\", convert_categoricals=False)\nnames = tx.drop_duplicates(\"statefip\").set_index(\"statefip\")[\"state\"]\nTEXAS = 48\ndonors = [s for s in tx.statefip.unique() if s != TEXAS]\n\ndp = Dataprep(\n    foo=tx, dependent=\"bmprison\", unit_variable=\"statefip\", time_variable=\"year\",\n    treatment_identifier=TEXAS, controls_identifier=donors,\n    predictors=[\"poverty\", \"income\"], predictors_op=\"mean\", time_predictors_prior=range(1985, 1994),\n    special_predictors=[\n        (\"bmprison\", range(1988, 1989), \"mean\"), (\"bmprison\", range(1990, 1991), \"mean\"),\n        (\"bmprison\", range(1991, 1992), \"mean\"), (\"bmprison\", range(1992, 1993), \"mean\"),\n        (\"alcohol\", range(1990, 1991), \"mean\"),  (\"aidscapita\", range(1990, 1992), \"mean\"),\n        (\"black\", range(1990, 1992), \"mean\"),    (\"perc1519\", range(1990, 1991), \"mean\"),\n    ],\n    time_optimize_ssr=range(1985, 1994),\n)\nsynth = Synth()\nsynth.fit(dataprep=dp, optim_method=\"BFGS\", optim_initial=\"ols\")   # ~20 s; the default Nelder-Mead can take many minutes\nw = synth.weights(); w.index = [names[i] for i in w.index]\nprint(w[w &gt; 0.01].round(3))\n\n\nlibrary(tidyverse); library(haven); library(tidysynth)   # or library(Synth)\n\ntx &lt;- read_dta(\"data/texas.dta\")\n\nout &lt;- tx %&gt;%\n  synthetic_control(outcome = bmprison, unit = state, time = year,\n                    i_unit = \"Texas\", i_time = 1993, generate_placebos = TRUE) %&gt;%\n  generate_predictor(time_window = 1985:1993, poverty = mean(poverty), income = mean(income)) %&gt;%\n  generate_predictor(time_window = 1988, bmprison_1988 = mean(bmprison)) %&gt;%\n  generate_predictor(time_window = 1990, bmprison_1990 = mean(bmprison), alcohol = mean(alcohol),\n                     perc1519 = mean(perc1519)) %&gt;%\n  generate_predictor(time_window = 1991, bmprison_1991 = mean(bmprison)) %&gt;%\n  generate_predictor(time_window = 1992, bmprison_1992 = mean(bmprison)) %&gt;%\n  generate_predictor(time_window = 1990:1991, aidscapita = mean(aidscapita), black = mean(black)) %&gt;%\n  generate_weights(optimization_window = 1985:1993) %&gt;%\n  generate_control()\n\nout %&gt;% grab_unit_weights() %&gt;% filter(weight &gt; 0.01) %&gt;% arrange(desc(weight))\n\n\n\n\nA handful of donors with positive weight — in the Python fit, Florida ≈ 0.56, New York ≈ 0.27, Illinois ≈ 0.17, everyone else zero (the book’s Stata fit lands on California, Florida, Illinois and Louisiana; solver and predictor details move the weights, not the picture). That sparsity is what the constraints produce.\n\n\n\nStep 2 — Plot Texas against synthetic Texas and the gap\n\nPythonR\n\n\nZ0, Z1 = dp.make_outcome_mats(time_period=range(1985, 2001))\npath = pd.DataFrame({\"Texas\": Z1, \"Synthetic Texas\": Z0 @ synth.W})\npath[\"gap\"] = path[\"Texas\"] - path[\"Synthetic Texas\"]\nprint(path.round(0))\n\nfig, ax = plt.subplots(1, 2, figsize=(10, 4))\npath[[\"Texas\", \"Synthetic Texas\"]].plot(ax=ax[0]); ax[0].axvline(1993, color=\"grey\", ls=\"--\")\npath[\"gap\"].plot(ax=ax[1]); ax[1].axhline(0, color=\"grey\"); ax[1].axvline(1993, color=\"grey\", ls=\"--\")\nax[0].set_ylabel(\"Black male prisoners\"); ax[1].set_ylabel(\"Texas − synthetic\"); plt.tight_layout()\n\n\nout %&gt;% plot_trends()\nout %&gt;% plot_differences()\n\n\n\n\nPre-1993 the two series track closely (pre-period RMSPE ≈ 900 prisoners on a base of 15,000–29,000). From 1994 the gap opens to ≈ +10,000 and then ≈ +20,000–27,000 per year from 1995 on, averaging ≈ 23,000 over 1994–2000: Texas holds roughly 23,000 more Black men in prison than its synthetic twin predicts. Check the pre-period RMSPE before believing any of it.\n\n\n\nStep 3 — Placebo-in-space inference\n\nPythonR\n\n\ndef fit_state(st):\n    d = Dataprep(foo=tx, dependent=\"bmprison\", unit_variable=\"statefip\", time_variable=\"year\",\n                 treatment_identifier=st, controls_identifier=[s for s in tx.statefip.unique() if s != st],\n                 predictors=[\"poverty\", \"income\"], predictors_op=\"mean\", time_predictors_prior=range(1985, 1994),\n                 special_predictors=dp.special_predictors, time_optimize_ssr=range(1985, 1994))\n    s = Synth(); s.fit(dataprep=d, optim_method=\"BFGS\", optim_initial=\"ols\")\n    Z0, Z1 = d.make_outcome_mats(time_period=range(1985, 2001)); g = Z1 - Z0 @ s.W\n    pre  = np.sqrt((g.loc[1985:1993] ** 2).mean())\n    post = np.sqrt((g.loc[1994:2000] ** 2).mean())\n    return pd.Series({\"pre_rmspe\": pre, \"post_rmspe\": post, \"ratio\": post / pre})\n\n# This loop fits 51 synthetic controls and takes several minutes.\nplacebo = pd.DataFrame({names[st]: fit_state(st) for st in tx.statefip.unique()}).T\nplacebo = placebo.sort_values(\"ratio\", ascending=False)\nprint(placebo.head(10).round(1))\nrank = int((placebo.index == \"Texas\").argmax()) + 1\nprint(f\"Texas rank: {rank} of {len(placebo)}  -&gt;  p = {rank/len(placebo):.3f}\")\n\n\nout %&gt;% plot_placebos()\nout %&gt;% plot_mspe_ratio()\nout %&gt;% grab_signficance()      # (sic) returns the rank-based p-value\n\n\n\n\nTexas has the largest post/pre RMSPE ratio of all 51 units: ≈ 25.9, against 20.4 for the runner-up (Illinois) and single digits for most states. The rank-based \\(p = 1/51 ≈\\) 0.02. The placebo-gap plot shows Texas’s line leaving the band of 50 grey placebo lines after 1993. The book’s convention is to drop placebos whose pre-period RMSPE is more than some multiple of the treated unit’s; here only one state exceeds twice Texas’s, so the result does not depend on it.\n\n\n\nStep 4 — Wrap-up: which design, when\nPut three fresh questions to the room and make the group pick a design and name its key assumption and its first diagnostic. Suggested questions:\n\nDid a city’s new minimum-wage ordinance reduce restaurant employment? — DiD or synthetic control against comparable cities; parallel trends / pre-period fit; event-study leads or placebo-in-space.\nDoes an extra year of schooling raise earnings for students who barely pass a school-entry test? — RDD on the test score; continuity at the cutoff; density test and covariate smoothness.\nDo defendants assigned public defenders get longer sentences than those with private counsel? — Selection on unobservables is severe; an instrument such as random assignment of public-defender availability (judge-leniency style); relevance and exclusion; first-stage F and a complier description.\n\nThen the decision tree, in words. If treatment was randomized, compare means and use randomization inference. If selection is on observables you can defend with a DAG, match or weight, and check overlap. If treatment switches at a threshold, RD. If something exogenous shifts treatment but not the outcome, IV, and say whose effect you are estimating. If you observe units before and after a change, fixed effects or DiD, with an event study to show the pre-period. If you have one treated aggregate and a long pre-period, synthetic control with placebo inference. If none of those apply, the honest answer is that the data cannot answer the causal question, and that is a finding.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 9 · Synthetic control, and which design when"
+    ]
+  },
+  {
+    "objectID": "sessions/09-synth-wrapup.html#exercises",
+    "href": "sessions/09-synth-wrapup.html#exercises",
+    "title": "Session 9 · Synthetic control, and which design when",
+    "section": "Exercises",
+    "text": "Exercises\n\nLeave-one-out. Drop Florida (the largest-weight donor) from the donor pool and refit the synthetic Texas. How much do the weights and the post-period gap change? Then also drop the state with the next-largest weight. What does sensitivity to a single donor tell you?\nPlacebo-in-time. Pretend treatment happened in 1989 and fit the synthetic control using only 1985–1988 to choose weights. Is there a spurious “effect” after 1989? Why is this a useful check in addition to placebo-in-space?\nDesign memo. Pick a causal question from your own work. In one page: state the estimand (ATE, ATT, LATE, local effect at a cutoff…), the design you would use, its identifying assumption written as a counterfactual statement, two diagnostics you would show, and the one thing that would make you abandon the design.",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 9 · Synthetic control, and which design when"
+    ]
+  },
+  {
+    "objectID": "sessions/09-synth-wrapup.html#solutions",
+    "href": "sessions/09-synth-wrapup.html#solutions",
+    "title": "Session 9 · Synthetic control, and which design when",
+    "section": "Solutions",
+    "text": "Solutions\n\n\n\n\n\n\nSolutions (click to expand)\n\n\n\n\n\n1. Without Florida the weight shifts to Illinois (0.44), New York (0.35) and California (0.21); the post-period gap is ≈ 23,600 and the pre-RMSPE rises only slightly (≈ 1,050). Dropping New York as well leaves Illinois 0.56 / California 0.44, a gap of ≈ 23,000 and pre-RMSPE ≈ 1,250. The result is not an artifact of any one donor. Large sensitivity to one donor would mean the synthetic unit was really a single comparison state, and you would be back to a one-control DiD.\n2. With a 1989 pseudo-treatment, the synthetic and actual series continue to track through 1993, with no gap that resembles the post-1993 one. Placebo-in-time guards against the pre-period fit being achieved by overfitting a short window; placebo-in-space guards against the post-period gap being within the range of ordinary noise.\n3. Discussed in the meeting. A good memo names the counterfactual explicitly (“absent the ordinance, employment in city A would have followed the trend in cities B–D”).",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 9 · Synthetic control, and which design when"
+    ]
+  },
+  {
+    "objectID": "sessions/09-synth-wrapup.html#facilitator-notes",
+    "href": "sessions/09-synth-wrapup.html#facilitator-notes",
+    "title": "Session 9 · Synthetic control, and which design when",
+    "section": "Facilitator notes",
+    "text": "Facilitator notes\n\n\n\n\n\n\nFacilitator notes (click to expand)\n\n\n\n\n\nRun Step 3 before the meeting. The 51-fit placebo loop takes several minutes in Python; have the results table ready and only re-run the Texas fit live. tidysynth with generate_placebos = TRUE does the loop inside generate_weights().\nMisconception: the weights are “the” comparison states. They are the solution to an optimization with the predictors you chose. Change the predictors and the weights move (Step 1’s expect box shows this between implementations). What should not move much is the post-period gap.\nMisconception: a pre-period fit that looks good is good enough. Insist on the pre-RMSPE number and the placebo-in-time check. Synthetic control with a short or badly fitted pre-period is a very elaborate way of picking a control state by hand.\nWrap-up block. Give it the full 15 minutes. It is the only time in the series the group practices choosing a design rather than executing one, and it is the skill the book is actually teaching.\nWhere to go next. The book’s own “Mixtape Sessions” workshops; Causal Inference for the Brave and True (Python-first, free); Huntington-Klein’s The Effect (free, R and Python, with the causaldata package); and the 2021–2023 DiD literature (Goodman-Bacon; Callaway & Sant’Anna; Sun & Abraham; de Chaisemartin & D’Haultfœuille; Roth et al.’s survey).\nDiscussion prompts. (a) Why is a synthetic control with 50 donors and 9 pre-years not simply overfitting? (b) What is the estimand here — ATT for Texas — and why can it not be generalized to other states?",
+    "crumbs": [
+      "Home",
+      "Sessions",
+      "Session 9 · Synthetic control, and which design when"
+    ]
+  },
+  {
+    "objectID": "slides.html",
+    "href": "slides.html",
+    "title": "Slides",
+    "section": "",
+    "text": "One reveal.js deck per session, each sized for the 15-minute concept block. Open a deck in a new tab and press F for full screen, S for speaker view (the speaker notes repeat the key talking points), and E to export to PDF.\n\n\n\nSession\nDeck\n\n\n\n\n1 · Why causal inference + regression review\nopen\n\n\n2 · Directed acyclic graphs\nopen\n\n\n3 · Potential outcomes\nopen\n\n\n4 · Matching & subclassification\nopen\n\n\n5 · Regression discontinuity\nopen\n\n\n6 · Instrumental variables\nopen\n\n\n7 · Panel data + the 2×2 DiD\nopen\n\n\n8 · DiD deep dive\nopen\n\n\n9 · Synthetic control + wrap-up\nopen",
+    "crumbs": [
+      "Home",
+      "Slides"
+    ]
+  },
+  {
+    "objectID": "slides/02-dags.html#last-time",
+    "href": "slides/02-dags.html#last-time",
+    "title": "Directed acyclic graphs",
+    "section": "Last time",
+    "text": "Last time\n\nRegression anatomy: “controlling for” is mechanical\nThe open question: which variables should you control for?\nRegression cannot answer that. A DAG can."
+  },
+  {
+    "objectID": "slides/02-dags.html#dag-grammar",
+    "href": "slides/02-dags.html#dag-grammar",
+    "title": "Directed acyclic graphs",
+    "section": "DAG grammar",
+    "text": "DAG grammar\n\nNodes are variables; \\(A \\to B\\) means \\(A\\) causes \\(B\\)\nA missing arrow is a strong claim: no direct effect\nThe graph encodes what you believe before looking at data\nAcyclic: no variable causes itself"
+  },
+  {
+    "objectID": "slides/02-dags.html#paths",
+    "href": "slides/02-dags.html#paths",
+    "title": "Directed acyclic graphs",
+    "section": "Paths",
+    "text": "Paths\n\nA path is any sequence of edges between \\(D\\) and \\(Y\\), ignoring direction\nBackdoor path: starts with an arrow into \\(D\\) — carries non-causal association\nA path is blocked if it contains\n\na non-collider you condition on, or\na collider you do not condition on"
+  },
+  {
+    "objectID": "slides/02-dags.html#confounder-vs-collider",
+    "href": "slides/02-dags.html#confounder-vs-collider",
+    "title": "Directed acyclic graphs",
+    "section": "Confounder vs collider",
+    "text": "Confounder vs collider\n\n\nConfounder \\(D \\leftarrow X \\to Y\\)\n\nOpen by default\nConditioning on \\(X\\) closes it\n\n\nCollider \\(D \\to C \\leftarrow Y\\)\n\nClosed by default\nConditioning on \\(C\\) opens it"
+  },
+  {
+    "objectID": "slides/02-dags.html#the-backdoor-criterion",
+    "href": "slides/02-dags.html#the-backdoor-criterion",
+    "title": "Directed acyclic graphs",
+    "section": "The backdoor criterion",
+    "text": "The backdoor criterion\n\\(X\\) identifies the effect of \\(D\\) on \\(Y\\) if\n\n\\(X\\) blocks every backdoor path from \\(D\\) to \\(Y\\), and\n\\(X\\) contains no descendant of \\(D\\)\n\n\nThe set can be empty (randomization)\nEverything in Sessions 4 and 7 is a bet that some \\(X\\) satisfies this"
+  },
+  {
+    "objectID": "slides/02-dags.html#the-discrimination-dag",
+    "href": "slides/02-dags.html#the-discrimination-dag",
+    "title": "Directed acyclic graphs",
+    "section": "The discrimination DAG",
+    "text": "The discrimination DAG\n\nfemale → discrimination → occupation → wage\ndiscrimination → wage (direct)\nability → occupation, ability → wage (unobserved)\n“Control for occupation” sounds careful. Occupation is a collider on discrimination → occupation ← ability → wage."
+  },
+  {
+    "objectID": "slides/02-dags.html#walkthrough",
+    "href": "slides/02-dags.html#walkthrough",
+    "title": "Directed acyclic graphs",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nSimulate the DAG; three regressions, three answers\nTrace every path and classify each node\nTalent and beauty among movie stars: selection is conditioning\n\ndagitty finds the adjustment set for you"
+  },
+  {
+    "objectID": "slides/02-dags.html#takeaway",
+    "href": "slides/02-dags.html#takeaway",
+    "title": "Directed acyclic graphs",
+    "section": "Takeaway",
+    "text": "Takeaway\n\nMore controls are not safer. The right adjustment set comes from the graph, and the graph comes from theory and institutional knowledge — not from the data."
+  },
+  {
+    "objectID": "slides/04-matching.html#last-time",
+    "href": "slides/04-matching.html#last-time",
+    "title": "Matching and subclassification",
+    "section": "Last time",
+    "text": "Last time\n\nSDO = ATE + selection bias + HTE bias\nRandomization kills both. Without it?\nToday’s bet: we can see everything that drives selection"
+  },
+  {
+    "objectID": "slides/04-matching.html#conditional-independence",
+    "href": "slides/04-matching.html#conditional-independence",
+    "title": "Matching and subclassification",
+    "section": "Conditional independence",
+    "text": "Conditional independence\n\\[(Y^0, Y^1) \\perp D \\mid X\\]\n\nWithin strata of \\(X\\), treatment is as good as random\nThe backdoor criterion, in potential-outcomes clothing\nUntestable: it is a claim about unobservables"
+  },
+  {
+    "objectID": "slides/04-matching.html#common-support",
+    "href": "slides/04-matching.html#common-support",
+    "title": "Matching and subclassification",
+    "section": "Common support",
+    "text": "Common support\n\\[0 &lt; P(D = 1 \\mid X) &lt; 1\\]\n\nEvery covariate profile needs both treated and untreated units\nWithout it you are extrapolating, not matching\nThe one assumption you can check — so check it"
+  },
+  {
+    "objectID": "slides/04-matching.html#subclassification",
+    "href": "slides/04-matching.html#subclassification",
+    "title": "Matching and subclassification",
+    "section": "Subclassification",
+    "text": "Subclassification\n\nStratify on \\(X\\); difference in means within each stratum\nAverage with the treated group’s stratum shares → ATT\nWorks with 2–3 discrete covariates\nDies of the curse of dimensionality immediately after"
+  },
+  {
+    "objectID": "slides/04-matching.html#the-propensity-score",
+    "href": "slides/04-matching.html#the-propensity-score",
+    "title": "Matching and subclassification",
+    "section": "The propensity score",
+    "text": "The propensity score\n\n\\(p(X) = P(D = 1 \\mid X)\\)\nRosenbaum & Rubin: if CIA holds given \\(X\\), it holds given \\(p(X)\\)\nOne number replaces the whole vector\nEstimate with a logit; then stratify, weight (IPW), or match on it"
+  },
+  {
+    "objectID": "slides/04-matching.html#not-a-prediction-problem",
+    "href": "slides/04-matching.html#not-a-prediction-problem",
+    "title": "Matching and subclassification",
+    "section": "Not a prediction problem",
+    "text": "Not a prediction problem\n\nYou are not trying to predict treatment well\nA score with perfect separation means no overlap\nThe goal is covariate balance, and the diagnostic is the balance table"
+  },
+  {
+    "objectID": "slides/04-matching.html#dehejiawahba",
+    "href": "slides/04-matching.html#dehejiawahba",
+    "title": "Matching and subclassification",
+    "section": "Dehejia–Wahba",
+    "text": "Dehejia–Wahba\n\nNSW experiment: training raised 1978 earnings by ≈ $1,800\nReplace the experimental controls with CPS: −$8,500\nPropensity-score methods with the right covariates and overlap: back to ≈ $1,800–2,000\nMatching can work. It can also fail silently."
+  },
+  {
+    "objectID": "slides/04-matching.html#walkthrough",
+    "href": "slides/04-matching.html#walkthrough",
+    "title": "Matching and subclassification",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nTitanic: raw gap 0.35 → subclassified 0.24\nNSW vs CPS: the −$8,500 disaster\nEstimate the score; look at the histogram\nIPW on the overlap region; nearest-neighbor ATT"
+  },
+  {
+    "objectID": "slides/04-matching.html#takeaway",
+    "href": "slides/04-matching.html#takeaway",
+    "title": "Matching and subclassification",
+    "section": "Takeaway",
+    "text": "Takeaway\n\nMatching is a bet that the DAG has no unobserved confounder. The propensity score makes the bet tractable; overlap and balance are the only things you can verify."
+  },
+  {
+    "objectID": "slides/06-iv.html#last-time",
+    "href": "slides/06-iv.html#last-time",
+    "title": "Instrumental variables",
+    "section": "Last time",
+    "text": "Last time\n\nA fuzzy RD: treatment probability jumps at the cutoff\nEffect = jump in \\(Y\\) / jump in \\(D\\)\nThat is an IV. Today: any variable can play the cutoff’s role"
+  },
+  {
+    "objectID": "slides/06-iv.html#the-problem",
+    "href": "slides/06-iv.html#the-problem",
+    "title": "Instrumental variables",
+    "section": "The problem",
+    "text": "The problem\n\n\\(Y = \\alpha + \\delta D + u\\) with \\(\\mathrm{Cov}(D, u) \\neq 0\\)\nIf \\(Z\\) moves \\(D\\) and is otherwise unrelated to \\(Y\\):\n\n\\[\\delta_{IV} = \\frac{\\mathrm{Cov}(Z, Y)}{\\mathrm{Cov}(Z, D)} = \\frac{\\text{reduced form}}{\\text{first stage}}\\]"
+  },
+  {
+    "objectID": "slides/06-iv.html#three-conditions-plus-one",
+    "href": "slides/06-iv.html#three-conditions-plus-one",
+    "title": "Instrumental variables",
+    "section": "Three conditions (plus one)",
+    "text": "Three conditions (plus one)\n\n\n\nCondition\nMeaning\nTestable?\n\n\n\n\nRelevance\n\\(Z\\) predicts \\(D\\)\nYes — first-stage F\n\n\nExclusion\n\\(Z \\to Y\\) only through \\(D\\)\nNo\n\n\nIndependence\n\\(Z\\) as good as random w.r.t. \\(u\\)\nNo\n\n\nMonotonicity\nNo defiers\nNo"
+  },
+  {
+    "objectID": "slides/06-iv.html#sls",
+    "href": "slides/06-iv.html#sls",
+    "title": "Instrumental variables",
+    "section": "2SLS",
+    "text": "2SLS\n\nRegress \\(D\\) on \\(Z\\) and covariates; keep \\(\\hat{D}\\)\nRegress \\(Y\\) on \\(\\hat{D}\\) and the same covariates\nUse an IV routine for the SEs — two lm calls get them wrong"
+  },
+  {
+    "objectID": "slides/06-iv.html#weak-instruments",
+    "href": "slides/06-iv.html#weak-instruments",
+    "title": "Instrumental variables",
+    "section": "Weak instruments",
+    "text": "Weak instruments\n\nWeak first stage → 2SLS biased toward OLS, badly behaved\nRule of thumb: F &gt; 10; be nervous below 20\nPrefer just-identified models; always report the F"
+  },
+  {
+    "objectID": "slides/06-iv.html#late",
+    "href": "slides/06-iv.html#late",
+    "title": "Instrumental variables",
+    "section": "LATE",
+    "text": "LATE\n\nWith heterogeneous effects, IV identifies the effect for compliers: units whose \\(D\\) is moved by \\(Z\\)\nDifferent instruments → different compliers → different LATEs\nCard’s compliers: people for whom college distance was binding\nStevenson’s compliers: defendants detained by a strict judge, released by a lenient one"
+  },
+  {
+    "objectID": "slides/06-iv.html#walkthrough",
+    "href": "slides/06-iv.html#walkthrough",
+    "title": "Instrumental variables",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nCard: OLS return to schooling ≈ 0.07\nFirst stage (0.33) and reduced form (0.04) by hand → Wald ≈ 0.12\n2SLS with proper SEs\nJudge leniency: OLS 0.035 vs 2SLS 0.16"
+  },
+  {
+    "objectID": "slides/06-iv.html#takeaway",
+    "href": "slides/06-iv.html#takeaway",
+    "title": "Instrumental variables",
+    "section": "Takeaway",
+    "text": "Takeaway\n\nIV is reduced form over first stage. Relevance you can test; exclusion you must argue; and the answer is a LATE for whoever the instrument moves."
+  },
+  {
+    "objectID": "slides/08-did-deep-dive.html#last-time",
+    "href": "slides/08-did-deep-dive.html#last-time",
+    "title": "Difference-in-differences, deep dive",
+    "section": "Last time",
+    "text": "Last time\n\nThe 2×2: no standard errors, no test of parallel trends\nToday: many periods, many groups — and a new problem"
+  },
+  {
+    "objectID": "slides/08-did-deep-dive.html#event-studies",
+    "href": "slides/08-did-deep-dive.html#event-studies",
+    "title": "Difference-in-differences, deep dive",
+    "section": "Event studies",
+    "text": "Event studies\n\nReplace \\(\\text{Treat} \\times \\text{Post}\\) with \\(\\text{Treat} \\times \\text{Year}_t\\) for every \\(t\\) (omit one)\nLeads (pre-treatment) should be ≈ 0\nLags trace the dynamic effect\nFlat leads make parallel trends plausible; they do not prove it"
+  },
+  {
+    "objectID": "slides/08-did-deep-dive.html#placebos-and-triple-differences",
+    "href": "slides/08-did-deep-dive.html#placebos-and-triple-differences",
+    "title": "Difference-in-differences, deep dive",
+    "section": "Placebos and triple differences",
+    "text": "Placebos and triple differences\n\nIf theory says the effect exists only for a group / cohort / window, estimate it where it should not and demand zero\nDDD: subtract the placebo group’s DD from the treated group’s DD\nAbsorbs group-specific shocks a plain DD would call “treatment”"
+  },
+  {
+    "objectID": "slides/08-did-deep-dive.html#abortion-legalization-cunningham-cornwell-2013",
+    "href": "slides/08-did-deep-dive.html#abortion-legalization-cunningham-cornwell-2013",
+    "title": "Difference-in-differences, deep dive",
+    "section": "Abortion legalization (Cunningham & Cornwell 2013)",
+    "text": "Abortion legalization (Cunningham & Cornwell 2013)\n\nFive states repealed bans in 1970; Roe in 1973\nTreated cohorts: born 1971–73 in repeal states\nPrediction: lower gonorrhea among 15–19 year olds in 1986–92, tracing a parabola as the cohort ages through the bracket\nPlacebo: 25–29 year olds"
+  },
+  {
+    "objectID": "slides/08-did-deep-dive.html#staggered-adoption",
+    "href": "slides/08-did-deep-dive.html#staggered-adoption",
+    "title": "Difference-in-differences, deep dive",
+    "section": "Staggered adoption",
+    "text": "Staggered adoption\n\nUnits treated at different times; TWFE: \\(Y_{it} = \\alpha_i + \\lambda_t + \\delta D_{it} + e_{it}\\)\nGoodman-Bacon: \\(\\hat{\\delta}\\) is a weighted average of every 2×2 in the data\nIncluding late-treated vs already-treated as “control”\nIf effects grow over time, those 2×2s are biased — sometimes to the wrong sign"
+  },
+  {
+    "objectID": "slides/08-did-deep-dive.html#modern-estimators",
+    "href": "slides/08-did-deep-dive.html#modern-estimators",
+    "title": "Difference-in-differences, deep dive",
+    "section": "Modern estimators",
+    "text": "Modern estimators\n\nCallaway–Sant’Anna: ATT for each cohort × period, using only never- or not-yet-treated controls; aggregate with chosen weights\nSun–Abraham: the same idea inside an interaction-weighted event-study regression\nBoth need a clean control group; neither is magic"
+  },
+  {
+    "objectID": "slides/08-did-deep-dive.html#castle-doctrine-cheng-hoekstra-2013",
+    "href": "slides/08-did-deep-dive.html#castle-doctrine-cheng-hoekstra-2013",
+    "title": "Difference-in-differences, deep dive",
+    "section": "Castle doctrine (Cheng & Hoekstra 2013)",
+    "text": "Castle doctrine (Cheng & Hoekstra 2013)\n\n“Stand your ground” laws, 2005–2010, 21 states\nTWFE: log homicide up ≈ 8%\n29 never-treated states → the decomposition puts 90% of weight on clean comparisons"
+  },
+  {
+    "objectID": "slides/08-did-deep-dive.html#walkthrough",
+    "href": "slides/08-did-deep-dive.html#walkthrough",
+    "title": "Difference-in-differences, deep dive",
+    "section": "Walkthrough",
+    "text": "Walkthrough\n\nAbortion event study: the parabola\nPlacebo cohort and DDD\nCastle TWFE\nBacon decomposition by hand; a modern estimator"
+  },
+  {
+    "objectID": "slides/08-did-deep-dive.html#takeaway",
+    "href": "slides/08-did-deep-dive.html#takeaway",
+    "title": "Difference-in-differences, deep dive",
+    "section": "Takeaway",
+    "text": "Takeaway\n\nThe event-study plot is the deliverable. TWFE is a weighted average with weights you did not choose; decompose it, and if the forbidden comparisons carry weight, use an estimator that refuses to make them."
+  }
+]

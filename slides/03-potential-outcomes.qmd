@@ -1,0 +1,57 @@
+---
+title: "Potential outcomes"
+subtitle: "Session 3 · Mixtape chapter 4"
+---
+
+## Last time
+
+- DAGs say which variables to condition on
+- Today: the language for *what* we are estimating, and what randomization buys
+
+## Potential outcomes
+
+- Each unit has $Y_i^1$ and $Y_i^0$; the treatment effect is $\delta_i = Y_i^1 - Y_i^0$
+- We see one: $Y_i = D_i Y_i^1 + (1 - D_i) Y_i^0$ (the switching equation)
+- The other is missing. That is the *fundamental problem of causal inference*.
+
+## Estimands
+
+- $ATE = E[\delta]$
+- $ATT = E[\delta \mid D = 1]$
+- $ATU = E[\delta \mid D = 0]$
+- They differ when effects are heterogeneous **and** treatment is selected on them
+
+## The decomposition
+
+$$\underbrace{E[Y \mid D=1] - E[Y \mid D=0]}_{\text{SDO}} = ATE + \underbrace{E[Y^0 \mid D=1] - E[Y^0 \mid D=0]}_{\text{selection bias}} + \underbrace{(1-\pi)(ATT - ATU)}_{\text{HTE bias}}$$
+
+- Selection bias: the treated would have done differently anyway
+- HTE bias: the treated gain differently from treatment
+- Every design in this book is a story about killing these two terms
+
+## Randomization
+
+- $D \perp (Y^0, Y^1)$
+- Both bias terms are zero in expectation
+- SDO = ATE
+- The regression is doing no work; the design did it
+
+## Randomization inference
+
+- Fisher's **sharp null**: $\delta_i = 0$ for every $i$
+- Under it, every missing potential outcome is known
+- Recompute the statistic for every possible assignment
+- Exact $p$-value, no distributional assumptions, no large-sample appeal
+
+## Walkthrough
+
+1. Yule (1899): pauperism on out-relief — regression without a design
+2. Thornton (2008): randomized HIV-test incentives in Malawi
+3. Fisher's exact $p$ on 8 units (70 assignments)
+4. RI on Thornton with 1,000 permutations
+
+## Takeaway
+
+::: {.takeaway}
+Write the SDO decomposition on the wall and keep it there for the rest of the series. Randomization zeroes both bias terms; everything else is an argument about why they might be zero anyway.
+:::

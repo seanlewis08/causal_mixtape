@@ -1,0 +1,72 @@
+---
+title: "Directed acyclic graphs"
+subtitle: "Session 2 · Mixtape chapter 3"
+---
+
+## Last time
+
+- Regression anatomy: "controlling for" is mechanical
+- The open question: *which* variables should you control for?
+- Regression cannot answer that. A DAG can.
+
+## DAG grammar
+
+- Nodes are variables; $A \to B$ means $A$ causes $B$
+- A **missing** arrow is a strong claim: no direct effect
+- The graph encodes what you believe *before* looking at data
+- Acyclic: no variable causes itself
+
+## Paths
+
+- A path is any sequence of edges between $D$ and $Y$, ignoring direction
+- **Backdoor path**: starts with an arrow *into* $D$ — carries non-causal association
+- A path is **blocked** if it contains
+  - a non-collider you condition on, **or**
+  - a collider you do **not** condition on
+
+## Confounder vs collider
+
+::: {.columns}
+::: {.column}
+**Confounder** $D \leftarrow X \to Y$
+
+- Open by default
+- Conditioning on $X$ closes it
+:::
+::: {.column}
+**Collider** $D \to C \leftarrow Y$
+
+- Closed by default
+- Conditioning on $C$ **opens** it
+:::
+:::
+
+## The backdoor criterion
+
+$X$ identifies the effect of $D$ on $Y$ if
+
+1. $X$ blocks every backdoor path from $D$ to $Y$, and
+2. $X$ contains no descendant of $D$
+
+- The set can be empty (randomization)
+- Everything in Sessions 4 and 7 is a bet that some $X$ satisfies this
+
+## The discrimination DAG
+
+- female → discrimination → occupation → wage
+- discrimination → wage (direct)
+- ability → occupation, ability → wage (unobserved)
+- "Control for occupation" sounds careful. Occupation is a **collider** on discrimination → occupation ← ability → wage.
+
+## Walkthrough
+
+1. Simulate the DAG; three regressions, three answers
+2. Trace every path and classify each node
+3. Talent and beauty among movie stars: selection *is* conditioning
+4. (R) `dagitty` finds the adjustment set for you
+
+## Takeaway
+
+::: {.takeaway}
+More controls are not safer. The right adjustment set comes from the graph, and the graph comes from theory and institutional knowledge — not from the data.
+:::

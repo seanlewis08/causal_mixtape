@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Session 6 · Instrumental variables – Mixtape Workshops</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../sessions/07-panel-did.html" rel="next">
+<link href="../sessions/05-rdd.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b6ebfe76373a65f90f03e4eef39a9400.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Mixtape Workshops</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../setup.html"> 
+<span class="menu-text">Setup</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../facilitating.html"> 
+<span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Sessions</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-sessions">    
+        <li>
+    <a class="dropdown-item" href="../sessions/01-intro-regression.html">
+ <span class="dropdown-text">1 · Why causal inference + regression review</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/02-dags.html">
+ <span class="dropdown-text">2 · Directed acyclic graphs</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/03-potential-outcomes.html">
+ <span class="dropdown-text">3 · Potential outcomes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/04-matching.html">
+ <span class="dropdown-text">4 · Matching &amp; subclassification</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/05-rdd.html">
+ <span class="dropdown-text">5 · Regression discontinuity</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/06-iv.html">
+ <span class="dropdown-text">6 · Instrumental variables</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/07-panel-did.html">
+ <span class="dropdown-text">7 · Panel data + the 2×2 DiD</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/08-did-deep-dive.html">
+ <span class="dropdown-text">8 · DiD deep dive</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/09-synth-wrapup.html">
+ <span class="dropdown-text">9 · Synthetic control + wrap-up</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../slides.html"> 
+<span class="menu-text">Slides</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://mixtape-1ed.netlify.app/"> 
+<span class="menu-text">The book</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../sessions/01-intro-regression.html">Sessions</a></li><li class="breadcrumb-item"><a href="../sessions/06-iv.html">Session 6 · Instrumental variables</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Mixtape Workshops</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../facilitating.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Facilitating</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Sessions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/01-intro-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 1 · Why causal inference, and regression as a tool</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/02-dags.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 2 · Directed acyclic graphs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/03-potential-outcomes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 3 · Potential outcomes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/04-matching.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 4 · Matching and subclassification</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/05-rdd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 5 · Regression discontinuity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/06-iv.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Session 6 · Instrumental variables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/07-panel-did.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 7 · Panel data and the 2×2 difference-in-differences</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/08-did-deep-dive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 8 · Difference-in-differences, deep dive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/09-synth-wrapup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 9 · Synthetic control, and which design when</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals">Learning goals</a></li>
+  <li><a href="#key-ideas" id="toc-key-ideas" class="nav-link" data-scroll-target="#key-ideas">Key ideas</a></li>
+  <li><a href="#walkthrough" id="toc-walkthrough" class="nav-link" data-scroll-target="#walkthrough">Walkthrough</a>
+  <ul class="collapse">
+  <li><a href="#step-1-card-1995-ols-returns-to-schooling" id="toc-step-1-card-1995-ols-returns-to-schooling" class="nav-link" data-scroll-target="#step-1-card-1995-ols-returns-to-schooling">Step 1 — Card (1995): OLS returns to schooling</a></li>
+  <li><a href="#step-2-first-stage-growing-up-near-a-four-year-college" id="toc-step-2-first-stage-growing-up-near-a-four-year-college" class="nav-link" data-scroll-target="#step-2-first-stage-growing-up-near-a-four-year-college">Step 2 — First stage: growing up near a four-year college</a></li>
+  <li><a href="#step-3-2sls-with-proper-standard-errors" id="toc-step-3-2sls-with-proper-standard-errors" class="nav-link" data-scroll-target="#step-3-2sls-with-proper-standard-errors">Step 3 — 2SLS with proper standard errors</a></li>
+  <li><a href="#step-4-judge-leniency-as-an-instrument-stevenson-2018" id="toc-step-4-judge-leniency-as-an-instrument-stevenson-2018" class="nav-link" data-scroll-target="#step-4-judge-leniency-as-an-instrument-stevenson-2018">Step 4 — Judge leniency as an instrument (Stevenson 2018)</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
+  <li><a href="#facilitator-notes" id="toc-facilitator-notes" class="nav-link" data-scroll-target="#facilitator-notes">Facilitator notes</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../sessions/01-intro-regression.html">Sessions</a></li><li class="breadcrumb-item"><a href="../sessions/06-iv.html">Session 6 · Instrumental variables</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Session 6 · Instrumental variables</h1>
+<p class="subtitle lead">Book chapter 7</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="session-meta">
+<p><strong>Read before the meeting:</strong> <a href="https://mixtape-1ed.netlify.app/07-Instrumental_Variables.html">Chapter 7 — Instrumental Variables</a>. <strong>Data:</strong> <code>data/card.dta</code>; <code>judge_fe.dta</code> (58 MB, downloaded from the book’s repo — see Step 4). <strong>Code files:</strong> <a href="../code/session06.py"><code>code/session06.py</code></a> · <a href="../code/session06.R"><code>code/session06.R</code></a> · <a href="../slides/06-iv.html" target="_blank">Slides</a></p>
+</div>
+<section id="learning-goals" class="level2">
+<h2 class="anchored" data-anchor-id="learning-goals">Learning goals</h2>
+<p>Participants should be able to state the three IV conditions (relevance, exclusion, independence) and the fourth that makes the estimand interpretable (monotonicity), compute a Wald/2SLS estimate and explain it as reduced form divided by first stage, diagnose weak instruments with the first-stage F, and explain why the IV estimand under heterogeneous effects is a LATE for compliers — and who the compliers are in the judge-leniency design.</p>
+<div class="agenda">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 46%">
+<col style="width: 53%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Time</th>
+<th>Block</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0:00</td>
+<td>Recap: fuzzy RD as an IV</td>
+</tr>
+<tr class="even">
+<td>0:05</td>
+<td>Concepts: Wright’s problem, the IV conditions, 2SLS, weak instruments, LATE and compliers</td>
+</tr>
+<tr class="odd">
+<td>0:20</td>
+<td>Walkthrough: Card’s college-proximity instrument; the judge-leniency design</td>
+</tr>
+<tr class="even">
+<td>0:45</td>
+<td>Exercise 1 kickoff</td>
+</tr>
+<tr class="odd">
+<td>0:55</td>
+<td>Assign exercises; preview panel data</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="key-ideas" class="level2">
+<h2 class="anchored" data-anchor-id="key-ideas">Key ideas</h2>
+<p><strong>The problem IV solves.</strong> <span class="math inline">\(Y = \alpha + \delta D + u\)</span> with <span class="math inline">\(\mathrm{Cov}(D, u) \neq 0\)</span>. Regression cannot recover <span class="math inline">\(\delta\)</span>. But if some instrument <span class="math inline">\(Z\)</span> moves <span class="math inline">\(D\)</span> and is otherwise unrelated to <span class="math inline">\(Y\)</span>, then the <em>only</em> reason <span class="math inline">\(Y\)</span> moves with <span class="math inline">\(Z\)</span> is through <span class="math inline">\(D\)</span>, so <span class="math display">\[\delta_{IV} = \frac{\mathrm{Cov}(Z, Y)}{\mathrm{Cov}(Z, D)} = \frac{\text{reduced form}}{\text{first stage}}.\]</span></p>
+<p><strong>The conditions.</strong> <em>Relevance</em>: <span class="math inline">\(Z\)</span> predicts <span class="math inline">\(D\)</span> (testable; look at the first-stage F). <em>Exclusion</em>: <span class="math inline">\(Z\)</span> affects <span class="math inline">\(Y\)</span> only through <span class="math inline">\(D\)</span> (untestable; argued from the DAG). <em>Independence</em>: <span class="math inline">\(Z\)</span> is as good as random with respect to <span class="math inline">\(u\)</span> (untestable). Philip Wright’s 1928 appendix is the origin story: identify a demand curve with a supply shifter (weather) that does not enter demand.</p>
+<p><strong>2SLS.</strong> Regress <span class="math inline">\(D\)</span> on <span class="math inline">\(Z\)</span> and covariates, take the fitted values <span class="math inline">\(\hat{D}\)</span>, regress <span class="math inline">\(Y\)</span> on <span class="math inline">\(\hat{D}\)</span> and the same covariates. The second-stage SEs must account for the first stage; use a proper IV routine, not two <code>lm</code> calls.</p>
+<p><strong>Weak instruments.</strong> When the first stage is weak, 2SLS is biased toward OLS and its sampling distribution is badly behaved. The rule of thumb is first-stage F above 10 for one endogenous regressor; the modern advice is to report it, prefer just-identified models, and be nervous below 20.</p>
+<p><strong>LATE.</strong> With heterogeneous effects, IV identifies the average effect for <em>compliers</em> — units whose treatment is moved by the instrument — under monotonicity (no defiers). Different instruments identify different LATEs for the same treatment. The judge-leniency design makes this vivid: the compliers are defendants who would be detained by a strict judge and released by a lenient one.</p>
+</section>
+<section id="walkthrough" class="level2">
+<h2 class="anchored" data-anchor-id="walkthrough">Walkthrough</h2>
+<section id="step-1-card-1995-ols-returns-to-schooling" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-card-1995-ols-returns-to-schooling">Step 1 — Card (1995): OLS returns to schooling</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> linearmodels.iv <span class="im">import</span> IV2SLS</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>card <span class="op">=</span> pd.read_stata(<span class="st">"data/card.dta"</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ctrl <span class="op">=</span> <span class="st">"exper + black + south + married + smsa"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>ols <span class="op">=</span> smf.ols(<span class="ss">f"lwage ~ educ + </span><span class="sc">{</span>ctrl<span class="sc">}</span><span class="ss">"</span>, data<span class="op">=</span>card).fit()</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"OLS return to a year of schooling:"</span>, ols.params[<span class="st">"educ"</span>].<span class="bu">round</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven); <span class="fu">library</span>(estimatr); <span class="fu">library</span>(ivreg)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>card <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/card.dta"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(lwage <span class="sc">~</span> educ <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa, <span class="at">data =</span> card)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(ols)[<span class="st">"educ"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="expect">
+<p>≈ <strong>0.071</strong>: a 7.1% wage premium per year of schooling. Ability bias says this is too high; measurement error in schooling says too low. The book’s reason for IV is that we do not know which dominates.</p>
+</div>
+</section>
+<section id="step-2-first-stage-growing-up-near-a-four-year-college" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-first-stage-growing-up-near-a-four-year-college">Step 2 — First stage: growing up near a four-year college</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> smf.ols(<span class="ss">f"educ ~ nearc4 + </span><span class="sc">{</span>ctrl<span class="sc">}</span><span class="ss">"</span>, data<span class="op">=</span>card).fit()</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"first stage:"</span>, fs.params[<span class="st">"nearc4"</span>].<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">" t ="</span>, (fs.params[<span class="st">"nearc4"</span>] <span class="op">/</span> fs.bse[<span class="st">"nearc4"</span>]).<span class="bu">round</span>(<span class="dv">2</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>rf <span class="op">=</span> smf.ols(<span class="ss">f"lwage ~ nearc4 + </span><span class="sc">{</span>ctrl<span class="sc">}</span><span class="ss">"</span>, data<span class="op">=</span>card).fit()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"reduced form:"</span>, rf.params[<span class="st">"nearc4"</span>].<span class="bu">round</span>(<span class="dv">4</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Wald ratio:"</span>, (rf.params[<span class="st">"nearc4"</span>] <span class="op">/</span> fs.params[<span class="st">"nearc4"</span>]).<span class="bu">round</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fs <span class="ot">&lt;-</span> <span class="fu">lm</span>(educ <span class="sc">~</span> nearc4 <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa, <span class="at">data =</span> card)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>rf <span class="ot">&lt;-</span> <span class="fu">lm</span>(lwage <span class="sc">~</span> nearc4 <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa, <span class="at">data =</span> card)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(fs)[<span class="st">"nearc4"</span>]; <span class="fu">coef</span>(rf)[<span class="st">"nearc4"</span>]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(rf)[<span class="st">"nearc4"</span>] <span class="sc">/</span> <span class="fu">coef</span>(fs)[<span class="st">"nearc4"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="expect">
+<p>First stage ≈ <strong>0.33</strong> more years of schooling for those near a college, <span class="math inline">\(t ≈ 4\)</span> (F ≈ 16: not weak, not strong). Reduced form ≈ 0.04 log points. Their ratio, ≈ <strong>0.12</strong>, is the IV estimate before any software. Ask the room: what is the exclusion restriction here, and what violates it? (Proximity correlates with urban labor markets; that is why <code>smsa</code> is in the model.)</p>
+</div>
+</section>
+<section id="step-3-2sls-with-proper-standard-errors" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-2sls-with-proper-standard-errors">Step 3 — 2SLS with proper standard errors</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cc <span class="op">=</span> card.dropna(subset<span class="op">=</span>[<span class="st">"lwage"</span>, <span class="st">"educ"</span>, <span class="st">"exper"</span>, <span class="st">"black"</span>, <span class="st">"south"</span>, <span class="st">"married"</span>, <span class="st">"smsa"</span>, <span class="st">"nearc4"</span>])</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>iv <span class="op">=</span> IV2SLS.from_formula(<span class="ss">f"lwage ~ 1 + </span><span class="sc">{</span>ctrl<span class="sc">}</span><span class="ss"> + [educ ~ nearc4]"</span>, data<span class="op">=</span>cc).fit(cov_type<span class="op">=</span><span class="st">"robust"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iv.summary.tables[<span class="dv">1</span>])</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iv.first_stage.diagnostics[[<span class="st">"f.stat"</span>, <span class="st">"partial.rsquared"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>iv <span class="ot">&lt;-</span> <span class="fu">ivreg</span>(lwage <span class="sc">~</span> educ <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa <span class="sc">|</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>              nearc4 <span class="sc">+</span> exper <span class="sc">+</span> black <span class="sc">+</span> south <span class="sc">+</span> married <span class="sc">+</span> smsa, <span class="at">data =</span> card)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(iv, <span class="at">diagnostics =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="expect">
+<p>2SLS <code>educ</code> ≈ <strong>0.124</strong> (SE ≈ 0.05), versus OLS 0.071. The IV estimate is <em>larger</em>, which the book reads as evidence that measurement error and the LATE population (people on the margin of attending because a college was nearby) matter more than ability bias. The 95% CI runs roughly 0.03 to 0.22: honest, and wide.</p>
+</div>
+</section>
+<section id="step-4-judge-leniency-as-an-instrument-stevenson-2018" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-judge-leniency-as-an-instrument-stevenson-2018">Step 4 — Judge leniency as an instrument (Stevenson 2018)</h3>
+<p>Defendants are quasi-randomly assigned to magistrates who differ in how often they set bail the defendant cannot pay. Judge indicators instrument for pretrial detention (<code>jail3</code>), and the outcome is whether the defendant is found guilty.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">R</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Large file: download once from the book's repo</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>judge <span class="op">=</span> pd.read_stata(url)        <span class="co"># or pd.read_stata("data/judge_fe.dta") if you saved it</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>controls <span class="op">=</span> (<span class="st">"white + age + male + black + possess + robbery + DUI1st + aggAss + drugSell "</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"+ fel + mis + threePriors + F1 + F2 + F3 + M1 + M2 + M3 "</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"+ day + day2 + day3 + t1 + t2 + t3 + t4 + t5"</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># `sum` and `t6` are dropped: they are linear combinations of the other controls,</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># and one judge dummy is dropped because the eight sum to one.</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>judges <span class="op">=</span> <span class="st">" + "</span>.join(<span class="ss">f"judge_pre_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">8</span>))</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>ols <span class="op">=</span> smf.ols(<span class="ss">f"guilt ~ jail3 + </span><span class="sc">{</span>controls<span class="sc">}</span><span class="ss">"</span>, data<span class="op">=</span>judge).fit()</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>iv  <span class="op">=</span> IV2SLS.from_formula(<span class="ss">f"guilt ~ 1 + </span><span class="sc">{</span>controls<span class="sc">}</span><span class="ss"> + [jail3 ~ </span><span class="sc">{</span>judges<span class="sc">}</span><span class="ss">]"</span>, data<span class="op">=</span>judge).fit(cov_type<span class="op">=</span><span class="st">"robust"</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"OLS  jail3:"</span>, ols.params[<span class="st">"jail3"</span>].<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">" SE"</span>, ols.bse[<span class="st">"jail3"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"2SLS jail3:"</span>, iv.params[<span class="st">"jail3"</span>].<span class="bu">round</span>(<span class="dv">3</span>),  <span class="st">" SE"</span>, iv.std_errors[<span class="st">"jail3"</span>].<span class="bu">round</span>(<span class="dv">3</span>))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(iv.first_stage.diagnostics[[<span class="st">"f.stat"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>judge <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>ctrl <span class="ot">&lt;-</span> <span class="er">~</span> white <span class="sc">+</span> age <span class="sc">+</span> male <span class="sc">+</span> black <span class="sc">+</span> possess <span class="sc">+</span> robbery <span class="sc">+</span> DUI1st <span class="sc">+</span> aggAss <span class="sc">+</span> drugSell <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  fel <span class="sc">+</span> mis <span class="sc">+</span> sum <span class="sc">+</span> threePriors <span class="sc">+</span> F1 <span class="sc">+</span> F2 <span class="sc">+</span> F3 <span class="sc">+</span> M1 <span class="sc">+</span> M2 <span class="sc">+</span> M3 <span class="sc">+</span> day <span class="sc">+</span> day2 <span class="sc">+</span> day3 <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  t1 <span class="sc">+</span> t2 <span class="sc">+</span> t3 <span class="sc">+</span> t4 <span class="sc">+</span> t5 <span class="sc">+</span> t6</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>judges <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"judge_pre_"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>, <span class="at">collapse =</span> <span class="st">" + "</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>ols <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">update</span>(ctrl, guilt <span class="sc">~</span> jail3 <span class="sc">+</span> .), <span class="at">data =</span> judge)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>iv  <span class="ot">&lt;-</span> <span class="fu">ivreg</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"guilt ~ jail3 +"</span>, <span class="fu">as.character</span>(ctrl)[<span class="dv">2</span>],</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"|"</span>, judges, <span class="st">"+"</span>, <span class="fu">as.character</span>(ctrl)[<span class="dv">2</span>])), <span class="at">data =</span> judge)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(ols)[<span class="st">"jail3"</span>]; <span class="fu">coef</span>(iv)[<span class="st">"jail3"</span>]</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># R drops collinear terms automatically; Python's linearmodels does not, hence the trimmed list above.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="expect">
+<p>OLS: detention raises the probability of a guilty finding by ≈ <strong>0.035</strong> (3.5 points). 2SLS: ≈ <strong>0.16</strong> (SE ≈ 0.07) — more than four times larger. The first-stage F is in the hundreds. Interpretation: for defendants whose detention depends on which judge they drew, being detained raises conviction by 16 points — the pressure to plead.</p>
+</div>
+</section>
+</section>
+<section id="exercises" class="level2">
+<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
+<ol type="1">
+<li><strong>Just-identified vs over-identified.</strong> Re-estimate Card’s model using <code>nearc2</code> (near a two-year college) as a second instrument alongside <code>nearc4</code>. Report the 2SLS estimate, the first-stage F, and (in R, <code>summary(..., diagnostics = TRUE)</code>; in Python, <code>iv.sargan</code>) the Sargan over-identification test. What does a rejection mean and why is it not a test of the exclusion restriction?</li>
+<li><strong>Weak-instrument simulation.</strong> Simulate <span class="math inline">\(Y = D + u\)</span>, <span class="math inline">\(D = \pi Z + v\)</span> with <span class="math inline">\(\mathrm{Corr}(u, v) = 0.8\)</span>, <span class="math inline">\(n = 500\)</span>. For <span class="math inline">\(\pi \in \{0.05, 0.1, 0.2, 0.5\}\)</span>, run 1,000 replications and record OLS, 2SLS, and the first-stage F. Plot the sampling distribution of 2SLS for each <span class="math inline">\(\pi\)</span>. At what F does 2SLS start to look well-behaved?</li>
+<li><strong>Who are the compliers?</strong> Using Card, compute the share of compliers implied by the first stage (it is the first-stage coefficient when <span class="math inline">\(D\)</span> is binary; here <code>educ</code> is continuous, so think of a binary version: <code>educ &gt;= 13</code>). Then compare the mean of <code>black</code> and <code>south</code> among compliers to the full sample using the Abadie (2003) kappa-weighting trick or the simpler ratio-of-first-stages method from the book. Are compliers representative?</li>
+</ol>
+</section>
+<section id="solutions" class="level2">
+<h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions (click to expand)">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solutions (click to expand)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> With both instruments the estimate rises to ≈ 0.16 (SE ≈ 0.05) and the first-stage F is ≈ 19; the Sargan statistic is 3.6 on 1 df, <span class="math inline">\(p ≈ 0.06\)</span> — borderline. A rejection would say the two instruments imply <em>different</em> LATEs, which could be heterogeneity rather than invalidity; the test can never validate the exclusion restriction of either instrument on its own.</p>
+<p><strong>2.</strong> OLS is ≈ 1.8 regardless of <span class="math inline">\(\pi\)</span> (the endogeneity bias). At <span class="math inline">\(\pi = 0.05\)</span> the median first-stage F is ≈ 1 and the 2SLS median is ≈ 1.3 with an interquartile range of about 0.8–1.7, pulled toward OLS; at <span class="math inline">\(\pi = 0.1\)</span> (F ≈ 5) the median is right but the IQR is still 0.6–1.3; by <span class="math inline">\(\pi = 0.2\)</span> (F ≈ 20) it is tight around 1 (IQR 0.8–1.1). The F ≈ 10 threshold is where the worst behavior fades, not where it ends.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">0</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sim(pi, n<span class="op">=</span><span class="dv">500</span>):</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    z <span class="op">=</span> rng.normal(size<span class="op">=</span>n)<span class="op">;</span> uv <span class="op">=</span> rng.multivariate_normal([<span class="dv">0</span>,<span class="dv">0</span>], [[<span class="dv">1</span>,<span class="fl">.8</span>],[<span class="fl">.8</span>,<span class="dv">1</span>]], n)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> pi<span class="op">*</span>z <span class="op">+</span> uv[:,<span class="dv">1</span>]<span class="op">;</span> y <span class="op">=</span> d <span class="op">+</span> uv[:,<span class="dv">0</span>]</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame(<span class="bu">dict</span>(y<span class="op">=</span>y, d<span class="op">=</span>d, z<span class="op">=</span>z))</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    fs <span class="op">=</span> smf.ols(<span class="st">"d ~ z"</span>, df).fit()</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> smf.ols(<span class="st">"y ~ d"</span>, df).fit().params[<span class="st">"d"</span>], <span class="op">\</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>           IV2SLS.from_formula(<span class="st">"y ~ 1 + [d ~ z]"</span>, df).fit().params[<span class="st">"d"</span>], fs.fvalue</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>3.</strong> With <code>D = educ &gt;= 13</code>, the first stage on <code>nearc4</code> is about 0.06, i.e.&nbsp;roughly 6% of the sample are compliers. Using the ratio-of-first-stages method (<span class="math inline">\(P(x=1 \mid \text{complier}) / P(x=1) = \text{FS}_{x=1} / \text{FS}\)</span>), compliers are far <em>less</em> likely to be Black (ratio ≈ 0.2) and less likely to be Southern (ratio ≈ 0.6) than the full sample. The LATE is for a population that looks quite different from the average respondent — one more reason not to call it “the” return to schooling.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="facilitator-notes" class="level2">
+<h2 class="anchored" data-anchor-id="facilitator-notes">Facilitator notes</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Facilitator notes (click to expand)">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Facilitator notes (click to expand)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Do Step 2 by hand before Step 3.</strong> The Wald ratio is the whole idea; 2SLS is bookkeeping. If people see 0.04 / 0.33 ≈ 0.12 with their own eyes, the software output stops being magic.</p>
+<p><strong>Misconception: a significant first stage proves the instrument is valid.</strong> It proves relevance only. Exclusion and independence come from the argument, never from the data.</p>
+<p><strong>Misconception: IV estimates “the” effect.</strong> Keep saying LATE. Card’s compliers and Stevenson’s compliers are different people with different effects; neither is the ATE.</p>
+<p><strong>On the judge data.</strong> It is 58 MB; have people download it before the meeting. If the network is bad, skip Step 4 and talk through the design on the slides — the numbers are in the <em>expect</em> box.</p>
+<p><strong>On collinearity.</strong> Stata and R silently drop collinear controls; <code>linearmodels</code> raises an error. The trimmed Python control list is the same model.</p>
+<p><strong>Discussion prompts.</strong> (a) Why might college proximity violate exclusion? (b) In the judge design, what is monotonicity, and is it plausible that <em>every</em> judge is weakly stricter than another for <em>every</em> defendant?</p>
+<p><strong>Bridge to next session.</strong> IV finds exogenous variation in a cross-section. Panel data gets it from <em>within-unit</em> changes over time, assuming the unobservables that matter are fixed.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/seanlewis08\.github\.io\/causal_mixtape\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../sessions/05-rdd.html" class="pagination-link" aria-label="Session 5 · Regression discontinuity">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Session 5 · Regression discontinuity</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../sessions/07-panel-did.html" class="pagination-link" aria-label="Session 7 · Panel data and the 2×2 difference-in-differences">
+        <span class="nav-page-text">Session 7 · Panel data and the 2×2 difference-in-differences</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Built on <em>Causal Inference: The Mixtape</em> by Scott Cunningham (free online edition).</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Made with Quarto</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

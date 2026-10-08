@@ -1,0 +1,67 @@
+---
+title: "Why causal inference, and regression as a tool"
+subtitle: "Session 1 · Mixtape chapters 1–2"
+---
+
+## The series
+
+- Nine one-hour sessions, one research design each
+- Read the chapter first; we replicate and discuss
+- Every walkthrough in Python **and** R
+- Predict before you run
+
+::: {.notes}
+Set expectations: this is a study group, not a lecture. The value is in the replication and the argument about assumptions.
+:::
+
+## Correlation is not causation — but *why* not?
+
+- People, firms and governments **optimize**
+- Observed outcomes are the result of choices made with information we do not see
+- So the treatment is correlated with everything that drove the choice
+- "Optimization makes everything endogenous"
+
+## Price elasticity of demand
+
+- Every observed (price, quantity) is an equilibrium: supply *and* demand moved
+- Regress $Q$ on $P$ and you get… a mix of both curves
+- Philip Wright (1928): find something that shifts supply only (weather)
+- That is the agenda for the whole book: *where does the exogenous variation come from?*
+
+## What a regression coefficient is
+
+- $E[Y \mid X]$ is the conditional expectation function (CEF)
+- Regression gives the **best linear approximation** to the CEF, always
+- That is a *descriptive* fact. Nothing causal yet.
+- Causal content enters only through assumptions about $u$: $E[u \mid X] = 0$
+
+## Regression anatomy (Frisch–Waugh–Lovell)
+
+$$\beta_1 = \frac{\mathrm{Cov}(y, \tilde{x}_1)}{\mathrm{Var}(\tilde{x}_1)}, \quad \tilde{x}_1 = x_1 - \hat{E}[x_1 \mid x_2, \dots, x_k]$$
+
+- "Controlling for $x_2$" = using only the part of $x_1$ that $x_2$ cannot predict
+- Today we reproduce a multiple-regression coefficient this way, by hand
+
+## Standard errors
+
+| Situation | Use |
+|---|---|
+| Errors have constant variance | Conventional |
+| Variance depends on $X$ | Heteroskedasticity-robust (HC1) |
+| Units share shocks (classrooms, states) | Cluster-robust |
+
+- Changes inference, never the estimate
+- Clustering is not a fix for omitted variables
+
+## Walkthrough
+
+1. `auto`: price on length, then add controls — watch the sign flip
+2. Reproduce the `length` coefficient via regression anatomy
+3. Simulated heteroskedasticity: conventional vs robust SE
+4. Simulated clusters: robust vs clustered SE (and a biased estimate)
+
+## Takeaway
+
+::: {.takeaway}
+Regression tells you what the conditional expectation looks like. Whether that is a causal effect depends entirely on an argument about the error term — and that argument is the rest of this book.
+:::

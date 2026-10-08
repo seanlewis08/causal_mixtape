@@ -1,0 +1,31 @@
+---
+title: "Mixtape Workshops"
+subtitle: "A chapter-by-chapter study group for *Causal Inference: The Mixtape*"
+toc: false
+---
+
+This site is the companion for a small-group workshop series that works through Scott Cunningham's free textbook [*Causal Inference: The Mixtape*](https://mixtape-1ed.netlify.app/) one research design at a time. Each session is a one-hour meeting built around the same rhythm: a short conceptual recap, a live replication of the chapter's headline result in **both Python and R**, and exercises to take home.
+
+The book ships its code in R and Stata. Here every walkthrough is written side-by-side in Python (`pandas`, `statsmodels`, `linearmodels`) and R (`tidyverse`, `fixest`, `estimatr`), with the datasets bundled in the repo so nothing depends on a network connection during the meeting.
+
+## Schedule
+
+Nine sessions cover the book's eleven chapters. Short chapters are paired, and the difference-in-differences chapter is split in two because the modern staggered-timing material deserves its own hour.
+
+| # | Session | Book chapters | Headline replication |
+|---|---------|---------------|----------------------|
+| 1 | [Why causal inference + regression review](sessions/01-intro-regression.qmd) | 1, 2 | Regression anatomy on `auto`; robust vs. clustered SEs |
+| 2 | [Directed acyclic graphs](sessions/02-dags.qmd) | 3 | Collider bias in a simulated gender-discrimination DAG |
+| 3 | [Potential outcomes](sessions/03-potential-outcomes.qmd) | 4 | Thornton's HIV experiment; Fisher randomization inference |
+| 4 | [Matching & subclassification](sessions/04-matching.qmd) | 5 | Titanic subclassification; NSW/CPS propensity scores |
+| 5 | [Regression discontinuity](sessions/05-rdd.qmd) | 6 | Lee, Moretti & Butler close elections |
+| 6 | [Instrumental variables](sessions/06-iv.qmd) | 7 | Card's college proximity; judge-leniency design |
+| 7 | [Panel data + the 2×2 DiD](sessions/07-panel-did.qmd) | 8, 9.1–9.3 | Fixed effects on the SASP panel; John Snow as a DiD |
+| 8 | [DiD deep dive](sessions/08-did-deep-dive.qmd) | 9.4–9.7 | Abortion-legalization event study; castle-doctrine TWFE |
+| 9 | [Synthetic control + wrap-up](sessions/09-synth-wrapup.qmd) | 10, 11 | Texas prison construction |
+
+## How to use this site
+
+Before the first meeting, everyone should work through [Setup](setup.qmd) so that the data loads and both toolchains run. If you are facilitating, [Facilitating](facilitating.qmd) has the 60-minute template and the norms the sessions assume. Each session page is self-contained: read **Key ideas** before the meeting, follow the **Walkthrough** live, and do the **Exercises** before the next session. Solutions and facilitator notes are collapsed at the bottom of every page so they do not spoil the exercises.
+
+Code on this site is displayed but not executed at build time. Every snippet was run against the bundled data while the site was written, and each walkthrough step has a *What you should see* box with the numbers to check against. Copy the code into a notebook or script to reproduce them.

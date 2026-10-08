@@ -1,0 +1,56 @@
+---
+title: "Regression discontinuity"
+subtitle: "Session 5 · Mixtape chapter 6"
+---
+
+## Last time
+
+- Matching needs CIA: observe everything that drives selection
+- Today: give up on that, and find a place where treatment flips for a reason that is *locally* arbitrary
+
+## The design
+
+- Running variable $X$, cutoff $c_0$
+- Sharp: $D = 1[X \geq c_0]$
+- Fuzzy: $P(D = 1 \mid X)$ jumps at $c_0$
+- Units just above and just below differ in $D$ and, if nothing else jumps, in nothing else
+
+## Identification by continuity
+
+$$\delta_{SRD} = \lim_{x \downarrow c_0} E[Y \mid X = x] - \lim_{x \uparrow c_0} E[Y \mid X = x]$$
+
+- Assumption: $E[Y^0 \mid X]$ and $E[Y^1 \mid X]$ are continuous at $c_0$
+- No CIA, no need to observe confounders
+- Estimand is **local** to the cutoff
+
+## Estimation is bias vs variance
+
+- Global polynomials: all the data, but far-away points steer the fit at the cutoff
+- Local linear within bandwidth $h$: the modern default
+- `rdrobust` picks $h$ and bias-corrects the CI
+- Report several; show the bandwidth curve
+
+## Threats
+
+- **Manipulation**: units sort just past the cutoff → density jumps (McCrary / `rddensity`)
+- **Something else at the cutoff**: covariates should be smooth there
+- **Wrong functional form**: placebo cutoffs should show nothing
+
+## Lee, Moretti & Butler (2004)
+
+- Do politicians converge to the median voter, or vote their party?
+- Close House elections: the party that barely won is as-good-as random
+- If the winner's ADA score jumps at 50% — no convergence
+
+## Walkthrough
+
+1. Plot binned ADA scores against lagged vote share
+2. Naive comparison (31) vs ±2-point window (21)
+3. Four polynomial specs: 18 to 38
+4. `rdrobust`; density test
+
+## Takeaway
+
+::: {.takeaway}
+RDD trades a strong assumption everywhere (CIA) for a weak one in one place (continuity). The price is that the estimate is only about units near the cutoff — and the plot is the argument.
+:::

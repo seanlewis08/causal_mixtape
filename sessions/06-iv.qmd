@@ -1,0 +1,228 @@
+---
+title: "Session 6 · Instrumental variables"
+subtitle: "Book chapter 7"
+---
+
+::: {.session-meta}
+**Read before the meeting:** [Chapter 7 — Instrumental Variables](https://mixtape-1ed.netlify.app/07-Instrumental_Variables.html).
+**Data:** `data/card.dta`; `judge_fe.dta` (58 MB, downloaded from the book's repo — see Step 4).
+**Code files:** [`code/session06.py`](../code/session06.py) · [`code/session06.R`](../code/session06.R) · [Slides](../slides/06-iv.qmd){target="_blank"}
+:::
+
+## Learning goals
+
+Participants should be able to state the three IV conditions (relevance, exclusion, independence) and the fourth that makes the estimand interpretable (monotonicity), compute a Wald/2SLS estimate and explain it as reduced form divided by first stage, diagnose weak instruments with the first-stage F, and explain why the IV estimand under heterogeneous effects is a LATE for compliers — and who the compliers are in the judge-leniency design.
+
+::: {.agenda}
+| Time | Block |
+|------|-------|
+| 0:00 | Recap: fuzzy RD as an IV |
+| 0:05 | Concepts: Wright's problem, the IV conditions, 2SLS, weak instruments, LATE and compliers |
+| 0:20 | Walkthrough: Card's college-proximity instrument; the judge-leniency design |
+| 0:45 | Exercise 1 kickoff |
+| 0:55 | Assign exercises; preview panel data |
+:::
+
+## Key ideas
+
+**The problem IV solves.** $Y = \alpha + \delta D + u$ with $\mathrm{Cov}(D, u) \neq 0$. Regression cannot recover $\delta$. But if some instrument $Z$ moves $D$ and is otherwise unrelated to $Y$, then the *only* reason $Y$ moves with $Z$ is through $D$, so
+$$\delta_{IV} = \frac{\mathrm{Cov}(Z, Y)}{\mathrm{Cov}(Z, D)} = \frac{\text{reduced form}}{\text{first stage}}.$$
+
+**The conditions.** *Relevance*: $Z$ predicts $D$ (testable; look at the first-stage F). *Exclusion*: $Z$ affects $Y$ only through $D$ (untestable; argued from the DAG). *Independence*: $Z$ is as good as random with respect to $u$ (untestable). Philip Wright's 1928 appendix is the origin story: identify a demand curve with a supply shifter (weather) that does not enter demand.
+
+**2SLS.** Regress $D$ on $Z$ and covariates, take the fitted values $\hat{D}$, regress $Y$ on $\hat{D}$ and the same covariates. The second-stage SEs must account for the first stage; use a proper IV routine, not two `lm` calls.
+
+**Weak instruments.** When the first stage is weak, 2SLS is biased toward OLS and its sampling distribution is badly behaved. The rule of thumb is first-stage F above 10 for one endogenous regressor; the modern advice is to report it, prefer just-identified models, and be nervous below 20.
+
+**LATE.** With heterogeneous effects, IV identifies the average effect for *compliers* — units whose treatment is moved by the instrument — under monotonicity (no defiers). Different instruments identify different LATEs for the same treatment. The judge-leniency design makes this vivid: the compliers are defendants who would be detained by a strict judge and released by a lenient one.
+
+## Walkthrough
+
+### Step 1 — Card (1995): OLS returns to schooling
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as smf
+from linearmodels.iv import IV2SLS
+
+card = pd.read_stata("data/card.dta")
+ctrl = "exper + black + south + married + smsa"
+
+ols = smf.ols(f"lwage ~ educ + {ctrl}", data=card).fit()
+print("OLS return to a year of schooling:", ols.params["educ"].round(4))
+```
+
+#### R
+
+```r
+library(tidyverse); library(haven); library(estimatr); library(ivreg)
+
+card <- read_dta("data/card.dta")
+ols <- lm(lwage ~ educ + exper + black + south + married + smsa, data = card)
+coef(ols)["educ"]
+```
+
+:::
+
+::: {.expect}
+≈ **0.071**: a 7.1% wage premium per year of schooling. Ability bias says this is too high; measurement error in schooling says too low. The book's reason for IV is that we do not know which dominates.
+:::
+
+### Step 2 — First stage: growing up near a four-year college
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+fs = smf.ols(f"educ ~ nearc4 + {ctrl}", data=card).fit()
+print("first stage:", fs.params["nearc4"].round(3), " t =", (fs.params["nearc4"] / fs.bse["nearc4"]).round(2))
+
+rf = smf.ols(f"lwage ~ nearc4 + {ctrl}", data=card).fit()
+print("reduced form:", rf.params["nearc4"].round(4))
+print("Wald ratio:", (rf.params["nearc4"] / fs.params["nearc4"]).round(4))
+```
+
+#### R
+
+```r
+fs <- lm(educ ~ nearc4 + exper + black + south + married + smsa, data = card)
+rf <- lm(lwage ~ nearc4 + exper + black + south + married + smsa, data = card)
+coef(fs)["nearc4"]; coef(rf)["nearc4"]
+coef(rf)["nearc4"] / coef(fs)["nearc4"]
+```
+
+:::
+
+::: {.expect}
+First stage ≈ **0.33** more years of schooling for those near a college, $t ≈ 4$ (F ≈ 16: not weak, not strong). Reduced form ≈ 0.04 log points. Their ratio, ≈ **0.12**, is the IV estimate before any software. Ask the room: what is the exclusion restriction here, and what violates it? (Proximity correlates with urban labor markets; that is why `smsa` is in the model.)
+:::
+
+### Step 3 — 2SLS with proper standard errors
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+cc = card.dropna(subset=["lwage", "educ", "exper", "black", "south", "married", "smsa", "nearc4"])
+iv = IV2SLS.from_formula(f"lwage ~ 1 + {ctrl} + [educ ~ nearc4]", data=cc).fit(cov_type="robust")
+print(iv.summary.tables[1])
+print(iv.first_stage.diagnostics[["f.stat", "partial.rsquared"]])
+```
+
+#### R
+
+```r
+iv <- ivreg(lwage ~ educ + exper + black + south + married + smsa |
+              nearc4 + exper + black + south + married + smsa, data = card)
+summary(iv, diagnostics = TRUE)
+```
+
+:::
+
+::: {.expect}
+2SLS `educ` ≈ **0.124** (SE ≈ 0.05), versus OLS 0.071. The IV estimate is *larger*, which the book reads as evidence that measurement error and the LATE population (people on the margin of attending because a college was nearby) matter more than ability bias. The 95% CI runs roughly 0.03 to 0.22: honest, and wide.
+:::
+
+### Step 4 — Judge leniency as an instrument (Stevenson 2018)
+
+Defendants are quasi-randomly assigned to magistrates who differ in how often they set bail the defendant cannot pay. Judge indicators instrument for pretrial detention (`jail3`), and the outcome is whether the defendant is found guilty.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+# Large file: download once from the book's repo
+url = "https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta"
+judge = pd.read_stata(url)        # or pd.read_stata("data/judge_fe.dta") if you saved it
+
+controls = ("white + age + male + black + possess + robbery + DUI1st + aggAss + drugSell "
+            "+ fel + mis + threePriors + F1 + F2 + F3 + M1 + M2 + M3 "
+            "+ day + day2 + day3 + t1 + t2 + t3 + t4 + t5")
+# `sum` and `t6` are dropped: they are linear combinations of the other controls,
+# and one judge dummy is dropped because the eight sum to one.
+judges = " + ".join(f"judge_pre_{i}" for i in range(1, 8))
+
+ols = smf.ols(f"guilt ~ jail3 + {controls}", data=judge).fit()
+iv  = IV2SLS.from_formula(f"guilt ~ 1 + {controls} + [jail3 ~ {judges}]", data=judge).fit(cov_type="robust")
+print("OLS  jail3:", ols.params["jail3"].round(3), " SE", ols.bse["jail3"].round(3))
+print("2SLS jail3:", iv.params["jail3"].round(3),  " SE", iv.std_errors["jail3"].round(3))
+print(iv.first_stage.diagnostics[["f.stat"]])
+```
+
+#### R
+
+```r
+judge <- read_dta("https://github.com/scunning1975/mixtape/raw/master/judge_fe.dta")
+
+ctrl <- ~ white + age + male + black + possess + robbery + DUI1st + aggAss + drugSell +
+  fel + mis + sum + threePriors + F1 + F2 + F3 + M1 + M2 + M3 + day + day2 + day3 +
+  t1 + t2 + t3 + t4 + t5 + t6
+judges <- paste0("judge_pre_", 1:8, collapse = " + ")
+
+ols <- lm(update(ctrl, guilt ~ jail3 + .), data = judge)
+iv  <- ivreg(as.formula(paste("guilt ~ jail3 +", as.character(ctrl)[2],
+                              "|", judges, "+", as.character(ctrl)[2])), data = judge)
+coef(ols)["jail3"]; coef(iv)["jail3"]
+# R drops collinear terms automatically; Python's linearmodels does not, hence the trimmed list above.
+```
+
+:::
+
+::: {.expect}
+OLS: detention raises the probability of a guilty finding by ≈ **0.035** (3.5 points). 2SLS: ≈ **0.16** (SE ≈ 0.07) — more than four times larger. The first-stage F is in the hundreds. Interpretation: for defendants whose detention depends on which judge they drew, being detained raises conviction by 16 points — the pressure to plead.
+:::
+
+## Exercises
+
+1. **Just-identified vs over-identified.** Re-estimate Card's model using `nearc2` (near a two-year college) as a second instrument alongside `nearc4`. Report the 2SLS estimate, the first-stage F, and (in R, `summary(..., diagnostics = TRUE)`; in Python, `iv.sargan`) the Sargan over-identification test. What does a rejection mean and why is it not a test of the exclusion restriction?
+2. **Weak-instrument simulation.** Simulate $Y = D + u$, $D = \pi Z + v$ with $\mathrm{Corr}(u, v) = 0.8$, $n = 500$. For $\pi \in \{0.05, 0.1, 0.2, 0.5\}$, run 1,000 replications and record OLS, 2SLS, and the first-stage F. Plot the sampling distribution of 2SLS for each $\pi$. At what F does 2SLS start to look well-behaved?
+3. **Who are the compliers?** Using Card, compute the share of compliers implied by the first stage (it is the first-stage coefficient when $D$ is binary; here `educ` is continuous, so think of a binary version: `educ >= 13`). Then compare the mean of `black` and `south` among compliers to the full sample using the Abadie (2003) kappa-weighting trick or the simpler ratio-of-first-stages method from the book. Are compliers representative?
+
+## Solutions
+
+::: {.callout-tip collapse="true" title="Solutions (click to expand)"}
+
+**1.** With both instruments the estimate rises to ≈ 0.16 (SE ≈ 0.05) and the first-stage F is ≈ 19; the Sargan statistic is 3.6 on 1 df, $p ≈ 0.06$ — borderline. A rejection would say the two instruments imply *different* LATEs, which could be heterogeneity rather than invalidity; the test can never validate the exclusion restriction of either instrument on its own.
+
+**2.** OLS is ≈ 1.8 regardless of $\pi$ (the endogeneity bias). At $\pi = 0.05$ the median first-stage F is ≈ 1 and the 2SLS median is ≈ 1.3 with an interquartile range of about 0.8–1.7, pulled toward OLS; at $\pi = 0.1$ (F ≈ 5) the median is right but the IQR is still 0.6–1.3; by $\pi = 0.2$ (F ≈ 20) it is tight around 1 (IQR 0.8–1.1). The F ≈ 10 threshold is where the worst behavior fades, not where it ends.
+
+```python
+rng = np.random.default_rng(0)
+def sim(pi, n=500):
+    z = rng.normal(size=n); uv = rng.multivariate_normal([0,0], [[1,.8],[.8,1]], n)
+    d = pi*z + uv[:,1]; y = d + uv[:,0]
+    df = pd.DataFrame(dict(y=y, d=d, z=z))
+    fs = smf.ols("d ~ z", df).fit()
+    return smf.ols("y ~ d", df).fit().params["d"], \
+           IV2SLS.from_formula("y ~ 1 + [d ~ z]", df).fit().params["d"], fs.fvalue
+```
+
+**3.** With `D = educ >= 13`, the first stage on `nearc4` is about 0.06, i.e. roughly 6% of the sample are compliers. Using the ratio-of-first-stages method ($P(x=1 \mid \text{complier}) / P(x=1) = \text{FS}_{x=1} / \text{FS}$), compliers are far *less* likely to be Black (ratio ≈ 0.2) and less likely to be Southern (ratio ≈ 0.6) than the full sample. The LATE is for a population that looks quite different from the average respondent — one more reason not to call it "the" return to schooling.
+:::
+
+## Facilitator notes
+
+::: {.callout-note collapse="true" title="Facilitator notes (click to expand)"}
+
+**Do Step 2 by hand before Step 3.** The Wald ratio is the whole idea; 2SLS is bookkeeping. If people see 0.04 / 0.33 ≈ 0.12 with their own eyes, the software output stops being magic.
+
+**Misconception: a significant first stage proves the instrument is valid.** It proves relevance only. Exclusion and independence come from the argument, never from the data.
+
+**Misconception: IV estimates "the" effect.** Keep saying LATE. Card's compliers and Stevenson's compliers are different people with different effects; neither is the ATE.
+
+**On the judge data.** It is 58 MB; have people download it before the meeting. If the network is bad, skip Step 4 and talk through the design on the slides — the numbers are in the *expect* box.
+
+**On collinearity.** Stata and R silently drop collinear controls; `linearmodels` raises an error. The trimmed Python control list is the same model.
+
+**Discussion prompts.** (a) Why might college proximity violate exclusion? (b) In the judge design, what is monotonicity, and is it plausible that *every* judge is weakly stricter than another for *every* defendant?
+
+**Bridge to next session.** IV finds exogenous variation in a cross-section. Panel data gets it from *within-unit* changes over time, assuming the unobservables that matter are fixed.
+:::

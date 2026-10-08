@@ -1,0 +1,76 @@
+---
+title: "Synthetic control, and which design when"
+subtitle: "Session 9 · Mixtape chapters 10–11"
+---
+
+## Last time
+
+- DiD needs a control group whose trend you trust
+- With one treated unit and a few candidates, you are picking a control by hand
+- Today: let an algorithm build the control
+
+## The synthetic-control estimator
+
+- Donors $j = 1, \dots, J$; weights $w_j \geq 0$, $\sum_j w_j = 1$
+- Choose $w$ so the weighted donors match the treated unit's **pre-period** outcomes and predictors
+- Effect = post-period gap between treated and synthetic
+
+## Why the constraints matter
+
+- Non-negative, sum to one → stay inside the convex hull of donors
+- No extrapolation
+- Sparse, interpretable weights: "Texas is 45% California, 32% Ohio…"
+- Bad pre-period fit = nothing to say. Report the pre-RMSPE.
+
+## Inference by placebo
+
+- Reassign treatment to each donor; fit its synthetic control
+- Post/pre RMSPE ratio for every unit
+- Treated unit's rank ÷ number of units = the $p$-value
+- Also: placebo-in-time, leave-one-out donors
+
+## Texas (Cunningham & Kang 2019)
+
+- Massive prison construction, 1993–94
+- Black male incarceration roughly doubles
+- Synthetic Texas: ≈ 25,000 fewer Black men in prison per year after 1995
+- Texas's RMSPE ratio is the largest of 51 → $p ≈ 0.02$
+
+## Walkthrough
+
+1. Fit the synthetic Texas; read the weights
+2. Plot actual vs synthetic; the gap
+3. Placebo-in-space; Texas's rank
+4. Then: the design decision tree
+
+## Which design, when
+
+| Source of variation | Design | Key assumption |
+|---|---|---|
+| Randomization | Compare means; RI | — |
+| Observable selection | Matching / IPW | CIA + overlap |
+| A threshold | RDD | Continuity at cutoff |
+| An instrument | IV / 2SLS | Exclusion; LATE |
+| Within-unit change | FE / DiD | Strict exogeneity / parallel trends |
+| One treated aggregate | Synthetic control | Pre-period fit |
+
+## Three new questions
+
+1. Did a city minimum-wage ordinance reduce restaurant employment?
+2. Does an extra year of schooling raise earnings for students who barely pass an entry test?
+3. Do public defenders get longer sentences than private counsel?
+
+For each: estimand, design, assumption as a counterfactual sentence, first diagnostic.
+
+## Takeaway
+
+::: {.takeaway}
+The method follows the source of exogenous variation, never the reverse. If you cannot name where the variation comes from, the data cannot answer the causal question — and saying so is a result.
+:::
+
+## Where next
+
+- The book's *Mixtape Sessions*
+- *Causal Inference for the Brave and True* (Python, free)
+- Huntington-Klein, *The Effect* (free; R + Python)
+- The staggered-DiD literature: Goodman-Bacon; Callaway & Sant'Anna; Sun & Abraham; Roth et al.

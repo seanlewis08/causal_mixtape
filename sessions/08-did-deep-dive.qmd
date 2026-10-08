@@ -1,0 +1,348 @@
+---
+title: "Session 8 · Difference-in-differences, deep dive"
+subtitle: "Book sections 9.4–9.7"
+---
+
+::: {.session-meta}
+**Read before the meeting:** [Chapter 9, sections 9.4–9.7](https://mixtape-1ed.netlify.app/09-Difference_in_Differences.html).
+**Data:** `data/abortion.dta` (Cunningham & Cornwell 2013), `data/castle.dta` (Cheng & Hoekstra 2013).
+**Code files:** [`code/session08.py`](../code/session08.py) · [`code/session08.R`](../code/session08.R) · [Slides](../slides/08-did-deep-dive.qmd){target="_blank"}
+:::
+
+## Learning goals
+
+Participants should be able to estimate and plot an event study and read pre-trends and dynamics off it, build a triple-difference with a placebo cohort, run a two-way fixed-effects DiD with staggered adoption and explain why it is a weighted average of 2×2 comparisons — some of which use already-treated units as controls — and know what the modern estimators (Callaway–Sant'Anna, Sun–Abraham) do differently.
+
+::: {.agenda}
+| Time | Block |
+|------|-------|
+| 0:00 | Recap: the 2×2 and parallel trends |
+| 0:05 | Concepts: event studies and leads; placebos and DDD; staggered TWFE and the Bacon decomposition |
+| 0:20 | Walkthrough: abortion legalization event study and DDD; castle doctrine TWFE; decompose it |
+| 0:45 | Exercise 1 kickoff |
+| 0:55 | Assign exercises; preview synthetic control |
+:::
+
+## Key ideas
+
+**Event studies.** With many periods, replace the single $\text{Treat} \times \text{Post}$ with a full set of $\text{Treat} \times \text{Year}$ interactions (omitting one reference year). The *leads* (pre-treatment interactions) should be near zero if parallel trends is plausible; the *lags* trace the dynamic effect. Passing a pre-trends test is not proof of parallel trends — the counterfactual is still unobserved — but failing it is close to disqualifying.
+
+**Placebos and triple differences.** If theory says an effect should show up only for a specific group, cohort, or window, estimate the same model where it should *not* and demand a null. A DDD nets the placebo group's DD out of the treated group's DD, absorbing group-specific shocks that a plain DD would attribute to treatment.
+
+**The abortion study.** *Roe v. Wade* legalized abortion nationally in 1973; five states had repealed their bans in 1970. Cohorts born 1971–1973 in repeal states were "treated" three years earlier than the rest of the country. If legalization reduced the share of unwanted births, those cohorts should show lower gonorrhea incidence as 15–19 year olds in 1986–1992, with the effect tracing a parabola as the treated cohort moves into and out of the age bracket. The placebo is 25–29 year olds in the same states.
+
+**Staggered adoption and TWFE.** With treatment switching on at different times for different units, the TWFE coefficient is a variance-weighted average of *every* 2×2 DD in the data (Goodman-Bacon 2021): early vs never-treated, late vs never-treated, early vs late (before late is treated), and *late vs early (after early is treated)*. In that last type the "control" is already treated; if effects grow over time, its trend is contaminated and the 2×2 is biased — sometimes to the wrong sign. The decomposition tells you how much weight these comparisons get.
+
+**Modern estimators.** Callaway and Sant'Anna estimate each cohort-by-time ATT using only never-treated or not-yet-treated controls and aggregate them with transparent weights. Sun and Abraham do the analogous thing within an interaction-weighted event-study regression. Both avoid the forbidden comparisons; both need a clean control group.
+
+## Walkthrough
+
+### Step 1 — Abortion legalization: the DD event study
+
+Black women aged 15–19; log gonorrhea rate; `repeal` marks the five early-repeal states. The reference year is 1985; controls and population weights follow the paper.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as smf
+import matplotlib.pyplot as plt
+
+ab = pd.read_stata("data/abortion.dta", convert_categoricals=False)
+yrs = list(range(1986, 2001))
+ctrl = "acc + ir + pi + alcohol + crack + poverty + income + ur"
+needed = ["lnr", "totpop", "fip", "year", "repeal",
+          "acc", "ir", "pi", "alcohol", "crack", "poverty", "income", "ur"]
+
+def event_study(df):
+    df = df.dropna(subset=needed).copy()
+    for y in yrs:
+        df[f"rep_{y}"] = ((df.year == y) & (df.repeal == 1)).astype(int)
+    f = "lnr ~ " + " + ".join(f"rep_{y}" for y in yrs) + " + C(fip) + C(year) + " + ctrl
+    m = smf.wls(f, data=df, weights=df.totpop).fit(cov_type="cluster", cov_kwds={"groups": df["fip"]})
+    out = pd.DataFrame({"coef": m.params[[f"rep_{y}" for y in yrs]].to_numpy(),
+                        "se":   m.bse[[f"rep_{y}" for y in yrs]].to_numpy()}, index=yrs)
+    return out
+
+bf15 = ab[(ab.sex == 2) & (ab.race == 2) & (ab.age == 15)]     # black females 15–19
+dd = event_study(bf15)
+print(dd.round(3))
+
+ax = dd["coef"].plot(marker="o")
+ax.fill_between(dd.index, dd.coef - 1.96*dd.se, dd.coef + 1.96*dd.se, alpha=0.2)
+ax.axhline(0, color="grey"); ax.axvspan(1986, 1992, alpha=0.1, color="orange")
+ax.set_title("Repeal × year, black women 15–19 (ref. 1985)"); plt.show()
+```
+
+#### R
+
+```r
+library(tidyverse); library(haven); library(fixest)
+
+ab <- read_dta("data/abortion.dta")
+bf15 <- ab %>% filter(sex == 2, race == 2, age == 15)
+
+dd <- feols(lnr ~ i(year, repeal, ref = 1985) + acc + ir + pi + alcohol + crack +
+              poverty + income + ur | fip + year,
+            data = bf15, weights = ~totpop, cluster = ~fip)
+coeftable(dd)[grepl("year::", rownames(coeftable(dd))), 1:2]
+iplot(dd, main = "Repeal × year, black women 15–19 (ref. 1985)")
+```
+
+:::
+
+::: {.expect}
+Coefficients ≈ **−0.26, −0.34, −0.61, −0.79, −0.63, −0.55, −0.44** for 1986–1992, then shrinking to ≈ −0.3, −0.1 and hovering near zero (with wide CIs) from 1995 on. The parabola is the signature the theory predicted: effect builds as treated cohorts enter the 15–19 bracket, peaks around 1989, and fades as they age out. (`fixest::i()` produces the same interactions as the hand-built dummies.)
+:::
+
+### Step 2 — The placebo cohort and the DDD
+
+Run the same event study for black women aged 25–29, who were born before legalization anywhere. Then stack both cohorts and estimate the triple difference: repeal × year × younger.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+bf25 = ab[(ab.sex == 2) & (ab.race == 2) & (ab.age == 25)]
+placebo = event_study(bf25)
+print(placebo.round(2))
+
+both = ab[(ab.sex == 2) & (ab.race == 2) & (ab.age.isin([15, 25]))].dropna(subset=needed).copy()
+both["younger"] = (both.age == 15).astype(int)
+for y in yrs:
+    both[f"rep_{y}"] = ((both.year == y) & (both.repeal == 1)).astype(int)
+    both[f"ry_{y}"]  = both[f"rep_{y}"] * both.younger             # the DDD terms
+    both[f"yy_{y}"]  = ((both.year == y) & (both.younger == 1)).astype(int)
+both["fip_young"] = both.fip.astype(str) + "_" + both.younger.astype(str)
+
+f = ("lnr ~ " + " + ".join(f"rep_{y}" for y in yrs) + " + " + " + ".join(f"ry_{y}" for y in yrs)
+     + " + " + " + ".join(f"yy_{y}" for y in yrs) + " + C(fip_young) + C(year) + " + ctrl)
+ddd = smf.wls(f, data=both, weights=both.totpop).fit(cov_type="cluster", cov_kwds={"groups": both["fip"]})
+print(pd.DataFrame({"coef": ddd.params[[f"ry_{y}" for y in yrs]].to_numpy(),
+                    "se":   ddd.bse[[f"ry_{y}" for y in yrs]].to_numpy()}, index=yrs).round(3))
+```
+
+#### R
+
+```r
+bf25 <- ab %>% filter(sex == 2, race == 2, age == 25)
+placebo <- feols(lnr ~ i(year, repeal, ref = 1985) + acc + ir + pi + alcohol + crack +
+                   poverty + income + ur | fip + year,
+                 data = bf25, weights = ~totpop, cluster = ~fip)
+iplot(placebo, main = "Placebo: black women 25–29")
+
+both <- ab %>% filter(sex == 2, race == 2, age %in% c(15, 25)) %>%
+  mutate(younger = as.integer(age == 15), fip_young = paste(fip, younger))
+ddd <- feols(lnr ~ i(year, repeal, ref = 1985) + i(year, repeal * younger, ref = 1985) +
+               i(year, younger, ref = 1985) + acc + ir + pi + alcohol + crack +
+               poverty + income + ur | fip_young + year,
+             data = both, weights = ~totpop, cluster = ~fip)
+iplot(ddd, i.select = 2, main = "DDD: repeal × year × younger")
+```
+
+:::
+
+::: {.expect}
+The 25–29 placebo shows no parabola in 1986–1989 (coefficients of about +0.2, +0.2, 0, −0.2 with SEs around 0.2–0.3). The DDD coefficients are ≈ **−0.36, −0.41, −0.44, −0.33** for 1986–1989, then ≈ −0.09 in 1990 and statistically zero thereafter. The treated-cohort effect survives netting out whatever happened to older women in the same states.
+:::
+
+### Step 3 — Castle doctrine: TWFE with staggered adoption
+
+States adopted "stand your ground" laws between 2005 and 2010. The book's regression: log homicide rate on `post`, state and year fixed effects, population weights, clustered by state.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+castle = pd.read_stata("data/castle.dta", convert_categoricals=False)
+cs = castle.dropna(subset=["l_homicide", "post", "popwt", "sid", "year"])
+twfe = smf.wls("l_homicide ~ post + C(sid) + C(year)", data=cs, weights=cs.popwt)\
+          .fit(cov_type="cluster", cov_kwds={"groups": cs["sid"]})
+print("TWFE post:", twfe.params["post"].round(4), " SE", twfe.bse["post"].round(4))
+
+# adoption timing
+castle["D"] = (castle.post > 0).astype(int)
+first = castle[castle.D == 1].groupby("sid").year.min()
+castle["g"] = castle.sid.map(first).fillna(0).astype(int)
+print(castle.groupby("g").sid.nunique())
+```
+
+#### R
+
+```r
+castle <- read_dta("data/castle.dta")
+twfe <- feols(l_homicide ~ post | sid + year, data = castle, weights = ~popwt, cluster = ~sid)
+coeftable(twfe)
+
+castle <- castle %>% group_by(sid) %>%
+  mutate(g = if (any(post > 0)) min(year[post > 0]) else 0) %>% ungroup()
+count(distinct(castle, sid, g), g)
+```
+
+:::
+
+::: {.expect}
+`post` ≈ **0.076** (SE 0.035): castle-doctrine laws are associated with about 8% more homicides. Adoption timing: 29 never-treated states, 1 in 2006, 13 in 2007, 4 in 2008, 2 in 2009, 1 in 2010. (`post` is fractional in adoption years; `D` is its binary version for the decomposition.)
+:::
+
+### Step 4 — Decompose the TWFE estimate into its 2×2s
+
+The exact Goodman-Bacon decomposition needs a balanced panel, a binary treatment and no weights, so this step uses the unweighted binary version. In R, `bacondecomp` does it in one line; in Python we compute the 2×2 estimates and their weights by hand from the paper's formulas.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+years = sorted(castle.year.unique())
+base = smf.ols("l_homicide ~ D + C(sid) + C(year)", data=castle).fit()
+print("unweighted binary TWFE:", base.params["D"].round(4))
+
+n    = castle.groupby("g").sid.nunique() / castle.sid.nunique()        # group shares
+Dbar = {g: (np.array(years) >= g).mean() if g > 0 else 0 for g in n.index}  # share of periods treated
+
+def dd_2x2(sub):
+    """TWFE on a two-group subsample = the 2x2 DD for that comparison."""
+    s = sub.copy()
+    for v in ["D", "l_homicide"]:
+        s[v + "_t"] = s[v] - s.groupby("sid")[v].transform("mean") - s.groupby("year")[v].transform("mean") + s[v].mean()
+    return (s.D_t * s.l_homicide_t).sum() / (s.D_t ** 2).sum()
+
+rows = []
+G = [g for g in n.index if g > 0]
+for k in G:
+    rows.append((k, "never-treated", dd_2x2(castle[castle.g.isin([k, 0])]),
+                 n[k] * n[0] * Dbar[k] * (1 - Dbar[k])))
+    for l in G:
+        if l <= k: continue
+        nkl = n[k] / (n[k] + n[l])
+        # k treated earlier; l (not yet treated) is the control in years before l adopts
+        s_kl = ((n[k] + n[l]) * (1 - Dbar[l]))**2 * nkl * (1 - nkl) * (Dbar[k] - Dbar[l]) / (1 - Dbar[l]) * (1 - Dbar[k]) / (1 - Dbar[l])
+        rows.append((k, f"later-treated ({l}) as control", dd_2x2(castle[castle.g.isin([k, l]) & (castle.year < l)]), s_kl))
+        # l treated later; k (already treated) is the control in years from k's adoption on
+        s_lk = ((n[k] + n[l]) * Dbar[k])**2 * nkl * (1 - nkl) * Dbar[l] / Dbar[k] * (Dbar[k] - Dbar[l]) / Dbar[k]
+        rows.append((l, f"earlier-treated ({k}) as control", dd_2x2(castle[castle.g.isin([k, l]) & (castle.year >= k)]), s_lk))
+
+bacon = pd.DataFrame(rows, columns=["treated", "control", "dd", "s"])
+bacon["weight"] = bacon.s / bacon.s.sum()
+bacon["type"] = bacon.control.str.split(" ").str[0]
+print(bacon.sort_values("weight", ascending=False).head(8).round(3))
+print("weighted sum of 2x2s:", (bacon.weight * bacon.dd).sum().round(4))
+print(bacon.groupby("type").apply(lambda x: pd.Series({"weight": x.weight.sum(),
+                                                       "avg_dd": (x.weight * x.dd).sum() / x.weight.sum()})).round(3))
+```
+
+#### R
+
+```r
+library(bacondecomp)
+castle <- mutate(castle, D = as.integer(post > 0))
+bd <- bacon(l_homicide ~ D, data = castle, id_var = "sid", time_var = "year")
+# prints the weight and average estimate by comparison type
+bd %>% group_by(type) %>% summarise(weight = sum(weight), avg_est = weighted.mean(estimate, weight))
+ggplot(bd, aes(weight, estimate, shape = type, colour = type)) + geom_point(size = 3) +
+  geom_hline(yintercept = sum(bd$estimate * bd$weight)) + theme_minimal()
+```
+
+:::
+
+::: {.expect}
+Unweighted binary TWFE ≈ **0.069**, and the weighted sum of the 25 two-by-twos reproduces it exactly. About **90%** of the weight is on treated-vs-never-treated comparisons (average 2×2 ≈ 0.078); 8% on "later-treated as control" (average ≈ −0.03); and 2% on the forbidden "earlier-treated as control" comparisons (≈ 0.05). With 29 never-treated states the TWFE estimate is safe here. That is a property of *this* dataset, not of TWFE.
+:::
+
+### Step 5 — A modern estimator
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+# Option A: an event study in event time, with never-treated states as the pure controls
+cs2 = castle.copy()
+cs2["rel"] = (cs2.year - cs2.g).clip(-5, 4)          # event time, binned at the ends
+for k in range(-5, 5):
+    if k == -1: continue                              # reference period
+    cs2[f"ev_{'m' if k < 0 else 'p'}{abs(k)}"] = ((cs2.g > 0) & (cs2.rel == k)).astype(int)
+ev = [c for c in cs2.columns if c.startswith("ev_")]
+es = smf.wls("l_homicide ~ " + " + ".join(ev) + " + C(sid) + C(year)", data=cs2, weights=cs2.popwt)\
+        .fit(cov_type="cluster", cov_kwds={"groups": cs2["sid"]})
+print(pd.DataFrame({"coef": es.params[ev], "se": es.bse[ev]}).round(3))
+
+# Option B: Callaway–Sant'Anna via the `csdid` or `differences` packages (pip install differences)
+# from differences import ATTgt
+# att = ATTgt(data=castle.set_index(["sid", "year"]), cohort_name="g").fit(formula="l_homicide")
+# att.aggregate("event")
+```
+
+#### R
+
+```r
+library(did)
+castle_cs <- castle %>% mutate(g_cs = ifelse(g == 0, 0, g))
+att <- att_gt(yname = "l_homicide", tname = "year", idname = "sid", gname = "g_cs",
+              data = castle_cs, control_group = "nevertreated", weightsname = "popwt")
+es <- aggte(att, type = "dynamic", min_e = -5, max_e = 4)
+summary(es); ggdid(es)
+aggte(att, type = "simple")
+```
+
+:::
+
+::: {.expect}
+The event-study leads are ≈ 0.00, 0.01, −0.01, −0.05 (SEs ≈ 0.04): flat. The lags are ≈ **0.08, 0.07, 0.06, 0.04, 0.10** for event years 0–4, each with SE 0.03–0.07. Callaway–Sant'Anna's simple aggregate ATT comes out close to the TWFE number, as the Bacon decomposition predicted. The point of running it is not a different answer here; it is that you would have *known* if TWFE had gone wrong.
+:::
+
+## Exercises
+
+1. **Reference year.** Re-run Step 1 with 1990 as the omitted year instead of 1985. The coefficients change; the figure's shape does not. Explain precisely what each coefficient now measures and why the pre-period "pre-trends test" is now meaningless.
+2. **Break TWFE.** Simulate 40 units × 10 periods with two cohorts treated at $t = 4$ and $t = 7$, **no** never-treated units, and an effect that grows by 0.5 per period after adoption. Estimate TWFE and the Bacon decomposition. Then add 20 never-treated units and repeat. Report what happens to the "earlier-treated as control" weight and the sign of the TWFE estimate.
+3. **Placebo outcome.** Castle-doctrine laws should not affect, say, larceny (`l_larceny`) or motor-vehicle theft (`l_motor`) through self-defense incentives. Run the Step 3 TWFE on those outcomes. What do you find, and how does it bear on the parallel-trends assumption for homicide?
+
+## Solutions
+
+::: {.callout-tip collapse="true" title="Solutions (click to expand)"}
+
+**1.** Each coefficient is now the repeal-vs-Roe gap in year $t$ *relative to the gap in 1990*. Since 1990 is mid-treatment, the "pre-period" coefficients for 1986–1989 are differences between two treated years and no longer test for differential pre-trends; the only clean reference is a year before anyone was treated.
+
+**2.** With no never-treated units and growing effects, the late-vs-early comparisons receive substantial weight and have *negative* 2×2 estimates (the early cohort's growing effect is differenced out as a "trend"); TWFE badly understates the true average effect (in the simulation below the true average effect among treated observations is 1.5, TWFE gives ≈ 0.35 with no never-treated units) and can flip sign when the dynamic is steep. Adding 20 never-treated units pulls TWFE to ≈ 0.9 — better, still biased, because the forbidden comparisons still get weight; a Callaway–Sant'Anna aggregate would recover 1.5.
+
+```python
+rng = np.random.default_rng(0)
+def panel(n_never):
+    units = [(i, 4) for i in range(20)] + [(i, 7) for i in range(20, 40)] + [(i, 0) for i in range(40, 40 + n_never)]
+    rows = [(i, g, t, (g > 0 and t >= g) * (t - g + 1) * 0.5 + rng.normal()) for i, g in units for t in range(10)]
+    df = pd.DataFrame(rows, columns=["sid", "g", "year", "l_homicide"])
+    df["D"] = ((df.g > 0) & (df.year >= df.g)).astype(int)
+    return df
+for n_never in [0, 20]:
+    df = panel(n_never)
+    print(n_never, smf.ols("l_homicide ~ D + C(sid) + C(year)", df).fit().params["D"].round(3))
+# then re-run the Step 4 decomposition on `df`
+```
+
+**3.** `l_larceny`: ≈ 0.00 (SE 0.015); `l_motor`: ≈ 0.04 (SE 0.05). Both small and insignificant. That supports the claim that adopting states were not simply on a different crime trajectory; it does not prove parallel trends for homicide, but it rules out one broad alternative.
+:::
+
+## Facilitator notes
+
+::: {.callout-note collapse="true" title="Facilitator notes (click to expand)"}
+
+**The event-study figure is the deliverable.** Make sure every participant can produce Step 1's plot and read it: leads, reference year, dynamics, confidence band. Everything in modern DiD is a conversation about that picture.
+
+**Misconception: flat pre-trends prove parallel trends.** They make it more plausible. The counterfactual post-period trend is unobserved, full stop. Use the DDD to show what *further* evidence looks like.
+
+**Misconception: TWFE is "wrong."** It is a weighted average with weights you did not choose. With a big never-treated group it is fine (Step 4). Without one, it can be badly wrong (Exercise 2). The decomposition is how you tell.
+
+**On the Python decomposition.** It follows Goodman-Bacon (2021) Theorem 1 and reproduces the TWFE coefficient to four decimals; that equality is the check that the code is right. It assumes a balanced panel, binary treatment and no weights, which is why Step 4 switches to the unweighted `D`.
+
+**If running short.** Do Steps 1, 3 and 4; assign Step 2 as the first exercise.
+
+**Discussion prompts.** (a) In the abortion study, what would a SUTVA violation look like, and why does it argue for 25–29 rather than 20–24 as the placebo? (b) Why can Callaway–Sant'Anna not help you if *every* unit is eventually treated at nearly the same time?
+
+**Bridge to next session.** DiD needs a control group whose trend you trust. Synthetic control builds one — a weighted combination of donors chosen to match the treated unit's pre-period — and makes inference by placebo.
+:::

@@ -1,0 +1,219 @@
+---
+title: "Session 9 · Synthetic control, and which design when"
+subtitle: "Book chapters 10 and 11"
+---
+
+::: {.session-meta}
+**Read before the meeting:** [Chapter 10 — Synthetic Control](https://mixtape-1ed.netlify.app/10-Synthetic_Control.html) and [Chapter 11 — Conclusion](https://mixtape-1ed.netlify.app/11-Conclusion.html).
+**Data:** `data/texas.dta` (Cunningham & Kang 2019).
+**Code files:** [`code/session09.py`](../code/session09.py) · [`code/session09.R`](../code/session09.R) · [Slides](../slides/09-synth-wrapup.qmd){target="_blank"}
+:::
+
+## Learning goals
+
+Participants should be able to explain the synthetic-control estimator as a constrained weighted average of donor units chosen to match the treated unit's pre-period, fit one and read the weights, run placebo-in-space inference and compute the treated unit's rank, and — the point of the final session — look at a new causal question and say which of the book's designs fits it and why.
+
+::: {.agenda}
+| Time | Block |
+|------|-------|
+| 0:00 | Recap: the Bacon decomposition; what a control group is for |
+| 0:05 | Concepts: comparative case studies, the synthetic-control weights, placebo inference |
+| 0:20 | Walkthrough: Texas prison construction — fit, plot, placebos, rank |
+| 0:40 | Wrap-up: the design decision tree, applied to three new questions |
+| 0:55 | Where to go next |
+:::
+
+## Key ideas
+
+**The comparative case study.** One treated aggregate unit (a state, a country), a handful of candidate controls, and a long pre-period. DiD with one treated unit has no credible standard error and picks the control arbitrarily. Synthetic control replaces the choice with an algorithm: find weights $w_j \geq 0$, $\sum w_j = 1$, over donor units $j$ that make the weighted average of donors match the treated unit's pre-treatment outcomes and predictors as closely as possible. The post-period gap between the treated unit and its synthetic version is the estimated effect.
+
+**Why the constraints matter.** Non-negativity and summing to one keep the synthetic unit inside the convex hull of the donors: no extrapolation, and the weights are interpretable ("Texas is 45% California, 32% Ohio…"). A poor pre-period fit means the method has nothing to say; report the pre-period RMSPE.
+
+**Inference by placebo.** Reassign treatment to each donor in turn, fit its synthetic control, and compute its post/pre RMSPE ratio. If the treated unit's ratio is extreme relative to the placebo distribution, the effect is unlikely to be luck. The "p-value" is the treated unit's rank divided by the number of units.
+
+**The Texas question.** Texas massively expanded prison capacity in 1993–1994. Black male incarceration roughly doubled over the following years. Did the building cause the filling, relative to a synthetic Texas built from other states?
+
+**What the book wants you to leave with.** Every chapter answered the same question: where does the exogenous variation come from? Randomization (Ch. 4), observable selection you can model (Ch. 5), a threshold (Ch. 6), an instrument (Ch. 7), within-unit change (Ch. 8), a policy difference across groups and time (Ch. 9), a weighted comparison unit (Ch. 10). The method follows the source of variation, never the reverse.
+
+## Walkthrough
+
+### Step 1 — Fit the synthetic Texas
+
+Predictors follow the book: poverty and income averaged over the pre-period, plus the Black male prison population in selected years, alcohol consumption, AIDS incidence, the Black population share and the 15–19 share.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from pysyncon import Dataprep, Synth        # pip install pysyncon
+
+tx = pd.read_stata("data/texas.dta", convert_categoricals=False)
+names = tx.drop_duplicates("statefip").set_index("statefip")["state"]
+TEXAS = 48
+donors = [s for s in tx.statefip.unique() if s != TEXAS]
+
+dp = Dataprep(
+    foo=tx, dependent="bmprison", unit_variable="statefip", time_variable="year",
+    treatment_identifier=TEXAS, controls_identifier=donors,
+    predictors=["poverty", "income"], predictors_op="mean", time_predictors_prior=range(1985, 1994),
+    special_predictors=[
+        ("bmprison", range(1988, 1989), "mean"), ("bmprison", range(1990, 1991), "mean"),
+        ("bmprison", range(1991, 1992), "mean"), ("bmprison", range(1992, 1993), "mean"),
+        ("alcohol", range(1990, 1991), "mean"),  ("aidscapita", range(1990, 1992), "mean"),
+        ("black", range(1990, 1992), "mean"),    ("perc1519", range(1990, 1991), "mean"),
+    ],
+    time_optimize_ssr=range(1985, 1994),
+)
+synth = Synth()
+synth.fit(dataprep=dp, optim_method="BFGS", optim_initial="ols")   # ~20 s; the default Nelder-Mead can take many minutes
+w = synth.weights(); w.index = [names[i] for i in w.index]
+print(w[w > 0.01].round(3))
+```
+
+#### R
+
+```r
+library(tidyverse); library(haven); library(tidysynth)   # or library(Synth)
+
+tx <- read_dta("data/texas.dta")
+
+out <- tx %>%
+  synthetic_control(outcome = bmprison, unit = state, time = year,
+                    i_unit = "Texas", i_time = 1993, generate_placebos = TRUE) %>%
+  generate_predictor(time_window = 1985:1993, poverty = mean(poverty), income = mean(income)) %>%
+  generate_predictor(time_window = 1988, bmprison_1988 = mean(bmprison)) %>%
+  generate_predictor(time_window = 1990, bmprison_1990 = mean(bmprison), alcohol = mean(alcohol),
+                     perc1519 = mean(perc1519)) %>%
+  generate_predictor(time_window = 1991, bmprison_1991 = mean(bmprison)) %>%
+  generate_predictor(time_window = 1992, bmprison_1992 = mean(bmprison)) %>%
+  generate_predictor(time_window = 1990:1991, aidscapita = mean(aidscapita), black = mean(black)) %>%
+  generate_weights(optimization_window = 1985:1993) %>%
+  generate_control()
+
+out %>% grab_unit_weights() %>% filter(weight > 0.01) %>% arrange(desc(weight))
+```
+
+:::
+
+::: {.expect}
+A handful of donors with positive weight — in the Python fit, Florida ≈ **0.56**, New York ≈ 0.27, Illinois ≈ 0.17, everyone else zero (the book's Stata fit lands on California, Florida, Illinois and Louisiana; solver and predictor details move the weights, not the picture). That sparsity is what the constraints produce.
+:::
+
+### Step 2 — Plot Texas against synthetic Texas and the gap
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+Z0, Z1 = dp.make_outcome_mats(time_period=range(1985, 2001))
+path = pd.DataFrame({"Texas": Z1, "Synthetic Texas": Z0 @ synth.W})
+path["gap"] = path["Texas"] - path["Synthetic Texas"]
+print(path.round(0))
+
+fig, ax = plt.subplots(1, 2, figsize=(10, 4))
+path[["Texas", "Synthetic Texas"]].plot(ax=ax[0]); ax[0].axvline(1993, color="grey", ls="--")
+path["gap"].plot(ax=ax[1]); ax[1].axhline(0, color="grey"); ax[1].axvline(1993, color="grey", ls="--")
+ax[0].set_ylabel("Black male prisoners"); ax[1].set_ylabel("Texas − synthetic"); plt.tight_layout()
+```
+
+#### R
+
+```r
+out %>% plot_trends()
+out %>% plot_differences()
+```
+
+:::
+
+::: {.expect}
+Pre-1993 the two series track closely (pre-period RMSPE ≈ **900** prisoners on a base of 15,000–29,000). From 1994 the gap opens to ≈ +10,000 and then ≈ **+20,000–27,000** per year from 1995 on, averaging ≈ **23,000** over 1994–2000: Texas holds roughly 23,000 more Black men in prison than its synthetic twin predicts. Check the pre-period RMSPE before believing any of it.
+:::
+
+### Step 3 — Placebo-in-space inference
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+def fit_state(st):
+    d = Dataprep(foo=tx, dependent="bmprison", unit_variable="statefip", time_variable="year",
+                 treatment_identifier=st, controls_identifier=[s for s in tx.statefip.unique() if s != st],
+                 predictors=["poverty", "income"], predictors_op="mean", time_predictors_prior=range(1985, 1994),
+                 special_predictors=dp.special_predictors, time_optimize_ssr=range(1985, 1994))
+    s = Synth(); s.fit(dataprep=d, optim_method="BFGS", optim_initial="ols")
+    Z0, Z1 = d.make_outcome_mats(time_period=range(1985, 2001)); g = Z1 - Z0 @ s.W
+    pre  = np.sqrt((g.loc[1985:1993] ** 2).mean())
+    post = np.sqrt((g.loc[1994:2000] ** 2).mean())
+    return pd.Series({"pre_rmspe": pre, "post_rmspe": post, "ratio": post / pre})
+
+# This loop fits 51 synthetic controls and takes several minutes.
+placebo = pd.DataFrame({names[st]: fit_state(st) for st in tx.statefip.unique()}).T
+placebo = placebo.sort_values("ratio", ascending=False)
+print(placebo.head(10).round(1))
+rank = int((placebo.index == "Texas").argmax()) + 1
+print(f"Texas rank: {rank} of {len(placebo)}  ->  p = {rank/len(placebo):.3f}")
+```
+
+#### R
+
+```r
+out %>% plot_placebos()
+out %>% plot_mspe_ratio()
+out %>% grab_signficance()      # (sic) returns the rank-based p-value
+```
+
+:::
+
+::: {.expect}
+Texas has the largest post/pre RMSPE ratio of all 51 units: ≈ **25.9**, against 20.4 for the runner-up (Illinois) and single digits for most states. The rank-based $p = 1/51 ≈$ **0.02**. The placebo-gap plot shows Texas's line leaving the band of 50 grey placebo lines after 1993. The book's convention is to drop placebos whose pre-period RMSPE is more than some multiple of the treated unit's; here only one state exceeds twice Texas's, so the result does not depend on it.
+:::
+
+### Step 4 — Wrap-up: which design, when
+
+Put three fresh questions to the room and make the group pick a design and name its key assumption and its first diagnostic. Suggested questions:
+
+1. *Did a city's new minimum-wage ordinance reduce restaurant employment?* — DiD or synthetic control against comparable cities; parallel trends / pre-period fit; event-study leads or placebo-in-space.
+2. *Does an extra year of schooling raise earnings for students who barely pass a school-entry test?* — RDD on the test score; continuity at the cutoff; density test and covariate smoothness.
+3. *Do defendants assigned public defenders get longer sentences than those with private counsel?* — Selection on unobservables is severe; an instrument such as random assignment of public-defender availability (judge-leniency style); relevance and exclusion; first-stage F and a complier description.
+
+Then the decision tree, in words. If treatment was randomized, compare means and use randomization inference. If selection is on observables you can defend with a DAG, match or weight, and check overlap. If treatment switches at a threshold, RD. If something exogenous shifts treatment but not the outcome, IV, and say whose effect you are estimating. If you observe units before and after a change, fixed effects or DiD, with an event study to show the pre-period. If you have one treated aggregate and a long pre-period, synthetic control with placebo inference. If none of those apply, the honest answer is that the data cannot answer the causal question, and that is a finding.
+
+## Exercises
+
+1. **Leave-one-out.** Drop Florida (the largest-weight donor) from the donor pool and refit the synthetic Texas. How much do the weights and the post-period gap change? Then also drop the state with the next-largest weight. What does sensitivity to a single donor tell you?
+2. **Placebo-in-time.** Pretend treatment happened in 1989 and fit the synthetic control using only 1985–1988 to choose weights. Is there a spurious "effect" after 1989? Why is this a useful check in addition to placebo-in-space?
+3. **Design memo.** Pick a causal question from your own work. In one page: state the estimand (ATE, ATT, LATE, local effect at a cutoff…), the design you would use, its identifying assumption written as a counterfactual statement, two diagnostics you would show, and the one thing that would make you abandon the design.
+
+## Solutions
+
+::: {.callout-tip collapse="true" title="Solutions (click to expand)"}
+
+**1.** Without Florida the weight shifts to Illinois (0.44), New York (0.35) and California (0.21); the post-period gap is ≈ 23,600 and the pre-RMSPE rises only slightly (≈ 1,050). Dropping New York as well leaves Illinois 0.56 / California 0.44, a gap of ≈ 23,000 and pre-RMSPE ≈ 1,250. The result is not an artifact of any one donor. Large sensitivity to one donor would mean the synthetic unit was really a single comparison state, and you would be back to a one-control DiD.
+
+**2.** With a 1989 pseudo-treatment, the synthetic and actual series continue to track through 1993, with no gap that resembles the post-1993 one. Placebo-in-time guards against the pre-period fit being achieved by overfitting a short window; placebo-in-space guards against the post-period gap being within the range of ordinary noise.
+
+**3.** Discussed in the meeting. A good memo names the counterfactual explicitly ("absent the ordinance, employment in city A would have followed the trend in cities B–D").
+:::
+
+## Facilitator notes
+
+::: {.callout-note collapse="true" title="Facilitator notes (click to expand)"}
+
+**Run Step 3 before the meeting.** The 51-fit placebo loop takes several minutes in Python; have the results table ready and only re-run the Texas fit live. `tidysynth` with `generate_placebos = TRUE` does the loop inside `generate_weights()`.
+
+**Misconception: the weights are "the" comparison states.** They are the solution to an optimization with the predictors you chose. Change the predictors and the weights move (Step 1's expect box shows this between implementations). What should *not* move much is the post-period gap.
+
+**Misconception: a pre-period fit that looks good is good enough.** Insist on the pre-RMSPE number and the placebo-in-time check. Synthetic control with a short or badly fitted pre-period is a very elaborate way of picking a control state by hand.
+
+**Wrap-up block.** Give it the full 15 minutes. It is the only time in the series the group practices *choosing* a design rather than executing one, and it is the skill the book is actually teaching.
+
+**Where to go next.** The book's own "Mixtape Sessions" workshops; *Causal Inference for the Brave and True* (Python-first, free); Huntington-Klein's *The Effect* (free, R and Python, with the `causaldata` package); and the 2021–2023 DiD literature (Goodman-Bacon; Callaway & Sant'Anna; Sun & Abraham; de Chaisemartin & D'Haultfœuille; Roth et al.'s survey).
+
+**Discussion prompts.** (a) Why is a synthetic control with 50 donors and 9 pre-years not simply overfitting? (b) What is the estimand here — ATT for Texas — and why can it not be generalized to other states?
+:::

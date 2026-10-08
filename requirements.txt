@@ -1,0 +1,10 @@
+pandas>=2.0
+numpy
+scipy
+statsmodels>=0.14
+linearmodels>=6.0
+pyreadstat
+matplotlib
+scikit-learn
+pysyncon
+jupyter

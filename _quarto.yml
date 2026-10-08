@@ -1,0 +1,87 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - "*.qmd"
+    - "sessions/*.qmd"
+    - "slides/*.qmd"
+  resources:
+    - "code/*"
+
+execute:
+  enabled: false   # code is shown, not run, at build time — run the session files locally (see Setup)
+
+website:
+  title: "Mixtape Workshops"
+  description: "A chapter-by-chapter workshop series for Causal Inference: The Mixtape"
+  site-url: https://seanlewis08.github.io/causal_mixtape/
+  repo-url: https://github.com/seanlewis08/causal_mixtape
+  page-navigation: true
+  search: true
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Setup"
+        href: setup.qmd
+      - text: "Facilitating"
+        href: facilitating.qmd
+      - text: "Sessions"
+        menu:
+          - text: "1 · Why causal inference + regression review"
+            href: sessions/01-intro-regression.qmd
+          - text: "2 · Directed acyclic graphs"
+            href: sessions/02-dags.qmd
+          - text: "3 · Potential outcomes"
+            href: sessions/03-potential-outcomes.qmd
+          - text: "4 · Matching & subclassification"
+            href: sessions/04-matching.qmd
+          - text: "5 · Regression discontinuity"
+            href: sessions/05-rdd.qmd
+          - text: "6 · Instrumental variables"
+            href: sessions/06-iv.qmd
+          - text: "7 · Panel data + the 2×2 DiD"
+            href: sessions/07-panel-did.qmd
+          - text: "8 · DiD deep dive"
+            href: sessions/08-did-deep-dive.qmd
+          - text: "9 · Synthetic control + wrap-up"
+            href: sessions/09-synth-wrapup.qmd
+      - text: "Slides"
+        href: slides.qmd
+    right:
+      - text: "The book"
+        href: https://mixtape-1ed.netlify.app/
+  sidebar:
+    style: docked
+    collapse-level: 1
+    contents:
+      - index.qmd
+      - setup.qmd
+      - facilitating.qmd
+      - section: "Sessions"
+        contents:
+          - sessions/01-intro-regression.qmd
+          - sessions/02-dags.qmd
+          - sessions/03-potential-outcomes.qmd
+          - sessions/04-matching.qmd
+          - sessions/05-rdd.qmd
+          - sessions/06-iv.qmd
+          - sessions/07-panel-did.qmd
+          - sessions/08-did-deep-dive.qmd
+          - sessions/09-synth-wrapup.qmd
+      - slides.qmd
+  page-footer:
+    left: "Built on *Causal Inference: The Mixtape* by Scott Cunningham (free online edition)."
+    right: "Made with Quarto"
+
+format:
+  html:
+    theme:
+      light: [cosmo, styles.scss]
+    toc: true
+    toc-depth: 3
+    code-copy: true
+    code-tools: false
+    code-overflow: wrap
+    highlight-style: github
+    link-external-newwindow: true

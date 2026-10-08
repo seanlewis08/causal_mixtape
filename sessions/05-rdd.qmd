@@ -1,0 +1,262 @@
+---
+title: "Session 5 · Regression discontinuity"
+subtitle: "Book chapter 6"
+---
+
+::: {.session-meta}
+**Read before the meeting:** [Chapter 6 — Regression Discontinuity](https://mixtape-1ed.netlify.app/06-Regression_Discontinuity.html).
+**Data:** `data/close_elections_lmb.dta` (Lee, Moretti & Butler 2004).
+**Code files:** [`code/session05.py`](../code/session05.py) · [`code/session05.R`](../code/session05.R) · [Slides](../slides/05-rdd.qmd){target="_blank"}
+:::
+
+## Learning goals
+
+Participants should be able to explain what continuity of the potential-outcome CEFs at the cutoff buys, estimate a sharp RD with global and local polynomials and see how much the answer depends on those choices, run the two standard validity checks (covariate smoothness and the McCrary density test), and say what the estimand is — a *local* effect at the threshold — and why that is sometimes exactly what you want.
+
+::: {.agenda}
+| Time | Block |
+|------|-------|
+| 0:00 | Recap: CIA and common support |
+| 0:05 | Concepts: running variable, cutoff, continuity, sharp vs fuzzy, bandwidth, manipulation |
+| 0:20 | Walkthrough: Lee–Moretti–Butler — plot, estimate with four specifications, density test |
+| 0:45 | Exercise 1 kickoff |
+| 0:55 | Assign exercises; preview IV |
+:::
+
+## Key ideas
+
+**The design.** Treatment $D$ is a deterministic function of a running variable $X$ relative to a cutoff $c_0$: $D = 1[X \geq c_0]$ (sharp) or jumps in *probability* there (fuzzy). Units just above and just below the cutoff differ in treatment but, if nothing *else* jumps at $c_0$, in nothing else.
+
+**Identification by continuity.** $E[Y^0 \mid X]$ and $E[Y^1 \mid X]$ must be continuous at $c_0$. Then
+$$\delta_{SRD} = \lim_{x \downarrow c_0} E[Y \mid X = x] - \lim_{x \uparrow c_0} E[Y \mid X = x].$$
+No conditional-independence assumption, no need to observe confounders: everything that matters is a smooth function of $X$ except the treatment.
+
+**Estimation is a bias–variance problem.** You need the two limits. Global polynomials use all the data but let far-away observations drive the fit at the cutoff (Gelman and Imbens's warning against high-order polynomials). Local linear regression within a bandwidth $h$ is the modern default, with `rdrobust` choosing $h$ and correcting for bias. The honest report shows several.
+
+**Threats and checks.** If units can precisely manipulate $X$ (sorting just above a test-score cutoff), continuity fails. Check that the *density* of $X$ is smooth at $c_0$ (McCrary) and that pre-determined covariates do not jump there. Fuzzy RD is IV with the cutoff as instrument, which is next session's topic.
+
+**The LMB question.** Do close elections reveal whether politicians *converge* to the median voter (Downs) or *diverge* to their party's preferences? In a 50–50 district the party barely won is as-good-as random; if the winner's voting score jumps at the 50% line, parties do not converge.
+
+## Walkthrough
+
+### Step 1 — Look at the data
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as smf
+import matplotlib.pyplot as plt
+
+lmb = (pd.read_stata("data/close_elections_lmb.dta")
+         .dropna(subset=["score", "lagdemvoteshare", "lagdemocrat"]))   # 11 rows lack a lagged vote share
+lmb["dem_c"] = lmb.lagdemvoteshare - 0.5          # centered running variable
+
+bins = lmb.groupby(pd.cut(lmb.lagdemvoteshare, np.arange(0, 1.01, 0.02)), observed=True)["score"].mean()
+ax = bins.plot(marker="o", linestyle="")
+ax.axvline(x=24.5, color="grey")                   # the 0.50 bin boundary
+ax.set_xlabel("Democratic vote share, previous election (binned)")
+ax.set_ylabel("ADA score of the representative")
+plt.show()
+```
+
+#### R
+
+```r
+library(tidyverse); library(haven); library(estimatr)
+
+lmb <- read_dta("data/close_elections_lmb.dta") %>%
+  drop_na(score, lagdemvoteshare, lagdemocrat) %>%
+  mutate(dem_c = lagdemvoteshare - 0.5)
+
+lmb %>%
+  mutate(bin = cut(lagdemvoteshare, seq(0, 1, 0.02))) %>%
+  group_by(bin) %>% summarise(score = mean(score), x = mean(lagdemvoteshare)) %>%
+  ggplot(aes(x, score)) + geom_point() + geom_vline(xintercept = 0.5) + theme_minimal()
+```
+
+:::
+
+::: {.expect}
+A cloud of points rising with Democratic vote share, with a visible vertical jump at 0.5 of roughly 20–40 ADA points. `score` is the ADA liberalism score of the sitting representative; `lagdemocrat` is whether a Democrat won the *previous* election, which is the treatment.
+:::
+
+### Step 2 — The naive and the close-election comparisons
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+def fit(df, formula):
+    return smf.ols(formula, data=df).fit(cov_type="cluster", cov_kwds={"groups": df["id"]})
+
+all_ = fit(lmb, "score ~ lagdemocrat")
+close = fit(lmb[(lmb.lagdemvoteshare > 0.48) & (lmb.lagdemvoteshare < 0.52)], "score ~ lagdemocrat")
+print("all elections:  ", all_.params["lagdemocrat"].round(2), all_.bse["lagdemocrat"].round(2))
+print("within ±2 points:", close.params["lagdemocrat"].round(2), close.bse["lagdemocrat"].round(2),
+      " n =", int(close.nobs))
+```
+
+#### R
+
+```r
+lm_robust(score ~ lagdemocrat, data = lmb, clusters = id)
+lm_robust(score ~ lagdemocrat,
+          data = filter(lmb, lagdemvoteshare > 0.48, lagdemvoteshare < 0.52),
+          clusters = id)
+```
+
+:::
+
+::: {.expect}
+All elections: ≈ **31.5**. Within ±2 points of the cutoff: ≈ **21.3** (SE ≈ 2, n = 915). The simple comparison is contaminated by district ideology; the close-election estimate is the book's headline number.
+:::
+
+### Step 3 — Polynomial specifications, global and local
+
+Interact the treatment with the centered running variable so each side gets its own slope.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+lmb["dem_c2"] = lmb.dem_c**2
+local = lmb[(lmb.lagdemvoteshare > 0.45) & (lmb.lagdemvoteshare < 0.55)]
+
+specs = {
+  "linear, all data":     fit(lmb,   "score ~ lagdemocrat * dem_c"),
+  "linear, ±5 points":    fit(local, "score ~ lagdemocrat * dem_c"),
+  "quadratic, all data":  fit(lmb,   "score ~ lagdemocrat * (dem_c + dem_c2)"),
+  "quadratic, ±5 points": fit(local, "score ~ lagdemocrat * (dem_c + dem_c2)"),
+}
+for k, m in specs.items():
+    print(f"{k:22s} {m.params['lagdemocrat']:6.2f}  (SE {m.bse['lagdemocrat']:.2f})")
+```
+
+#### R
+
+```r
+local <- filter(lmb, lagdemvoteshare > 0.45, lagdemvoteshare < 0.55)
+lmb   <- mutate(lmb, dem_c2 = dem_c^2); local <- mutate(local, dem_c2 = dem_c^2)
+
+list(
+  "linear, all"     = lm_robust(score ~ lagdemocrat * dem_c, data = lmb,   clusters = id),
+  "linear, ±5"      = lm_robust(score ~ lagdemocrat * dem_c, data = local, clusters = id),
+  "quadratic, all"  = lm_robust(score ~ lagdemocrat * (dem_c + dem_c2), data = lmb,   clusters = id),
+  "quadratic, ±5"   = lm_robust(score ~ lagdemocrat * (dem_c + dem_c2), data = local, clusters = id)
+) %>% map_dbl(~ coef(.x)["lagdemocrat"])
+```
+
+:::
+
+::: {.expect}
+Linear/all ≈ **37.7**; linear/±5 ≈ **19.8**; quadratic/all ≈ **18.1**; quadratic/±5 ≈ **25.6**. The sign and rough size are robust; the exact number is not. Show the room all four and ask which they would put in the abstract. The honest answer is "the local ones, with the bandwidth stated."
+:::
+
+### Step 4 — Let `rdrobust` pick the bandwidth
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+# pip install rdrobust
+from rdrobust import rdrobust, rdplot
+r = rdrobust(y=lmb["score"], x=lmb["lagdemvoteshare"], c=0.5, cluster=lmb["id"])
+print(r)
+rdplot(y=lmb["score"], x=lmb["lagdemvoteshare"], c=0.5)
+```
+
+#### R
+
+```r
+library(rdrobust)
+r <- rdrobust(y = lmb$score, x = lmb$lagdemvoteshare, c = 0.5, cluster = lmb$id)
+summary(r)
+rdplot(y = lmb$score, x = lmb$lagdemvoteshare, c = 0.5)
+```
+
+:::
+
+::: {.expect}
+A conventional local-linear estimate of ≈ **18.6** (SE 2.0), a bias-corrected robust 95% CI of about [13.5, 22.9], and a data-driven MSE-optimal bandwidth of ≈ **0.088** vote-share points on each side (about 2,200 effective observations per side). `rdplot` draws the binned means with separate fits on each side — the figure to put on the slide.
+:::
+
+### Step 5 — Is the density smooth at the cutoff?
+
+If incumbents could engineer bare wins, there would be a pile-up just above 0.5.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+counts, edges = np.histogram(lmb.lagdemvoteshare.dropna(), bins=np.arange(0.40, 0.61, 0.01))
+print(pd.Series(counts, index=edges[:-1].round(2)))
+
+# pip install rddensity
+from rddensity import rddensity
+dens = rddensity(X=lmb["lagdemvoteshare"], c=0.5)
+print(dens.test)           # t_jk is the jackknife test statistic, p_jk its p-value
+```
+
+#### R
+
+```r
+library(rddensity)
+dens <- rddensity(X = lmb$lagdemvoteshare, c = 0.5)
+summary(dens)
+rdplotdensity(dens, lmb$lagdemvoteshare)
+```
+
+:::
+
+::: {.expect}
+Bin counts hover around 200–300 on both sides of 0.50 with no spike; the density test does not reject (jackknife $t ≈ 0.68$, $p ≈ 0.49$). Also check that a pre-determined covariate (for example `lagdemvoteshare` from *two* elections back, or district demographics if available) does not jump at the cutoff.
+:::
+
+## Exercises
+
+1. **Placebo cutoffs.** Re-estimate the linear ±5-point specification at fake cutoffs of 0.40, 0.45, 0.55 and 0.60. What do you find, and what would it mean if one of them were large?
+2. **Bandwidth curve.** Loop over bandwidths from ±1 to ±25 vote-share points in steps of 1 using the local-linear specification. Plot the estimate and its 95% CI against bandwidth. Where does it stabilize? Compare to the `rdrobust` choice.
+3. **Fuzzy preview.** Suppose the data had an *actual* Democrat indicator `democrat` for the current term (it does). What is the first-stage relationship between `lagdemocrat` and `democrat` at the cutoff? Estimate it the same way as Step 3. Why is this a sharp rather than a fuzzy design for the `score` question, and when would it become fuzzy?
+
+## Solutions
+
+::: {.callout-tip collapse="true" title="Solutions (click to expand)"}
+
+**1.** Placebo estimates at 0.40, 0.45, 0.55 and 0.60 are ≈ −2.6, 1.7, 3.1 and −4.8 with SEs around 2 — small, mixed in sign, and nowhere near the 20-point jump at 0.50. A large placebo jump would suggest the relationship between vote share and ideology is non-linear in ways the specification does not capture, or that something else happens at that value.
+
+```python
+for c in [0.40, 0.45, 0.55, 0.60]:
+    sub = lmb[(lmb.lagdemvoteshare > c - 0.05) & (lmb.lagdemvoteshare < c + 0.05)].copy()
+    sub["above"] = (sub.lagdemvoteshare >= c).astype(int); sub["xc"] = sub.lagdemvoteshare - c
+    print(c, fit(sub, "score ~ above * xc").params["above"].round(2))
+```
+
+**2.** At ±1 point the estimate is ≈ 32 with SE 5.6; it drops to ≈ 22 at ±3, ≈ 20 at ±5, ≈ 18 at ±10, then drifts back up to ≈ 21, 23 and 24 at ±15, ±20 and ±25 as far-away districts bend the linear fit. The SE shrinks monotonically. The `rdrobust` bandwidth (≈ ±9 points) lands in the stable region.
+
+**3.** `lagdemocrat` predicts `democrat` with a jump of ≈ **0.42** at the cutoff — winning narrowly last time makes you much more likely to hold the seat (incumbency). The `score` question is sharp because treatment is *defined* as who won last time. It would be fuzzy if the treatment of interest were "a Democrat holds the seat now," since that only jumps partially at the cutoff; then $\delta = $ (jump in score) / (jump in Democrat), which is an IV estimate.
+:::
+
+## Facilitator notes
+
+::: {.callout-note collapse="true" title="Facilitator notes (click to expand)"}
+
+**Start with the picture.** RDD is the one design where the plot is the argument. Spend five minutes on Step 1 and make people say what they see before any regression.
+
+**Misconception: RDD needs the running variable to be random.** It needs *potential outcomes* to be continuous at the cutoff. Vote share is not random; what matters is that barely winning is not systematically different from barely losing.
+
+**Misconception: more data is better.** Step 3's global polynomials show far-away observations changing the estimate at the cutoff. This is the one session where throwing data away is the right move.
+
+**If `rdrobust` is not installed.** Skip Step 4 and point to the bandwidth curve in Exercise 2, which teaches the same thing by hand.
+
+**Discussion prompts.** (a) What is the population the LMB estimate applies to? (Districts near 50–50.) Is that a limitation or the point? (b) What would manipulation look like in an election context?
+
+**Bridge to next session.** A fuzzy RD is an IV. Next session generalizes: any variable that moves treatment and affects the outcome only through treatment can play the cutoff's role.
+:::

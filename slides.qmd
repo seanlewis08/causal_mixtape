@@ -1,0 +1,18 @@
+---
+title: "Slides"
+toc: false
+---
+
+One reveal.js deck per session, each sized for the 15-minute concept block. Open a deck in a new tab and press `F` for full screen, `S` for speaker view (the speaker notes repeat the key talking points), and `E` to export to PDF.
+
+| Session | Deck |
+|---------|------|
+| 1 · Why causal inference + regression review | [open](slides/01-intro-regression.qmd){target="_blank"} |
+| 2 · Directed acyclic graphs | [open](slides/02-dags.qmd){target="_blank"} |
+| 3 · Potential outcomes | [open](slides/03-potential-outcomes.qmd){target="_blank"} |
+| 4 · Matching & subclassification | [open](slides/04-matching.qmd){target="_blank"} |
+| 5 · Regression discontinuity | [open](slides/05-rdd.qmd){target="_blank"} |
+| 6 · Instrumental variables | [open](slides/06-iv.qmd){target="_blank"} |
+| 7 · Panel data + the 2×2 DiD | [open](slides/07-panel-did.qmd){target="_blank"} |
+| 8 · DiD deep dive | [open](slides/08-did-deep-dive.qmd){target="_blank"} |
+| 9 · Synthetic control + wrap-up | [open](slides/09-synth-wrapup.qmd){target="_blank"} |

@@ -1,0 +1,98 @@
+---
+title: "Setup"
+subtitle: "Get both toolchains running before Session 1"
+---
+
+Every session page shows the same analysis in Python and R. You only need one of them to follow along, but the group discussion is richer when both are in the room, so pick the one you are more comfortable with and glance at the other.
+
+## Get the repository
+
+```bash
+git clone https://github.com/seanlewis08/causal_mixtape.git
+cd causal_mixtape
+```
+
+The `data/` folder holds every dataset the sessions use (about 10 MB), pulled from the book's GitHub repository and the `causaldata` package. The one exception is the judge-leniency data for Session 6, which is 58 MB and is downloaded on demand from the book's repo.
+
+| File | Used in | Source |
+|------|---------|--------|
+| `auto.dta` | Session 1 | Stata's classic auto dataset |
+| `yule.dta`, `thornton_hiv.dta`, `ri.dta` | Session 3 | Yule (1899); Thornton (2008); Cunningham's RI toy data |
+| `titanic.dta`, `training_example.dta`, `training_bias_reduction.dta`, `nsw_mixtape.dta`, `cps_mixtape.dta` | Session 4 | Titanic passengers; LaLonde / Dehejia-Wahba NSW and CPS |
+| `close_elections_lmb.dta` | Session 5 | Lee, Moretti & Butler (2004) |
+| `card.dta`, `close_college.dta` | Session 6 | Card (1995) |
+| `sasp_panel.dta` | Session 7 | Survey of Adult Service Providers (Cunningham & Kendall) |
+| `abortion.dta`, `castle.dta` | Session 8 | Cunningham & Cornwell (2013); Cheng & Hoekstra (2013) |
+| `texas.dta` | Session 9 | Cunningham & Kang (2019) |
+
+## Python
+
+Python 3.10 or newer. Create an environment and install the pinned requirements:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+`requirements.txt` contains:
+
+```text
+pandas>=2.0
+numpy
+scipy
+statsmodels>=0.14
+linearmodels>=6.0
+pyreadstat
+matplotlib
+scikit-learn
+pysyncon
+jupyter
+```
+
+Smoke test:
+
+```python
+import pandas as pd
+import statsmodels.formula.api as smf
+auto = pd.read_stata("data/auto.dta")
+print(smf.ols("price ~ length", auto).fit().params)
+# Intercept   -4584.9
+# length         57.2
+```
+
+::: {.callout-note}
+The `causaldata` PyPI package bundles most of these datasets too, but its build is fragile on recent Python versions, so the sessions read the `.dta` files directly with `pd.read_stata()`. One wrinkle: pandas converts Stata value labels to categoricals by default. Where that gets in the way (Sessions 7 and 8) the code passes `convert_categoricals=False`.
+:::
+
+## R
+
+R 4.2 or newer. Install the packages once:
+
+```r
+install.packages(c(
+  "tidyverse", "haven", "estimatr", "fixest", "modelsummary",
+  "dagitty", "ggdag", "MatchIt", "rdrobust", "rddensity",
+  "ivreg", "did", "bacondecomp", "Synth", "tidysynth"
+))
+```
+
+The same list lives in `install.R` so you can run `Rscript install.R`.
+
+Smoke test:
+
+```r
+library(haven); library(estimatr)
+auto <- read_dta("data/auto.dta")
+lm_robust(price ~ length, data = auto)
+```
+
+## Running the code
+
+The session pages display code without executing it, so the site builds without needing every package installed. To actually run a session, copy the chunks into a Jupyter notebook or an R script (each session page links its Python and R code files under `code/` in the header), or open the `.qmd` file itself in RStudio / VS Code and run chunks interactively.
+
+If you would rather render the site with live output, set `execute: enabled: true` in `_quarto.yml` and add `freeze: auto` so results are cached; you will then need both a Jupyter kernel and an R installation with the packages above.
+
+## Reading the book
+
+The sessions assume you have read the chapter before the meeting. The free online edition is at [mixtape-1ed.netlify.app](https://mixtape-1ed.netlify.app/); each session page links to the exact chapter.

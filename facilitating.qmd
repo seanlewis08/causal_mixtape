@@ -1,0 +1,34 @@
+---
+title: "Facilitating"
+subtitle: "The 60-minute template and the norms the sessions assume"
+---
+
+Every session page is written to the same clock. The timings are tight on purpose: an hour is enough to see one design work end to end, and not enough to also cover every extension in the chapter. The extensions are what the exercises are for.
+
+## The 60-minute template
+
+| Time | Block | What happens |
+|------|-------|--------------|
+| 0:00–0:05 | Recap | One participant summarizes last session's design in two sentences; one question from the homework. |
+| 0:05–0:20 | Concepts | Walk the slides. Three things only: the identification problem, the assumption that buys identification, and what breaks it. |
+| 0:20–0:45 | Live walkthrough | Replicate the chapter's headline result step by step. Lead in one language; show the other at the end so people can see the mapping. |
+| 0:45–0:55 | Exercise kickoff | Everyone starts Exercise 1. Ask people to predict the answer before running anything. |
+| 0:55–1:00 | Close | Assign the remaining exercises, preview next session, note any open questions. |
+
+## Norms
+
+Read the chapter first. The sessions are replication-and-discussion, not lecture; they do not work if the group is meeting the material for the first time.
+
+Predict, then run. Before every regression in the walkthrough, ask the room what sign and rough magnitude they expect. Being wrong is where the learning is.
+
+One language leads. Switching languages mid-walkthrough costs more time than it saves. Pick the language most of the room uses, lead in it, and show the other side-by-side at the end of the walkthrough.
+
+Numbers, not vibes. Every walkthrough step has a *What you should see* box. If someone's output differs, stop and find out why — it is usually a dropped observation, a categorical variable, or a different standard-error default, and those are worth five minutes.
+
+## Preparing a session
+
+The night before, run the walkthrough in both languages so the environment surprises happen to you, not to the group. Skim the facilitator notes at the bottom of the session page; they list the misconceptions that come up most and the discussion prompts for the close.
+
+## Adjusting the pace
+
+If the group is new to regression, split Session 1 into two meetings (probability and expectations, then OLS and standard errors). If it is strong, Sessions 7 and 8 can be merged by dropping the SASP panel replication and going straight from the 2×2 DiD to event studies.

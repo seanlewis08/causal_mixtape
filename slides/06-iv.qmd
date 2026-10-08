@@ -1,0 +1,58 @@
+---
+title: "Instrumental variables"
+subtitle: "Session 6 · Mixtape chapter 7"
+---
+
+## Last time
+
+- A fuzzy RD: treatment *probability* jumps at the cutoff
+- Effect = jump in $Y$ / jump in $D$
+- That is an IV. Today: any variable can play the cutoff's role
+
+## The problem
+
+- $Y = \alpha + \delta D + u$ with $\mathrm{Cov}(D, u) \neq 0$
+- If $Z$ moves $D$ and is otherwise unrelated to $Y$:
+
+$$\delta_{IV} = \frac{\mathrm{Cov}(Z, Y)}{\mathrm{Cov}(Z, D)} = \frac{\text{reduced form}}{\text{first stage}}$$
+
+## Three conditions (plus one)
+
+| Condition | Meaning | Testable? |
+|---|---|---|
+| Relevance | $Z$ predicts $D$ | Yes — first-stage F |
+| Exclusion | $Z \to Y$ only through $D$ | No |
+| Independence | $Z$ as good as random w.r.t. $u$ | No |
+| Monotonicity | No defiers | No |
+
+## 2SLS
+
+1. Regress $D$ on $Z$ and covariates; keep $\hat{D}$
+2. Regress $Y$ on $\hat{D}$ and the same covariates
+3. Use an IV routine for the SEs — two `lm` calls get them wrong
+
+## Weak instruments
+
+- Weak first stage → 2SLS biased toward OLS, badly behaved
+- Rule of thumb: F > 10; be nervous below 20
+- Prefer just-identified models; always report the F
+
+## LATE
+
+- With heterogeneous effects, IV identifies the effect for **compliers**: units whose $D$ is moved by $Z$
+- Different instruments → different compliers → different LATEs
+- Card's compliers: people for whom college distance was binding
+- Stevenson's compliers: defendants detained by a strict judge, released by a lenient one
+
+## Walkthrough
+
+1. Card: OLS return to schooling ≈ 0.07
+2. First stage (0.33) and reduced form (0.04) by hand → Wald ≈ 0.12
+3. 2SLS with proper SEs
+4. Judge leniency: OLS 0.035 vs 2SLS 0.16
+
+## Takeaway
+
+::: {.takeaway}
+IV is reduced form over first stage. Relevance you can test; exclusion you must argue; and the answer is a LATE for whoever the instrument moves.
+:::

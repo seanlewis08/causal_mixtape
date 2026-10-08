@@ -1,0 +1,66 @@
+---
+title: "Panel data and the 2×2 difference-in-differences"
+subtitle: "Session 7 · Mixtape chapter 8 and §9.1–9.3"
+---
+
+## Last time
+
+- IV: exogenous variation from an instrument, in a cross-section
+- Today: exogenous variation from **within-unit change over time**
+
+## The fixed-effects model
+
+$$Y_{it} = \delta D_{it} + \mathbf{X}_{it}\beta + u_i + \varepsilon_{it}$$
+
+- $u_i$: everything about unit $i$ that does not change
+- It can be correlated with $D_{it}$ however it likes
+- FE compares each unit **to itself**
+
+## Three implementations, one estimate
+
+- Unit dummies
+- Demean every variable within unit
+- First-difference (identical to FE when $T = 2$)
+- Today we run all three and watch them agree
+
+## What FE needs
+
+- **Strict exogeneity**: $E[\varepsilon_{it} \mid D_{i1}, \dots, D_{iT}, u_i] = 0$
+- Time-varying unobservables that move with $D$: still a problem
+- Feedback (today's shock → tomorrow's treatment): a problem
+- Regressors that never change within unit: absorbed, gone
+
+## The SASP question
+
+- Sex workers charge more for unprotected sex. Compensating differential, or selection?
+- Panel: same provider, many clients
+- Pooled OLS: premium ≈ 0. Within provider: ≈ 5%.
+
+## The 2×2 DiD
+
+$$\hat{\delta} = (\bar{Y}_{T,post} - \bar{Y}_{T,pre}) - (\bar{Y}_{C,post} - \bar{Y}_{C,pre})$$
+
+- As a regression: $Y = \alpha + \beta\,\text{Treat} + \gamma\,\text{Post} + \delta\,(\text{Treat} \times \text{Post}) + e$
+- Assumption: **parallel trends** — a counterfactual claim, untestable in the 2×2
+
+## John Snow, 1854
+
+| | 1849 | 1854 |
+|---|---|---|
+| Southwark & Vauxhall | 135 | 147 |
+| Lambeth (moved intake upstream) | 85 | 19 |
+
+- $(19 - 85) - (147 - 135) = -78$ deaths per 10,000 households
+
+## Walkthrough
+
+1. SASP pooled OLS
+2. FE three ways
+3. Why they differ: within vs between
+4. Snow by hand and by regression; draw the counterfactual
+
+## Takeaway
+
+::: {.takeaway}
+Fixed effects remove what is fixed. The 2×2 DiD is a two-unit, two-period fixed-effects model whose identifying assumption — parallel trends — you cannot test until you have more than two of something.
+:::

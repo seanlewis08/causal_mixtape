@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+.Rproj.user/
+.Rhistory
+.quarto/
+_freeze/
+/.idea/
+.DS_Store
+data/judge_fe.dta
+
+/.quarto/
+data/lmb-data.dta
+_to_delete/

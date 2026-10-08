@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Session 4 · Matching and subclassification – Mixtape Workshops</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../sessions/05-rdd.html" rel="next">
+<link href="../sessions/03-potential-outcomes.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-234273d1456647dabc34a594ac50e507.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-b6ebfe76373a65f90f03e4eef39a9400.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Mixtape Workshops</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../setup.html"> 
+<span class="menu-text">Setup</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../facilitating.html"> 
+<span class="menu-text">Facilitating</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sessions" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Sessions</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-sessions">    
+        <li>
+    <a class="dropdown-item" href="../sessions/01-intro-regression.html">
+ <span class="dropdown-text">1 · Why causal inference + regression review</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/02-dags.html">
+ <span class="dropdown-text">2 · Directed acyclic graphs</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/03-potential-outcomes.html">
+ <span class="dropdown-text">3 · Potential outcomes</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/04-matching.html">
+ <span class="dropdown-text">4 · Matching &amp; subclassification</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/05-rdd.html">
+ <span class="dropdown-text">5 · Regression discontinuity</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/06-iv.html">
+ <span class="dropdown-text">6 · Instrumental variables</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/07-panel-did.html">
+ <span class="dropdown-text">7 · Panel data + the 2×2 DiD</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/08-did-deep-dive.html">
+ <span class="dropdown-text">8 · DiD deep dive</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sessions/09-synth-wrapup.html">
+ <span class="dropdown-text">9 · Synthetic control + wrap-up</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../slides.html"> 
+<span class="menu-text">Slides</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="https://mixtape-1ed.netlify.app/"> 
+<span class="menu-text">The book</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../sessions/01-intro-regression.html">Sessions</a></li><li class="breadcrumb-item"><a href="../sessions/04-matching.html">Session 4 · Matching and subclassification</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Mixtape Workshops</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../facilitating.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Facilitating</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Sessions</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/01-intro-regression.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 1 · Why causal inference, and regression as a tool</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/02-dags.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 2 · Directed acyclic graphs</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/03-potential-outcomes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 3 · Potential outcomes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/04-matching.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Session 4 · Matching and subclassification</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/05-rdd.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 5 · Regression discontinuity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/06-iv.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 6 · Instrumental variables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/07-panel-did.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 7 · Panel data and the 2×2 difference-in-differences</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/08-did-deep-dive.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 8 · Difference-in-differences, deep dive</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../sessions/09-synth-wrapup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session 9 · Synthetic control, and which design when</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../slides.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Slides</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#learning-goals" id="toc-learning-goals" class="nav-link active" data-scroll-target="#learning-goals">Learning goals</a></li>
+  <li><a href="#key-ideas" id="toc-key-ideas" class="nav-link" data-scroll-target="#key-ideas">Key ideas</a></li>
+  <li><a href="#walkthrough" id="toc-walkthrough" class="nav-link" data-scroll-target="#walkthrough">Walkthrough</a>
+  <ul class="collapse">
+  <li><a href="#step-1-titanic-the-simple-difference-and-the-subclassified-difference" id="toc-step-1-titanic-the-simple-difference-and-the-subclassified-difference" class="nav-link" data-scroll-target="#step-1-titanic-the-simple-difference-and-the-subclassified-difference">Step 1 — Titanic: the simple difference and the subclassified difference</a></li>
+  <li><a href="#step-2-nsw-the-experimental-benchmark-and-the-naive-comparison" id="toc-step-2-nsw-the-experimental-benchmark-and-the-naive-comparison" class="nav-link" data-scroll-target="#step-2-nsw-the-experimental-benchmark-and-the-naive-comparison">Step 2 — NSW: the experimental benchmark and the naive comparison</a></li>
+  <li><a href="#step-3-estimate-the-propensity-score" id="toc-step-3-estimate-the-propensity-score" class="nav-link" data-scroll-target="#step-3-estimate-the-propensity-score">Step 3 — Estimate the propensity score</a></li>
+  <li><a href="#step-4-inverse-probability-weighting-on-the-overlap-region" id="toc-step-4-inverse-probability-weighting-on-the-overlap-region" class="nav-link" data-scroll-target="#step-4-inverse-probability-weighting-on-the-overlap-region">Step 4 — Inverse-probability weighting on the overlap region</a></li>
+  <li><a href="#step-5-nearest-neighbor-matching-on-the-score-att" id="toc-step-5-nearest-neighbor-matching-on-the-score-att" class="nav-link" data-scroll-target="#step-5-nearest-neighbor-matching-on-the-score-att">Step 5 — Nearest-neighbor matching on the score (ATT)</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises">Exercises</a></li>
+  <li><a href="#solutions" id="toc-solutions" class="nav-link" data-scroll-target="#solutions">Solutions</a></li>
+  <li><a href="#facilitator-notes" id="toc-facilitator-notes" class="nav-link" data-scroll-target="#facilitator-notes">Facilitator notes</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../sessions/01-intro-regression.html">Sessions</a></li><li class="breadcrumb-item"><a href="../sessions/04-matching.html">Session 4 · Matching and subclassification</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Session 4 · Matching and subclassification</h1>
+<p class="subtitle lead">Book chapter 5</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="session-meta">
+<p><strong>Read before the meeting:</strong> <a href="https://mixtape-1ed.netlify.app/05-Matching_and_Subclassification.html">Chapter 5 — Matching and Subclassification</a>. <strong>Data:</strong> <code>data/titanic.dta</code>, <code>data/nsw_mixtape.dta</code>, <code>data/cps_mixtape.dta</code> (also <code>training_example.dta</code>, <code>training_bias_reduction.dta</code> for exercises). <strong>Code files:</strong> <a href="../code/session04.py"><code>code/session04.py</code></a> · <a href="../code/session04.R"><code>code/session04.R</code></a> · <a href="../slides/04-matching.html" target="_blank">Slides</a></p>
+</div>
+<section id="learning-goals" class="level2">
+<h2 class="anchored" data-anchor-id="learning-goals">Learning goals</h2>
+<p>Participants should be able to state the conditional independence assumption and the common-support condition, compute a subclassification estimate by hand, explain why the propensity score is a sufficient statistic for the covariates, implement inverse-probability weighting and nearest-neighbor matching on the propensity score, and recognize the Dehejia–Wahba result: a good selection-on-observables design can recover an experimental benchmark — and a careless one can be off by $10,000.</p>
+<div class="agenda">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 46%">
+<col style="width: 53%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Time</th>
+<th>Block</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0:00</td>
+<td>Recap: SDO = ATE + selection bias + HTE bias</td>
+</tr>
+<tr class="even">
+<td>0:05</td>
+<td>Concepts: CIA, common support, curse of dimensionality, the propensity-score theorem</td>
+</tr>
+<tr class="odd">
+<td>0:20</td>
+<td>Walkthrough: Titanic subclassification; NSW vs CPS; estimate the propensity score; IPW and nearest-neighbor ATT</td>
+</tr>
+<tr class="even">
+<td>0:45</td>
+<td>Exercise 1 kickoff</td>
+</tr>
+<tr class="odd">
+<td>0:55</td>
+<td>Assign exercises; preview RDD</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="key-ideas" class="level2">
+<h2 class="anchored" data-anchor-id="key-ideas">Key ideas</h2>
+<p><strong>Conditional independence (CIA).</strong> <span class="math inline">\((Y^0, Y^1) \perp D \mid X\)</span>. Within strata of <span class="math inline">\(X\)</span>, treatment is as good as random. This is the backdoor criterion in potential-outcomes clothing. It is an assumption about <em>unobservables</em>, so no test on the data can confirm it; only the DAG argument can.</p>
+<p><strong>Common support.</strong> <span class="math inline">\(0 &lt; P(D=1 \mid X) &lt; 1\)</span>. For each covariate profile there must be both treated and untreated units; otherwise you are extrapolating.</p>
+<p><strong>Subclassification.</strong> Stratify on <span class="math inline">\(X\)</span>, compute the treated-minus-control difference within each stratum, and average using the treated group’s stratum shares (for the ATT). It works beautifully with a few discrete covariates and dies of the curse of dimensionality quickly.</p>
+<p><strong>Propensity score.</strong> Rosenbaum and Rubin: if CIA holds given <span class="math inline">\(X\)</span>, it also holds given <span class="math inline">\(p(X) = P(D=1 \mid X)\)</span>. One scalar replaces the whole covariate vector. Estimate it with a logit, then stratify on it, weight by it (IPW), or match on it.</p>
+<p><strong>Dehejia–Wahba.</strong> LaLonde showed that regressions using a non-experimental control group (CPS) badly missed the NSW experimental estimate. Dehejia and Wahba showed that propensity-score methods with a well-specified score and attention to common support get close. The lesson is double-edged: matching can work, and it can fail silently.</p>
+</section>
+<section id="walkthrough" class="level2">
+<h2 class="anchored" data-anchor-id="walkthrough">Walkthrough</h2>
+<section id="step-1-titanic-the-simple-difference-and-the-subclassified-difference" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-titanic-the-simple-difference-and-the-subclassified-difference">Step 1 — Titanic: the simple difference and the subclassified difference</h3>
+<p>Did first-class passengers survive more because they were first class, or because of who was in first class? Stratify on sex and age.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> pd.read_stata(<span class="st">"data/titanic.dta"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>t[<span class="st">"d"</span>]    <span class="op">=</span> (t[<span class="st">"class"</span>] <span class="op">==</span> <span class="st">"1st class"</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>t[<span class="st">"surv"</span>] <span class="op">=</span> (t[<span class="st">"survived"</span>] <span class="op">==</span> <span class="st">"yes"</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>t[<span class="st">"man"</span>]  <span class="op">=</span> (t[<span class="st">"sex"</span>] <span class="op">==</span> <span class="st">"man"</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>t[<span class="st">"adult"</span>]<span class="op">=</span> (t[<span class="st">"age"</span>] <span class="op">==</span> <span class="st">"adults"</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>sdo <span class="op">=</span> t.loc[t.d <span class="op">==</span> <span class="dv">1</span>, <span class="st">"surv"</span>].mean() <span class="op">-</span> t.loc[t.d <span class="op">==</span> <span class="dv">0</span>, <span class="st">"surv"</span>].mean()</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"SDO:"</span>, <span class="bu">round</span>(sdo, <span class="dv">3</span>))</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>cell <span class="op">=</span> t.groupby([<span class="st">"man"</span>, <span class="st">"adult"</span>, <span class="st">"d"</span>])[<span class="st">"surv"</span>].mean().unstack(<span class="st">"d"</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>diff <span class="op">=</span> cell[<span class="dv">1</span>] <span class="op">-</span> cell[<span class="dv">0</span>]</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>w <span class="op">=</span> t[t.d <span class="op">==</span> <span class="dv">1</span>].groupby([<span class="st">"man"</span>, <span class="st">"adult"</span>]).size() <span class="op">/</span> (t.d <span class="op">==</span> <span class="dv">1</span>).<span class="bu">sum</span>()</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pd.DataFrame({<span class="st">"diff"</span>: diff.<span class="bu">round</span>(<span class="dv">3</span>), <span class="st">"treated_share"</span>: w.<span class="bu">round</span>(<span class="dv">3</span>)}))</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Subclassified ATT:"</span>, <span class="bu">round</span>((diff <span class="op">*</span> w).<span class="bu">sum</span>(), <span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse); <span class="fu">library</span>(haven)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/titanic.dta"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">d =</span> <span class="fu">as.integer</span>(class <span class="sc">==</span> <span class="dv">1</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">man =</span> <span class="fu">as.integer</span>(sex <span class="sc">==</span> <span class="dv">1</span>), <span class="at">adult =</span> <span class="fu">as.integer</span>(age <span class="sc">==</span> <span class="dv">1</span>))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># haven keeps Stata's numeric codes; attributes(t$sex)$labels shows</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 1 = man, and age 1 = adults, class 1 = 1st class, survived 1 = yes</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>sdo <span class="ot">&lt;-</span> <span class="fu">with</span>(t, <span class="fu">mean</span>(survived[d <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(survived[d <span class="sc">==</span> <span class="dv">0</span>]))</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>att <span class="ot">&lt;-</span> t <span class="sc">%&gt;%</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(man, adult) <span class="sc">%&gt;%</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">diff =</span> <span class="fu">mean</span>(survived[d <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(survived[d <span class="sc">==</span> <span class="dv">0</span>]),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">n_treated =</span> <span class="fu">sum</span>(d <span class="sc">==</span> <span class="dv">1</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">w =</span> n_treated <span class="sc">/</span> <span class="fu">sum</span>(n_treated))</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>att</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(att<span class="sc">$</span>diff <span class="sc">*</span> att<span class="sc">$</span>w)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="expect">
+<p>SDO ≈ <strong>0.354</strong>: first-class passengers survived 35 points more often. Within sex×age strata the gaps are smaller (adult men: 0.33 vs 0.19; adult women: 0.97 vs 0.63), and the subclassified ATT is ≈ <strong>0.24</strong>. A third of the raw gap was <em>who</em> was in first class, not <em>being</em> in first class.</p>
+</div>
+</section>
+<section id="step-2-nsw-the-experimental-benchmark-and-the-naive-comparison" class="level3">
+<h3 class="anchored" data-anchor-id="step-2-nsw-the-experimental-benchmark-and-the-naive-comparison">Step 2 — NSW: the experimental benchmark and the naive comparison</h3>
+<p><code>nsw_mixtape.dta</code> is the randomized job-training experiment; <code>cps_mixtape.dta</code> is a non-experimental comparison group from the CPS.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>nsw <span class="op">=</span> pd.read_stata(<span class="st">"data/nsw_mixtape.dta"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>cps <span class="op">=</span> pd.read_stata(<span class="st">"data/cps_mixtape.dta"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>exp <span class="op">=</span> nsw.loc[nsw.treat <span class="op">==</span> <span class="dv">1</span>, <span class="st">"re78"</span>].mean() <span class="op">-</span> nsw.loc[nsw.treat <span class="op">==</span> <span class="dv">0</span>, <span class="st">"re78"</span>].mean()</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"experimental effect on 1978 earnings:"</span>, <span class="bu">round</span>(exp, <span class="dv">0</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> pd.concat([nsw[nsw.treat <span class="op">==</span> <span class="dv">1</span>], cps[cps.treat <span class="op">==</span> <span class="dv">0</span>]], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>naive <span class="op">=</span> d.loc[d.treat <span class="op">==</span> <span class="dv">1</span>, <span class="st">"re78"</span>].mean() <span class="op">-</span> d.loc[d.treat <span class="op">==</span> <span class="dv">0</span>, <span class="st">"re78"</span>].mean()</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"NSW treated vs CPS controls:"</span>, <span class="bu">round</span>(naive, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>nsw <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/nsw_mixtape.dta"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cps <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"data/cps_mixtape.dta"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(nsw, <span class="fu">mean</span>(re78[treat <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(re78[treat <span class="sc">==</span> <span class="dv">0</span>]))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">filter</span>(nsw, treat <span class="sc">==</span> <span class="dv">1</span>), <span class="fu">filter</span>(cps, treat <span class="sc">==</span> <span class="dv">0</span>))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(d, <span class="fu">mean</span>(re78[treat <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(re78[treat <span class="sc">==</span> <span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="expect">
+<p>Experimental effect ≈ <strong>+$1,794</strong>. NSW treated vs CPS controls ≈ <strong>−$8,498</strong>. The CPS sample is older, better educated and far richer than NSW enrollees; selection bias swamps the effect.</p>
+</div>
+</section>
+<section id="step-3-estimate-the-propensity-score" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-estimate-the-propensity-score">Step 3 — Estimate the propensity score</h3>
+<p>The Dehejia–Wahba specification: polynomials in age and education, indicators for zero earnings, and an education×earnings interaction.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"age2"</span>] <span class="op">=</span> d.age<span class="op">**</span><span class="dv">2</span><span class="op">;</span>  d[<span class="st">"age3"</span>] <span class="op">=</span> d.age<span class="op">**</span><span class="dv">3</span><span class="op">;</span>  d[<span class="st">"educ2"</span>] <span class="op">=</span> d.educ<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"u74"</span>]  <span class="op">=</span> (d.re74 <span class="op">==</span> <span class="dv">0</span>).astype(<span class="bu">int</span>)<span class="op">;</span>  d[<span class="st">"u75"</span>] <span class="op">=</span> (d.re75 <span class="op">==</span> <span class="dv">0</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"interaction1"</span>] <span class="op">=</span> d.educ <span class="op">*</span> d.re74</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>logit <span class="op">=</span> smf.logit(<span class="st">"treat ~ age + age2 + age3 + educ + educ2 + marr + nodegree + black "</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"+ hisp + re74 + re75 + u74 + u75 + interaction1"</span>, data<span class="op">=</span>d).fit(disp<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"pscore"</span>] <span class="op">=</span> logit.predict(d)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(d.groupby(<span class="st">"treat"</span>)[<span class="st">"pscore"</span>].describe()[[<span class="st">"mean"</span>, <span class="st">"min"</span>, <span class="st">"max"</span>]].<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">age2 =</span> age<span class="sc">^</span><span class="dv">2</span>, <span class="at">age3 =</span> age<span class="sc">^</span><span class="dv">3</span>, <span class="at">educ2 =</span> educ<span class="sc">^</span><span class="dv">2</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">u74 =</span> <span class="fu">as.integer</span>(re74 <span class="sc">==</span> <span class="dv">0</span>), <span class="at">u75 =</span> <span class="fu">as.integer</span>(re75 <span class="sc">==</span> <span class="dv">0</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">interaction1 =</span> educ <span class="sc">*</span> re74)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>logit <span class="ot">&lt;-</span> <span class="fu">glm</span>(treat <span class="sc">~</span> age <span class="sc">+</span> age2 <span class="sc">+</span> age3 <span class="sc">+</span> educ <span class="sc">+</span> educ2 <span class="sc">+</span> marr <span class="sc">+</span> nodegree <span class="sc">+</span> black <span class="sc">+</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>               hisp <span class="sc">+</span> re74 <span class="sc">+</span> re75 <span class="sc">+</span> u74 <span class="sc">+</span> u75 <span class="sc">+</span> interaction1,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">family =</span> <span class="fu">binomial</span>(), <span class="at">data =</span> d)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>d<span class="sc">$</span>pscore <span class="ot">&lt;-</span> <span class="fu">predict</span>(logit, <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(treat) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(pscore), <span class="at">min =</span> <span class="fu">min</span>(pscore), <span class="at">max =</span> <span class="fu">max</span>(pscore))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(d, <span class="fu">aes</span>(pscore, <span class="at">fill =</span> <span class="fu">factor</span>(treat))) <span class="sc">+</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>, <span class="at">position =</span> <span class="st">"identity"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="expect">
+<p>Mean score ≈ <strong>0.33</strong> for treated and <strong>0.008</strong> for controls. Most CPS people have essentially zero probability of being in NSW. That is the common-support problem in one histogram; the next step trims to the overlap region.</p>
+</div>
+</section>
+<section id="step-4-inverse-probability-weighting-on-the-overlap-region" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-inverse-probability-weighting-on-the-overlap-region">Step 4 — Inverse-probability weighting on the overlap region</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">R</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ov <span class="op">=</span> d[(d.pscore <span class="op">&gt;</span> <span class="fl">0.1</span>) <span class="op">&amp;</span> (d.pscore <span class="op">&lt;</span> <span class="fl">0.9</span>)].copy()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"units in overlap:"</span>, <span class="bu">len</span>(ov), <span class="st">" treated:"</span>, <span class="bu">int</span>(ov.treat.<span class="bu">sum</span>()))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># normalized IPW (ATE)</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>w1 <span class="op">=</span> ov.treat <span class="op">/</span> ov.pscore</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>w0 <span class="op">=</span> (<span class="dv">1</span> <span class="op">-</span> ov.treat) <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> ov.pscore)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>y1 <span class="op">=</span> (w1 <span class="op">*</span> ov.re78).<span class="bu">sum</span>() <span class="op">/</span> w1.<span class="bu">sum</span>()</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>y0 <span class="op">=</span> (w0 <span class="op">*</span> ov.re78).<span class="bu">sum</span>() <span class="op">/</span> w0.<span class="bu">sum</span>()</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"normalized IPW estimate:"</span>, <span class="bu">round</span>(y1 <span class="op">-</span> y0, <span class="dv">0</span>))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># non-normalized version for comparison</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"non-normalized IPW:"</span>, <span class="bu">round</span>((w1 <span class="op">*</span> ov.re78).mean() <span class="op">-</span> (w0 <span class="op">*</span> ov.re78).mean(), <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>ov <span class="ot">&lt;-</span> d <span class="sc">%&gt;%</span> <span class="fu">filter</span>(pscore <span class="sc">&gt;</span> <span class="fl">0.1</span>, pscore <span class="sc">&lt;</span> <span class="fl">0.9</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">w1 =</span> treat <span class="sc">/</span> pscore, <span class="at">w0 =</span> (<span class="dv">1</span> <span class="sc">-</span> treat) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> pscore))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>y1 <span class="ot">&lt;-</span> <span class="fu">with</span>(ov, <span class="fu">sum</span>(w1 <span class="sc">*</span> re78) <span class="sc">/</span> <span class="fu">sum</span>(w1))</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>y0 <span class="ot">&lt;-</span> <span class="fu">with</span>(ov, <span class="fu">sum</span>(w0 <span class="sc">*</span> re78) <span class="sc">/</span> <span class="fu">sum</span>(w0))</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>y1 <span class="sc">-</span> y0</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(ov, <span class="fu">mean</span>(w1 <span class="sc">*</span> re78) <span class="sc">-</span> <span class="fu">mean</span>(w0 <span class="sc">*</span> re78))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="expect">
+<p>About <strong>445</strong> units remain in the overlap region, 147 of them treated. Normalized IPW ≈ <strong>+$2,030</strong>; non-normalized ≈ +$2,860. Both are within shouting distance of the $1,794 experimental benchmark and nowhere near −$8,498. Normalized weights are more stable; always report them.</p>
+</div>
+</section>
+<section id="step-5-nearest-neighbor-matching-on-the-score-att" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-nearest-neighbor-matching-on-the-score-att">Step 5 — Nearest-neighbor matching on the score (ATT)</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Python</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">R</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.neighbors <span class="im">import</span> NearestNeighbors</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>tr <span class="op">=</span> d[d.treat <span class="op">==</span> <span class="dv">1</span>]<span class="op">;</span> co <span class="op">=</span> d[d.treat <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>nn <span class="op">=</span> NearestNeighbors(n_neighbors<span class="op">=</span><span class="dv">1</span>).fit(co[[<span class="st">"pscore"</span>]].to_numpy())</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>_, idx <span class="op">=</span> nn.kneighbors(tr[[<span class="st">"pscore"</span>]].to_numpy())</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>att <span class="op">=</span> (tr.re78.to_numpy() <span class="op">-</span> co.re78.to_numpy()[idx[:, <span class="dv">0</span>]]).mean()</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"1-NN ATT on pscore:"</span>, <span class="bu">round</span>(att, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MatchIt)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">matchit</span>(treat <span class="sc">~</span> age <span class="sc">+</span> age2 <span class="sc">+</span> age3 <span class="sc">+</span> educ <span class="sc">+</span> educ2 <span class="sc">+</span> marr <span class="sc">+</span> nodegree <span class="sc">+</span> black <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>               hisp <span class="sc">+</span> re74 <span class="sc">+</span> re75 <span class="sc">+</span> u74 <span class="sc">+</span> u75 <span class="sc">+</span> interaction1,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">data =</span> d, <span class="at">method =</span> <span class="st">"nearest"</span>, <span class="at">distance =</span> <span class="st">"glm"</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>md <span class="ot">&lt;-</span> <span class="fu">match.data</span>(m)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(re78 <span class="sc">~</span> treat, <span class="at">data =</span> md, <span class="at">weights =</span> weights)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m)<span class="sc">$</span>sum.matched[, <span class="fu">c</span>(<span class="st">"Means Treated"</span>, <span class="st">"Means Control"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="expect">
+<p>1-NN ATT ≈ <strong>+$1,760</strong>, almost exactly the experimental estimate. (<code>MatchIt</code> with replacement gives a similar number; its <code>summary()</code> also shows covariate balance before and after, which is the diagnostic you should always print.)</p>
+</div>
+</section>
+</section>
+<section id="exercises" class="level2">
+<h2 class="anchored" data-anchor-id="exercises">Exercises</h2>
+<ol type="1">
+<li><strong>Bias reduction by matching.</strong> Using <code>training_bias_reduction.dta</code> (8 units, book §5.3), compute the raw SDO, then match each treated unit to the control with the closest <code>X</code>, and compute the ATT. Then compute the <em>bias-corrected</em> matching estimate using a regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span> in the control group. Compare all three to each other.</li>
+<li><strong>Trimming sensitivity.</strong> Rerun Step 4 with overlap windows (0.05, 0.95), (0.1, 0.9) and (0.2, 0.8). How does the estimate and the sample size move? Write two sentences on the bias–variance trade-off involved.</li>
+<li><strong>Break CIA.</strong> Drop <code>re74</code> and <code>re75</code> from the propensity-score model and redo Steps 3–5. What happens, and what does it tell you about which covariates drive selection into NSW?</li>
+</ol>
+</section>
+<section id="solutions" class="level2">
+<h2 class="anchored" data-anchor-id="solutions">Solutions</h2>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions (click to expand)">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solutions (click to expand)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>1.</strong> Raw SDO = <strong>3.25</strong>. Matching each treated unit to the control with the closest <code>X</code> (11→10, 7→8, 5→4, 3→4) gives an ATT of <strong>2.25</strong>. The bias-corrected version adjusts each matched pair by <span class="math inline">\(\hat{\mu}_0(X_{treated}) - \hat{\mu}_0(X_{match})\)</span>, where <span class="math inline">\(\hat{\mu}_0\)</span> is the control-group regression of <span class="math inline">\(Y\)</span> on <span class="math inline">\(X\)</span>. In this tiny example the <span class="math inline">\(X\)</span> mismatches are +1, −1, +1, −1, so with a linear <span class="math inline">\(\hat{\mu}_0\)</span> the corrections cancel and the bias-corrected ATT is also 2.25 — which is itself a useful lesson: the correction matters when mismatches are <em>systematic</em>, not when they are balanced.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>tb <span class="op">=</span> pd.read_stata(<span class="st">"data/training_bias_reduction.dta"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>tr, co <span class="op">=</span> tb[tb.D <span class="op">==</span> <span class="dv">1</span>], tb[tb.D <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>mu0 <span class="op">=</span> smf.ols(<span class="st">"Y ~ X"</span>, co).fit()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> _, r <span class="kw">in</span> tr.iterrows():</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    j <span class="op">=</span> (co.X <span class="op">-</span> r.X).<span class="bu">abs</span>().idxmin()</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    rows.append((r.Y <span class="op">-</span> co.loc[j, <span class="st">"Y"</span>],</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>                 r.Y <span class="op">-</span> co.loc[j, <span class="st">"Y"</span>] <span class="op">-</span> (mu0.predict(pd.DataFrame({<span class="st">"X"</span>:[r.X]}))[<span class="dv">0</span>]</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>                                        <span class="op">-</span> mu0.predict(pd.DataFrame({<span class="st">"X"</span>:[co.loc[j,<span class="st">"X"</span>]]}))[<span class="dv">0</span>])))</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.mean(rows, axis<span class="op">=</span><span class="dv">0</span>))   <span class="co"># [naive NN ATT, bias-corrected ATT]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>2.</strong> (0.05, 0.95): ≈ +$1,320 on 601 units; (0.1, 0.9): ≈ +$2,030 on 445; (0.2, 0.8): ≈ +$3,210 on 256. Wider windows keep more controls (lower variance) but include units with poor overlap (more bias); narrower windows do the reverse. The estimate swings by almost $2,000 across reasonable choices — report the sensitivity, not one number.</p>
+<p><strong>3.</strong> Without lagged earnings the treated group’s mean score drops from 0.33 to about 0.20, and the (0.1, 0.9) IPW estimate flips to ≈ <strong>−$2,080</strong>. The score no longer captures the dimension that matters most (NSW enrollees had near-zero 1974–75 earnings). Pre-treatment outcomes are the single most important covariate in this design.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="facilitator-notes" class="level2">
+<h2 class="anchored" data-anchor-id="facilitator-notes">Facilitator notes</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Facilitator notes (click to expand)">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Facilitator notes (click to expand)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>The Titanic step is the whole chapter in miniature.</strong> Make sure everyone can reproduce the 0.24 by hand (four cells, four weights) before touching propensity scores. The weights are the <em>treated</em> group’s shares, which is what makes it the ATT.</p>
+<p><strong>Misconception: the propensity score is a prediction model.</strong> You are not trying to predict treatment well; you are trying to achieve covariate balance. A score with AUC 0.99 means no overlap. Say this out loud; it surprises people who come from ML.</p>
+<p><strong>Misconception: matching “controls for” unobservables.</strong> It does not. The only thing that justifies CIA is the DAG from Session 2.</p>
+<p><strong>On the categorical columns.</strong> <code>pd.read_stata()</code> returns Stata value labels as categoricals, which is why Step 1 compares to strings. In R, <code>haven</code> keeps the numeric codes with labels attached; <code>attributes(t$class)$labels</code> shows them.</p>
+<p><strong>If running short.</strong> Drop Step 5; IPW alone makes the point.</p>
+<p><strong>Discussion prompts.</strong> (a) Why does Dehejia–Wahba work for NSW but Session 2’s discrimination example cannot be fixed by matching? (b) What covariate would you most want that is not in the CPS?</p>
+<p><strong>Bridge to next session.</strong> Matching needs CIA. RDD gives up on observing everything and instead finds a place where treatment flips for reasons that are <em>locally</em> as good as random.</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/seanlewis08\.github\.io\/causal_mixtape\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../sessions/03-potential-outcomes.html" class="pagination-link" aria-label="Session 3 · Potential outcomes">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Session 3 · Potential outcomes</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../sessions/05-rdd.html" class="pagination-link" aria-label="Session 5 · Regression discontinuity">
+        <span class="nav-page-text">Session 5 · Regression discontinuity</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Built on <em>Causal Inference: The Mixtape</em> by Scott Cunningham (free online edition).</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Made with Quarto</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

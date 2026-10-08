@@ -1,0 +1,13 @@
+format:
+  revealjs:
+    theme: [default, custom.scss]
+    slide-number: true
+    transition: none
+    incremental: false
+    footer: "Mixtape Workshops · built on Cunningham, *Causal Inference: The Mixtape*"
+    toc: false
+    code-line-numbers: false
+    embed-resources: false
+    width: 1280
+    height: 720
+toc: false

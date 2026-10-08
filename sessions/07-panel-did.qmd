@@ -1,0 +1,231 @@
+---
+title: "Session 7 · Panel data and the 2×2 difference-in-differences"
+subtitle: "Book chapter 8 and sections 9.1–9.3"
+---
+
+::: {.session-meta}
+**Read before the meeting:** [Chapter 8 — Panel Data](https://mixtape-1ed.netlify.app/08-Panel_Data.html) and [Chapter 9, sections 9.1–9.3](https://mixtape-1ed.netlify.app/09-Difference_in_Differences.html).
+**Data:** `data/sasp_panel.dta`; John Snow's cholera table (typed in).
+**Code files:** [`code/session07.py`](../code/session07.py) · [`code/session07.R`](../code/session07.R) · [Slides](../slides/07-panel-did.qmd){target="_blank"}
+:::
+
+## Learning goals
+
+Participants should be able to write the fixed-effects model and explain what *within* variation is, implement FE three ways (dummies, demeaning, a panel routine) and show they agree, say what FE can and cannot fix (time-invariant versus time-varying unobservables), and compute a 2×2 difference-in-differences by hand, as a regression, and in terms of the parallel-trends assumption.
+
+::: {.agenda}
+| Time | Block |
+|------|-------|
+| 0:00 | Recap: LATE and compliers |
+| 0:05 | Concepts: the FE model, within transformation, strict exogeneity; the 2×2 DiD and parallel trends |
+| 0:20 | Walkthrough: SASP panel — pooled OLS vs FE on the price of unprotected sex; John Snow's cholera DiD by hand and by regression |
+| 0:45 | Exercise 1 kickoff |
+| 0:55 | Assign exercises; preview event studies |
+:::
+
+## Key ideas
+
+**The fixed-effects model.** $Y_{it} = \delta D_{it} + \mathbf{X}_{it}\beta + u_i + \varepsilon_{it}$. The unit effect $u_i$ can be correlated with $D_{it}$ in any way; FE removes it by comparing each unit *to itself* across time. Three equivalent implementations: unit dummies, demeaning every variable within unit, or first-differencing (with two periods).
+
+**What FE needs.** *Strict exogeneity*: $E[\varepsilon_{it} \mid D_{i1}, \dots, D_{iT}, u_i] = 0$. Time-varying unobservables that move with $D$ are still a problem. Reverse causality and feedback (today's shock affects tomorrow's treatment) violate it. FE also needs *within* variation; a regressor that never changes for a unit is absorbed.
+
+**The SASP question.** Sex workers charge more for unprotected sex. Is that a compensating differential for risk, or do higher-priced providers simply differ in ways that also make them more likely to offer it? The panel follows the same provider across clients, so provider-level unobservables drop out.
+
+**The 2×2 DiD.** Two groups, two periods. $\hat{\delta} = (\bar{Y}_{T,post} - \bar{Y}_{T,pre}) - (\bar{Y}_{C,post} - \bar{Y}_{C,pre})$. The identifying assumption is *parallel trends*: absent treatment, the treated group's outcome would have moved by the same amount as the control group's. It is a statement about a counterfactual and is untestable in the 2×2 case. As a regression: $Y = \alpha + \beta\,\text{Treat} + \gamma\,\text{Post} + \delta\,(\text{Treat} \times \text{Post}) + e$.
+
+**John Snow.** In 1854 London, the Lambeth water company had moved its intake upstream of the sewage; Southwark & Vauxhall had not. Cholera deaths fell in Lambeth-served households and rose elsewhere. It is the first DiD and still one of the cleanest.
+
+## Walkthrough
+
+### Step 1 — SASP: pooled OLS
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as smf
+from linearmodels.panel import PanelOLS
+
+sasp = pd.read_stata("data/sasp_panel.dta", convert_categoricals=False)
+
+timevar = ["unsafe", "llength", "reg", "asq_cl", "appearance_cl", "provider_second",
+           "asian_cl", "black_cl", "hispanic_cl", "othrace_cl", "hot", "massage_cl", "age_cl"]
+fixed   = ["age", "asq", "bmi", "hispanic", "black", "other", "asian", "schooling",
+           "cohab", "married", "divorced", "separated"]
+sasp = sasp.dropna(subset=["lnw", "id"] + timevar + fixed)
+
+pooled = smf.ols("lnw ~ " + " + ".join(timevar + fixed), data=sasp)\
+            .fit(cov_type="cluster", cov_kwds={"groups": sasp["id"]})
+print("pooled OLS, unsafe:", pooled.params["unsafe"].round(3), " SE", pooled.bse["unsafe"].round(3))
+```
+
+#### R
+
+```r
+library(tidyverse); library(haven); library(fixest)
+
+sasp <- read_dta("data/sasp_panel.dta")
+timevar <- c("unsafe","llength","reg","asq_cl","appearance_cl","provider_second",
+             "asian_cl","black_cl","hispanic_cl","othrace_cl","hot","massage_cl","age_cl")
+fixed   <- c("age","asq","bmi","hispanic","black","other","asian","schooling",
+             "cohab","married","divorced","separated")
+
+f_pooled <- as.formula(paste("lnw ~", paste(c(timevar, fixed), collapse = " + ")))
+pooled <- feols(f_pooled, data = sasp, cluster = ~id)
+coeftable(pooled)["unsafe", ]
+```
+
+:::
+
+::: {.expect}
+`unsafe` ≈ **0.00** (SE 0.03): pooled across providers, there is *no* price premium for unprotected sex once client and provider characteristics are controlled. About 1,500 sessions enter after dropping missing values.
+:::
+
+### Step 2 — Fixed effects, three ways
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+# (a) demeaning by hand
+dm = sasp.copy()
+for v in ["lnw"] + timevar:
+    dm[v] = sasp[v] - sasp.groupby("id")[v].transform("mean")
+fe_dm = smf.ols("lnw ~ " + " + ".join(timevar), data=dm)\
+           .fit(cov_type="cluster", cov_kwds={"groups": dm["id"]})
+
+# (b) unit dummies (slow with many ids, but transparent)
+fe_dummy = smf.ols("lnw ~ " + " + ".join(timevar) + " + C(id)", data=sasp).fit()
+
+# (c) PanelOLS
+p = sasp.set_index(["id", "session"])
+fe_panel = PanelOLS.from_formula("lnw ~ " + " + ".join(timevar) + " + EntityEffects", data=p)\
+             .fit(cov_type="clustered", cluster_entity=True)
+
+print("demeaned:", fe_dm.params["unsafe"].round(3),
+      " dummies:", fe_dummy.params["unsafe"].round(3),
+      " PanelOLS:", fe_panel.params["unsafe"].round(3), " SE", fe_panel.std_errors["unsafe"].round(3))
+```
+
+#### R
+
+```r
+f_fe <- as.formula(paste("lnw ~", paste(timevar, collapse = " + "), "| id"))
+fe <- feols(f_fe, data = sasp, cluster = ~id)
+coeftable(fe)["unsafe", ]
+
+# the same thing by hand
+dm <- sasp %>% group_by(id) %>%
+  mutate(across(all_of(c("lnw", timevar)), ~ .x - mean(.x, na.rm = TRUE))) %>% ungroup()
+coef(lm(as.formula(paste("lnw ~", paste(timevar, collapse = " + "))), data = dm))["unsafe"]
+
+etable(pooled, fe, keep = "unsafe")
+```
+
+:::
+
+::: {.expect}
+All three give `unsafe` ≈ **0.05** (SE ≈ 0.024): within the same provider, an unprotected session commands about a 5% premium. The time-invariant provider characteristics (`age`, `schooling`, race, marital status) are absorbed; try adding them to the FE model and watch them vanish or error. The dummy version's SE is wrong (not clustered) — note it and move on.
+:::
+
+### Step 3 — Why they differ
+
+The pooled estimate mixes two comparisons: *within* a provider (does she charge more when the session is unprotected?) and *between* providers (do the ones who offer unprotected sex charge more in general?). FE keeps only the first. The near-zero pooled estimate means the between-provider correlation is negative enough to cancel the within premium: providers willing to offer unprotected sex are, on average, lower-priced. That is exactly the selection story FE was built to remove.
+
+### Step 4 — John Snow's cholera DiD by hand
+
+Deaths per 10,000 households, from the book's Table 9.1:
+
+| | 1849 (pre) | 1854 (post) |
+|---|---|---|
+| Southwark & Vauxhall (control) | 135 | 147 |
+| Lambeth (treated: moved intake upstream in 1852) | 85 | 19 |
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+snow = pd.DataFrame({
+    "company": ["SV", "SV", "Lambeth", "Lambeth"],
+    "year":    [1849, 1854, 1849, 1854],
+    "deaths":  [135, 147, 85, 19],
+})
+snow["treat"] = (snow.company == "Lambeth").astype(int)
+snow["post"]  = (snow.year == 1854).astype(int)
+
+by_hand = (19 - 85) - (147 - 135)
+reg = smf.ols("deaths ~ treat * post", data=snow).fit()
+print("by hand:", by_hand, "  regression:", reg.params["treat:post"].round(1))
+```
+
+#### R
+
+```r
+snow <- tibble(company = c("SV","SV","Lambeth","Lambeth"),
+               year = c(1849, 1854, 1849, 1854),
+               deaths = c(135, 147, 85, 19)) %>%
+  mutate(treat = as.integer(company == "Lambeth"), post = as.integer(year == 1854))
+
+(19 - 85) - (147 - 135)
+coef(lm(deaths ~ treat * post, data = snow))["treat:post"]
+```
+
+:::
+
+::: {.expect}
+Both give **−78** deaths per 10,000 households. With four cells there are no standard errors — the regression is exactly identified — which is the point: the 2×2 is an *identification* argument, and inference needs more groups or more periods (next session).
+:::
+
+### Step 5 — Draw the counterfactual
+
+Sketch (or plot) the four points. The DiD estimate is the gap between Lambeth's actual 1854 value (19) and what parallel trends says it *would* have been: $85 + (147 - 135) = 97$. Ask the room what would make the dotted line wrong — for example, if Lambeth's neighborhoods were already becoming cleaner for other reasons.
+
+## Exercises
+
+1. **First differences vs FE.** Keep only providers with exactly two sessions in the SASP data (about 68 of them). Estimate the `unsafe` effect by first-differencing (session 2 minus session 1, regression *without* a constant) and by FE on the demeaned data. Show they are identical with $T = 2$, explain what adding a constant to the FD regression corresponds to in the FE model, and say in one sentence why FD and FE diverge for $T > 2$.
+2. **What FE cannot fix.** Simulate a panel of 500 units × 5 periods where $D_{it}$ responds to *last period's* shock: $D_{it} = 1[\varepsilon_{i,t-1} > 0]$. Set the true effect to 1. Show that FE is biased and explain which assumption failed.
+3. **Snow with a placebo.** Suppose a third company, "Chelsea," had deaths of 110 in 1849 and 125 in 1854 and did not move its intake. Compute the DiD of Chelsea vs Southwark & Vauxhall. What does a near-zero number tell you about parallel trends, and what does it *not* tell you?
+
+## Solutions
+
+::: {.callout-tip collapse="true" title="Solutions (click to expand)"}
+
+**1.** With $T = 2$, demeaning and differencing use the same single within-unit contrast, so the estimates coincide exactly (≈ −0.06 in this small subsample — note it has the opposite sign from the full-panel FE estimate, a reminder that 68 providers is not much data). Adding a constant to the FD regression is the same as adding a period fixed effect to the FE model. For $T > 2$ FE uses all pairwise contrasts weighted by the within-unit variance, while FD uses only adjacent-period contrasts; they differ, and FD is more robust when $\varepsilon_{it}$ is a random walk.
+
+**2.** FE is biased because strict exogeneity fails: $D_{it}$ depends on $\varepsilon_{i,t-1}$, and demeaning puts every period's $\varepsilon$ into every period's transformed error. The bias shrinks as $T$ grows (it is of order $1/T$). First differencing *also* fails here, because $\Delta D_{it}$ depends on $\varepsilon_{i,t-1}$ which is in $\Delta \varepsilon_{it}$.
+
+```python
+rng = np.random.default_rng(0); N, T = 500, 5
+e = rng.normal(size=(N, T)); D = np.zeros((N, T), int); D[:, 1:] = (e[:, :-1] > 0)
+u = rng.normal(size=(N, 1)); Y = 1 * D + u + e
+df = pd.DataFrame({"y": Y.ravel(), "d": D.ravel(), "i": np.repeat(np.arange(N), T), "t": np.tile(np.arange(T), N)})
+dm = df.assign(y=df.y - df.groupby("i").y.transform("mean"), d=df.d - df.groupby("i").d.transform("mean"))
+print(smf.ols("y ~ d", dm).fit().params["d"])    # noticeably below 1
+```
+
+**3.** Chelsea vs S&V: $(125 - 110) - (147 - 135) = 3$: two untreated companies moved in parallel. That is *evidence consistent with* parallel trends for the untreated, which makes the assumption more plausible for Lambeth. It does not test Lambeth's own counterfactual trend, which is unobservable by construction.
+:::
+
+## Facilitator notes
+
+::: {.callout-note collapse="true" title="Facilitator notes (click to expand)"}
+
+**Step 2 is the demo.** Three implementations agreeing to three decimals is what makes "fixed effects" stop being a black box. Have one person run the demeaned version and another the panel routine, and compare live.
+
+**Misconception: FE controls for everything about the unit.** Everything *fixed* about the unit. Say "time-invariant" every time you say "fixed effect" for the first ten minutes.
+
+**Misconception: the pooled and FE estimates disagreeing means one is wrong.** They answer different questions (Step 3). Only one answers the causal question, and only under strict exogeneity.
+
+**On the data.** The SASP file loads `provider_second` as a categorical in pandas; `convert_categoricals=False` avoids a crash in the demeaning step. In R, `haven` keeps it numeric.
+
+**If running short.** Compress Steps 4–5 to the by-hand calculation and the sketch; the regression version recurs next session.
+
+**Discussion prompts.** (a) In SASP, what *time-varying* unobservable could still bias the FE estimate? (b) Why is the 2×2 DiD a special case of FE (two units, two periods)?
+
+**Bridge to next session.** The 2×2 has no SEs and no test of parallel trends. With many groups and many periods you get both — and a new problem when treatment turns on at different times.
+:::

@@ -1,0 +1,297 @@
+---
+title: "Session 4 · Matching and subclassification"
+subtitle: "Book chapter 5"
+---
+
+::: {.session-meta}
+**Read before the meeting:** [Chapter 5 — Matching and Subclassification](https://mixtape-1ed.netlify.app/05-Matching_and_Subclassification.html).
+**Data:** `data/titanic.dta`, `data/nsw_mixtape.dta`, `data/cps_mixtape.dta` (also `training_example.dta`, `training_bias_reduction.dta` for exercises).
+**Code files:** [`code/session04.py`](../code/session04.py) · [`code/session04.R`](../code/session04.R) · [Slides](../slides/04-matching.qmd){target="_blank"}
+:::
+
+## Learning goals
+
+Participants should be able to state the conditional independence assumption and the common-support condition, compute a subclassification estimate by hand, explain why the propensity score is a sufficient statistic for the covariates, implement inverse-probability weighting and nearest-neighbor matching on the propensity score, and recognize the Dehejia–Wahba result: a good selection-on-observables design can recover an experimental benchmark — and a careless one can be off by $10,000.
+
+::: {.agenda}
+| Time | Block |
+|------|-------|
+| 0:00 | Recap: SDO = ATE + selection bias + HTE bias |
+| 0:05 | Concepts: CIA, common support, curse of dimensionality, the propensity-score theorem |
+| 0:20 | Walkthrough: Titanic subclassification; NSW vs CPS; estimate the propensity score; IPW and nearest-neighbor ATT |
+| 0:45 | Exercise 1 kickoff |
+| 0:55 | Assign exercises; preview RDD |
+:::
+
+## Key ideas
+
+**Conditional independence (CIA).** $(Y^0, Y^1) \perp D \mid X$. Within strata of $X$, treatment is as good as random. This is the backdoor criterion in potential-outcomes clothing. It is an assumption about *unobservables*, so no test on the data can confirm it; only the DAG argument can.
+
+**Common support.** $0 < P(D=1 \mid X) < 1$. For each covariate profile there must be both treated and untreated units; otherwise you are extrapolating.
+
+**Subclassification.** Stratify on $X$, compute the treated-minus-control difference within each stratum, and average using the treated group's stratum shares (for the ATT). It works beautifully with a few discrete covariates and dies of the curse of dimensionality quickly.
+
+**Propensity score.** Rosenbaum and Rubin: if CIA holds given $X$, it also holds given $p(X) = P(D=1 \mid X)$. One scalar replaces the whole covariate vector. Estimate it with a logit, then stratify on it, weight by it (IPW), or match on it.
+
+**Dehejia–Wahba.** LaLonde showed that regressions using a non-experimental control group (CPS) badly missed the NSW experimental estimate. Dehejia and Wahba showed that propensity-score methods with a well-specified score and attention to common support get close. The lesson is double-edged: matching can work, and it can fail silently.
+
+## Walkthrough
+
+### Step 1 — Titanic: the simple difference and the subclassified difference
+
+Did first-class passengers survive more because they were first class, or because of who was in first class? Stratify on sex and age.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+import pandas as pd
+import numpy as np
+import statsmodels.formula.api as smf
+
+t = pd.read_stata("data/titanic.dta")
+t["d"]    = (t["class"] == "1st class").astype(int)
+t["surv"] = (t["survived"] == "yes").astype(int)
+t["man"]  = (t["sex"] == "man").astype(int)
+t["adult"]= (t["age"] == "adults").astype(int)
+
+sdo = t.loc[t.d == 1, "surv"].mean() - t.loc[t.d == 0, "surv"].mean()
+print("SDO:", round(sdo, 3))
+
+cell = t.groupby(["man", "adult", "d"])["surv"].mean().unstack("d")
+diff = cell[1] - cell[0]
+w = t[t.d == 1].groupby(["man", "adult"]).size() / (t.d == 1).sum()
+print(pd.DataFrame({"diff": diff.round(3), "treated_share": w.round(3)}))
+print("Subclassified ATT:", round((diff * w).sum(), 3))
+```
+
+#### R
+
+```r
+library(tidyverse); library(haven)
+
+t <- read_dta("data/titanic.dta") %>%
+  mutate(d = as.integer(class == 1),
+         man = as.integer(sex == 1), adult = as.integer(age == 1))
+# haven keeps Stata's numeric codes; attributes(t$sex)$labels shows
+# 1 = man, and age 1 = adults, class 1 = 1st class, survived 1 = yes
+
+sdo <- with(t, mean(survived[d == 1]) - mean(survived[d == 0]))
+
+att <- t %>%
+  group_by(man, adult) %>%
+  summarise(diff = mean(survived[d == 1]) - mean(survived[d == 0]),
+            n_treated = sum(d == 1), .groups = "drop") %>%
+  mutate(w = n_treated / sum(n_treated))
+att
+sum(att$diff * att$w)
+```
+
+:::
+
+::: {.expect}
+SDO ≈ **0.354**: first-class passengers survived 35 points more often. Within sex×age strata the gaps are smaller (adult men: 0.33 vs 0.19; adult women: 0.97 vs 0.63), and the subclassified ATT is ≈ **0.24**. A third of the raw gap was *who* was in first class, not *being* in first class.
+:::
+
+### Step 2 — NSW: the experimental benchmark and the naive comparison
+
+`nsw_mixtape.dta` is the randomized job-training experiment; `cps_mixtape.dta` is a non-experimental comparison group from the CPS.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+nsw = pd.read_stata("data/nsw_mixtape.dta")
+cps = pd.read_stata("data/cps_mixtape.dta")
+
+exp = nsw.loc[nsw.treat == 1, "re78"].mean() - nsw.loc[nsw.treat == 0, "re78"].mean()
+print("experimental effect on 1978 earnings:", round(exp, 0))
+
+d = pd.concat([nsw[nsw.treat == 1], cps[cps.treat == 0]], ignore_index=True)
+naive = d.loc[d.treat == 1, "re78"].mean() - d.loc[d.treat == 0, "re78"].mean()
+print("NSW treated vs CPS controls:", round(naive, 0))
+```
+
+#### R
+
+```r
+nsw <- read_dta("data/nsw_mixtape.dta")
+cps <- read_dta("data/cps_mixtape.dta")
+
+with(nsw, mean(re78[treat == 1]) - mean(re78[treat == 0]))
+
+d <- bind_rows(filter(nsw, treat == 1), filter(cps, treat == 0))
+with(d, mean(re78[treat == 1]) - mean(re78[treat == 0]))
+```
+
+:::
+
+::: {.expect}
+Experimental effect ≈ **+$1,794**. NSW treated vs CPS controls ≈ **−$8,498**. The CPS sample is older, better educated and far richer than NSW enrollees; selection bias swamps the effect.
+:::
+
+### Step 3 — Estimate the propensity score
+
+The Dehejia–Wahba specification: polynomials in age and education, indicators for zero earnings, and an education×earnings interaction.
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+d["age2"] = d.age**2;  d["age3"] = d.age**3;  d["educ2"] = d.educ**2
+d["u74"]  = (d.re74 == 0).astype(int);  d["u75"] = (d.re75 == 0).astype(int)
+d["interaction1"] = d.educ * d.re74
+
+logit = smf.logit("treat ~ age + age2 + age3 + educ + educ2 + marr + nodegree + black "
+                  "+ hisp + re74 + re75 + u74 + u75 + interaction1", data=d).fit(disp=0)
+d["pscore"] = logit.predict(d)
+print(d.groupby("treat")["pscore"].describe()[["mean", "min", "max"]].round(3))
+```
+
+#### R
+
+```r
+d <- d %>% mutate(age2 = age^2, age3 = age^3, educ2 = educ^2,
+                  u74 = as.integer(re74 == 0), u75 = as.integer(re75 == 0),
+                  interaction1 = educ * re74)
+logit <- glm(treat ~ age + age2 + age3 + educ + educ2 + marr + nodegree + black +
+               hisp + re74 + re75 + u74 + u75 + interaction1,
+             family = binomial(), data = d)
+d$pscore <- predict(logit, type = "response")
+d %>% group_by(treat) %>% summarise(mean = mean(pscore), min = min(pscore), max = max(pscore))
+
+ggplot(d, aes(pscore, fill = factor(treat))) +
+  geom_histogram(bins = 50, position = "identity", alpha = 0.5) + theme_minimal()
+```
+
+:::
+
+::: {.expect}
+Mean score ≈ **0.33** for treated and **0.008** for controls. Most CPS people have essentially zero probability of being in NSW. That is the common-support problem in one histogram; the next step trims to the overlap region.
+:::
+
+### Step 4 — Inverse-probability weighting on the overlap region
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+ov = d[(d.pscore > 0.1) & (d.pscore < 0.9)].copy()
+print("units in overlap:", len(ov), " treated:", int(ov.treat.sum()))
+
+# normalized IPW (ATE)
+w1 = ov.treat / ov.pscore
+w0 = (1 - ov.treat) / (1 - ov.pscore)
+y1 = (w1 * ov.re78).sum() / w1.sum()
+y0 = (w0 * ov.re78).sum() / w0.sum()
+print("normalized IPW estimate:", round(y1 - y0, 0))
+
+# non-normalized version for comparison
+print("non-normalized IPW:", round((w1 * ov.re78).mean() - (w0 * ov.re78).mean(), 0))
+```
+
+#### R
+
+```r
+ov <- d %>% filter(pscore > 0.1, pscore < 0.9) %>%
+  mutate(w1 = treat / pscore, w0 = (1 - treat) / (1 - pscore))
+
+y1 <- with(ov, sum(w1 * re78) / sum(w1))
+y0 <- with(ov, sum(w0 * re78) / sum(w0))
+y1 - y0
+
+with(ov, mean(w1 * re78) - mean(w0 * re78))
+```
+
+:::
+
+::: {.expect}
+About **445** units remain in the overlap region, 147 of them treated. Normalized IPW ≈ **+$2,030**; non-normalized ≈ +$2,860. Both are within shouting distance of the $1,794 experimental benchmark and nowhere near −$8,498. Normalized weights are more stable; always report them.
+:::
+
+### Step 5 — Nearest-neighbor matching on the score (ATT)
+
+::: {.panel-tabset}
+
+#### Python
+
+```python
+from sklearn.neighbors import NearestNeighbors
+
+tr = d[d.treat == 1]; co = d[d.treat == 0]
+nn = NearestNeighbors(n_neighbors=1).fit(co[["pscore"]].to_numpy())
+_, idx = nn.kneighbors(tr[["pscore"]].to_numpy())
+att = (tr.re78.to_numpy() - co.re78.to_numpy()[idx[:, 0]]).mean()
+print("1-NN ATT on pscore:", round(att, 0))
+```
+
+#### R
+
+```r
+library(MatchIt)
+m <- matchit(treat ~ age + age2 + age3 + educ + educ2 + marr + nodegree + black +
+               hisp + re74 + re75 + u74 + u75 + interaction1,
+             data = d, method = "nearest", distance = "glm", replace = TRUE)
+md <- match.data(m)
+lm(re78 ~ treat, data = md, weights = weights)
+summary(m)$sum.matched[, c("Means Treated", "Means Control")]
+```
+
+:::
+
+::: {.expect}
+1-NN ATT ≈ **+$1,760**, almost exactly the experimental estimate. (`MatchIt` with replacement gives a similar number; its `summary()` also shows covariate balance before and after, which is the diagnostic you should always print.)
+:::
+
+## Exercises
+
+1. **Bias reduction by matching.** Using `training_bias_reduction.dta` (8 units, book §5.3), compute the raw SDO, then match each treated unit to the control with the closest `X`, and compute the ATT. Then compute the *bias-corrected* matching estimate using a regression of $Y$ on $X$ in the control group. Compare all three to each other.
+2. **Trimming sensitivity.** Rerun Step 4 with overlap windows (0.05, 0.95), (0.1, 0.9) and (0.2, 0.8). How does the estimate and the sample size move? Write two sentences on the bias–variance trade-off involved.
+3. **Break CIA.** Drop `re74` and `re75` from the propensity-score model and redo Steps 3–5. What happens, and what does it tell you about which covariates drive selection into NSW?
+
+## Solutions
+
+::: {.callout-tip collapse="true" title="Solutions (click to expand)"}
+
+**1.** Raw SDO = **3.25**. Matching each treated unit to the control with the closest `X` (11→10, 7→8, 5→4, 3→4) gives an ATT of **2.25**. The bias-corrected version adjusts each matched pair by $\hat{\mu}_0(X_{treated}) - \hat{\mu}_0(X_{match})$, where $\hat{\mu}_0$ is the control-group regression of $Y$ on $X$. In this tiny example the $X$ mismatches are +1, −1, +1, −1, so with a linear $\hat{\mu}_0$ the corrections cancel and the bias-corrected ATT is also 2.25 — which is itself a useful lesson: the correction matters when mismatches are *systematic*, not when they are balanced.
+
+```python
+tb = pd.read_stata("data/training_bias_reduction.dta")
+tr, co = tb[tb.D == 1], tb[tb.D == 0]
+mu0 = smf.ols("Y ~ X", co).fit()
+rows = []
+for _, r in tr.iterrows():
+    j = (co.X - r.X).abs().idxmin()
+    rows.append((r.Y - co.loc[j, "Y"],
+                 r.Y - co.loc[j, "Y"] - (mu0.predict(pd.DataFrame({"X":[r.X]}))[0]
+                                        - mu0.predict(pd.DataFrame({"X":[co.loc[j,"X"]]}))[0])))
+print(np.mean(rows, axis=0))   # [naive NN ATT, bias-corrected ATT]
+```
+
+**2.** (0.05, 0.95): ≈ +$1,320 on 601 units; (0.1, 0.9): ≈ +$2,030 on 445; (0.2, 0.8): ≈ +$3,210 on 256. Wider windows keep more controls (lower variance) but include units with poor overlap (more bias); narrower windows do the reverse. The estimate swings by almost $2,000 across reasonable choices — report the sensitivity, not one number.
+
+**3.** Without lagged earnings the treated group's mean score drops from 0.33 to about 0.20, and the (0.1, 0.9) IPW estimate flips to ≈ **−$2,080**. The score no longer captures the dimension that matters most (NSW enrollees had near-zero 1974–75 earnings). Pre-treatment outcomes are the single most important covariate in this design.
+:::
+
+## Facilitator notes
+
+::: {.callout-note collapse="true" title="Facilitator notes (click to expand)"}
+
+**The Titanic step is the whole chapter in miniature.** Make sure everyone can reproduce the 0.24 by hand (four cells, four weights) before touching propensity scores. The weights are the *treated* group's shares, which is what makes it the ATT.
+
+**Misconception: the propensity score is a prediction model.** You are not trying to predict treatment well; you are trying to achieve covariate balance. A score with AUC 0.99 means no overlap. Say this out loud; it surprises people who come from ML.
+
+**Misconception: matching "controls for" unobservables.** It does not. The only thing that justifies CIA is the DAG from Session 2.
+
+**On the categorical columns.** `pd.read_stata()` returns Stata value labels as categoricals, which is why Step 1 compares to strings. In R, `haven` keeps the numeric codes with labels attached; `attributes(t$class)$labels` shows them.
+
+**If running short.** Drop Step 5; IPW alone makes the point.
+
+**Discussion prompts.** (a) Why does Dehejia–Wahba work for NSW but Session 2's discrimination example cannot be fixed by matching? (b) What covariate would you most want that is not in the CPS?
+
+**Bridge to next session.** Matching needs CIA. RDD gives up on observing everything and instead finds a place where treatment flips for reasons that are *locally* as good as random.
+:::

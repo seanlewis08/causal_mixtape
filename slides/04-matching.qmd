@@ -1,0 +1,66 @@
+---
+title: "Matching and subclassification"
+subtitle: "Session 4 · Mixtape chapter 5"
+---
+
+## Last time
+
+- SDO = ATE + selection bias + HTE bias
+- Randomization kills both. Without it?
+- Today's bet: we can **see** everything that drives selection
+
+## Conditional independence
+
+$$(Y^0, Y^1) \perp D \mid X$$
+
+- Within strata of $X$, treatment is as good as random
+- The backdoor criterion, in potential-outcomes clothing
+- Untestable: it is a claim about unobservables
+
+## Common support
+
+$$0 < P(D = 1 \mid X) < 1$$
+
+- Every covariate profile needs both treated and untreated units
+- Without it you are extrapolating, not matching
+- The one assumption you *can* check — so check it
+
+## Subclassification
+
+- Stratify on $X$; difference in means within each stratum
+- Average with the **treated** group's stratum shares → ATT
+- Works with 2–3 discrete covariates
+- Dies of the curse of dimensionality immediately after
+
+## The propensity score
+
+- $p(X) = P(D = 1 \mid X)$
+- Rosenbaum & Rubin: if CIA holds given $X$, it holds given $p(X)$
+- One number replaces the whole vector
+- Estimate with a logit; then stratify, weight (IPW), or match on it
+
+## Not a prediction problem
+
+- You are **not** trying to predict treatment well
+- A score with perfect separation means **no overlap**
+- The goal is covariate balance, and the diagnostic is the balance table
+
+## Dehejia–Wahba
+
+- NSW experiment: training raised 1978 earnings by ≈ $1,800
+- Replace the experimental controls with CPS: −$8,500
+- Propensity-score methods with the right covariates and overlap: back to ≈ $1,800–2,000
+- Matching can work. It can also fail silently.
+
+## Walkthrough
+
+1. Titanic: raw gap 0.35 → subclassified 0.24
+2. NSW vs CPS: the −$8,500 disaster
+3. Estimate the score; look at the histogram
+4. IPW on the overlap region; nearest-neighbor ATT
+
+## Takeaway
+
+::: {.takeaway}
+Matching is a bet that the DAG has no unobserved confounder. The propensity score makes the bet tractable; overlap and balance are the only things you can verify.
+:::
